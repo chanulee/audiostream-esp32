@@ -6,6 +6,7 @@
 #include "freertos/timers.h"
 #include "rtsp_events.h"
 #include "settings.h"
+#include "playback_control.h"
 
 #if CONFIG_LED_STATUS_GPIO >= 0 || CONFIG_LED_ERROR_GPIO >= 0
 #include "driver/ledc.h"
@@ -518,9 +519,18 @@ static void apply_state(led_state_t state) {
   render_state(state);
 }
 
+void led_set_playback_status(bool connected, bool playing) {
+  apply_state(!connected ? STATE_STANDBY : playing ? STATE_PLAYING : STATE_PAUSED);
+}
+
 static void on_rtsp_event(rtsp_event_t event, const rtsp_event_data_t *data,
                           void *user_data) {
   ESP_LOGD(TAG, "RTSP event: %d", event);
+  if ((playback_control_get_source() == PLAYBACK_SOURCE_SPOTIFY ||
+       playback_control_get_source() == PLAYBACK_SOURCE_BLUETOOTH) &&
+      event != RTSP_EVENT_PLAYING) {
+    return;
+  }
   switch (event) {
   case RTSP_EVENT_CLIENT_CONNECTED:
     apply_state(STATE_PAUSED);

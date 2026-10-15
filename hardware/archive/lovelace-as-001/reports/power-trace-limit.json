@@ -1,0 +1,30 @@
+{
+  "calculator": "trace-width",
+  "conductor_temp_c": 35.0,
+  "drop_limit_mv": null,
+  "drop_limit_pass": null,
+  "inputs": {
+    "ambient_c": 25.0,
+    "copper_oz": 1.0,
+    "current_a": 0.772,
+    "external": true,
+    "length_mm": 10.0,
+    "margin_percent": 25.0,
+    "temp_rise_c": 10.0
+  },
+  "model": "IPC-2221-style planning estimate",
+  "power_loss_w": 0.020844993979025617,
+  "recommended_width_mil": 10.405426299863676,
+  "recommended_width_mm": 0.26429782801653734,
+  "required_width_mil": 8.324341039890939,
+  "required_width_mm": 0.21143826241322985,
+  "resistance_ohm": 0.0349757610590647,
+  "selected_width_mil": 5.905511811023622,
+  "selected_width_mm": 0.15,
+  "voltage_drop_mv": 27.001287537597946,
+  "voltage_drop_v": 0.027001287537597948,
+  "warnings": [
+    "Use the fabricator's current rules, actual copper thickness, and thermal environment.",
+    "IPC-2152 or measured data is preferred for high-current, high-temperature, or safety-critical paths."
+  ]
+}

@@ -2,3 +2,14 @@ work/
 .venv/
 __pycache__/
 *.wav
+.DS_Store
+# KiCad local state
+*.lck
+*-backups/
+fp-info-cache
+*.silk-backup.kicad_pcb
+silkscreen.json.bak
+# Per-build scratch of make_board.sh: router intermediates, last render set
+hardware/lovelace-as-002/reports/krt/
+hardware/lovelace-as-002/renders/previous/
+hardware/lovelace-as-002/.render-bare/

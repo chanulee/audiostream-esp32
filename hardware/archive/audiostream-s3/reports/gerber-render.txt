@@ -1,0 +1,6 @@
+top: wrote hardware/audiostream-s3/gerber_top.png; silk on mask openings 0.000 mm2 (the fab clips it)
+bottom: wrote hardware/audiostream-s3/gerber_bottom.png; silk on mask openings 0.000 mm2 (the fab clips it)
+      audiostream-s3-F_Cu.gbr: copper to board edge min 0.505 mm at (5.08, -0.50)
+      audiostream-s3-In1_Cu.gbr: copper to board edge min 0.505 mm at (5.08, -0.50)
+      audiostream-s3-In2_Cu.gbr: copper to board edge min 0.505 mm at (5.08, -0.50)
+      audiostream-s3-B_Cu.gbr: copper to board edge min 0.505 mm at (5.08, -0.50)

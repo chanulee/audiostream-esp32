@@ -1,0 +1,3 @@
+INFO top occupancy 45% of usable area (normal; 41% of the whole board; usable = board - edge band - keep-outs)
+SUMMARY ERROR 0, WARN 0
+INFO PNG written: hardware/lovelace-as-001/placement.png

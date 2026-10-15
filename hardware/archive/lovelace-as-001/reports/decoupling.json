@@ -1,0 +1,164 @@
+[
+  {
+    "capacitor": "C1",
+    "cap_pin": 1,
+    "ic": "U1",
+    "ic_pin": 3,
+    "pad_edge_distance_mm": 0.775,
+    "target_max_mm": 3,
+    "pass": true
+  },
+  {
+    "capacitor": "C2",
+    "cap_pin": 1,
+    "ic": "U1",
+    "ic_pin": 2,
+    "pad_edge_distance_mm": 0.775,
+    "target_max_mm": 1,
+    "pass": true
+  },
+  {
+    "capacitor": "C3",
+    "cap_pin": 1,
+    "ic": "U1",
+    "ic_pin": 2,
+    "pad_edge_distance_mm": 4.331,
+    "target_max_mm": 5,
+    "pass": true
+  },
+  {
+    "capacitor": "C10",
+    "cap_pin": 1,
+    "ic": "U2",
+    "ic_pin": 1,
+    "pad_edge_distance_mm": 0.675,
+    "target_max_mm": 1,
+    "pass": true
+  },
+  {
+    "capacitor": "C14",
+    "cap_pin": 1,
+    "ic": "U2",
+    "ic_pin": 8,
+    "pad_edge_distance_mm": 0.704,
+    "target_max_mm": 1,
+    "pass": true
+  },
+  {
+    "capacitor": "C16",
+    "cap_pin": 1,
+    "ic": "U2",
+    "ic_pin": 20,
+    "pad_edge_distance_mm": 0.675,
+    "target_max_mm": 1,
+    "pass": true
+  },
+  {
+    "capacitor": "C18",
+    "cap_pin": 1,
+    "ic": "U2",
+    "ic_pin": 18,
+    "pad_edge_distance_mm": 0.675,
+    "target_max_mm": 1,
+    "pass": true
+  },
+  {
+    "capacitor": "C12",
+    "cap_pin": 1,
+    "ic": "U2",
+    "ic_pin": 2,
+    "pad_edge_distance_mm": 0.93,
+    "target_max_mm": 1,
+    "pass": true
+  },
+  {
+    "capacitor": "C12",
+    "cap_pin": 2,
+    "ic": "U2",
+    "ic_pin": 4,
+    "pad_edge_distance_mm": 0.989,
+    "target_max_mm": 1,
+    "pass": true
+  },
+  {
+    "capacitor": "C13",
+    "cap_pin": 1,
+    "ic": "U2",
+    "ic_pin": 5,
+    "pad_edge_distance_mm": 4.435,
+    "target_max_mm": 5,
+    "pass": true
+  },
+  {
+    "capacitor": "C11",
+    "cap_pin": 1,
+    "ic": "U2",
+    "ic_pin": 1,
+    "pad_edge_distance_mm": 3.953,
+    "target_max_mm": 5,
+    "pass": true
+  },
+  {
+    "capacitor": "C15",
+    "cap_pin": 1,
+    "ic": "U2",
+    "ic_pin": 8,
+    "pad_edge_distance_mm": 4.208,
+    "target_max_mm": 5,
+    "pass": true
+  },
+  {
+    "capacitor": "C17",
+    "cap_pin": 1,
+    "ic": "U2",
+    "ic_pin": 20,
+    "pad_edge_distance_mm": 4.497,
+    "target_max_mm": 5,
+    "pass": true
+  },
+  {
+    "capacitor": "C4",
+    "cap_pin": 1,
+    "ic": "U3",
+    "ic_pin": 2,
+    "pad_edge_distance_mm": 0.55,
+    "target_max_mm": 2,
+    "pass": true
+  },
+  {
+    "capacitor": "C8",
+    "cap_pin": 1,
+    "ic": "U4",
+    "ic_pin": 1,
+    "pad_edge_distance_mm": 0.991,
+    "target_max_mm": 3,
+    "pass": true
+  },
+  {
+    "capacitor": "C9",
+    "cap_pin": 1,
+    "ic": "U4",
+    "ic_pin": 5,
+    "pad_edge_distance_mm": 3.02,
+    "target_max_mm": 5,
+    "pass": true
+  },
+  {
+    "capacitor": "C21",
+    "cap_pin": 1,
+    "ic": "U6",
+    "ic_pin": 5,
+    "pad_edge_distance_mm": 0.825,
+    "target_max_mm": 1,
+    "pass": true
+  },
+  {
+    "capacitor": "C23",
+    "cap_pin": 1,
+    "ic": "U5",
+    "ic_pin": 5,
+    "pad_edge_distance_mm": 0.725,
+    "target_max_mm": 1,
+    "pass": true
+  }
+]

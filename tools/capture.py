@@ -20,9 +20,11 @@ def capture(base, seconds, output, timeout=120):
         raise ValueError('seconds must be 1..10')
     base = base.rstrip('/')
     status = json.loads(request(base, f'/api/capture/start?seconds={seconds}', 'POST'))
-    print('캡처 준비 완료. iPhone/Mac에서 이 기기를 AirPlay 또는 Spotify Connect 출력으로 선택하고 재생하세요.', flush=True)
+    print('캡처 준비 완료. iPhone/Mac에서 이 기기를 AirPlay·Spotify Connect·Bluetooth 출력으로 선택하고 재생하세요.', flush=True)
     deadline = time.monotonic() + timeout
     while status['state'] != 'complete':
+        if status['state'] == 'rate_changed':
+            raise ValueError('캡처 중 출력 주파수가 바뀌었습니다. 같은 입력에서 다시 캡처하세요.')
         if time.monotonic() >= deadline:
             raise TimeoutError('PCM 캡처 시간 초과. AirPlay 연결과 재생 상태를 확인하세요.')
         time.sleep(0.5)

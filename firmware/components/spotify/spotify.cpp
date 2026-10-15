@@ -132,10 +132,14 @@ public:
     void event(std::unique_ptr<cspot::SpircHandler::Event> event) {
         using E=cspot::SpircHandler::EventType;
         switch (event->eventType) {
+        case E::PLAY_REQUEST:
+            paused=false;
+            reset_audio();
+            if (!cb.begin()) { enqueue(SPOTIFY_PAUSE); set_state("output_unavailable"); }
+            else set_state("playing");
+            break;
         case E::PLAYBACK_START:
             reset_audio();
-            if (!cb.begin()) { enqueue(SPOTIFY_PAUSE); set_state("airplay_busy"); }
-            else set_state("playing");
             break;
         case E::PLAY_PAUSE:
             paused=std::get<bool>(event->data);
@@ -258,7 +262,7 @@ public:
                 auto credentials=app_credentials();
                 ctx->config.clientId=credentials.first;
                 ctx->config.clientSecret=credentials.second;
-                ctx->config.audioFormat=AudioFormat_OGG_VORBIS_160;
+                ctx->config.audioFormat=AudioFormat_OGG_VORBIS_320;
                 ctx->config.volume=volume;
                 ctx->session->connectWithRandomAp();
                 ctx->config.authData=ctx->session->authenticate(login);

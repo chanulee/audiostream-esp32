@@ -8,7 +8,7 @@
  */
 
 // Default device name (used if none configured)
-#define SETTINGS_DEFAULT_DEVICE_NAME "ESP32 AirPlay"
+#define SETTINGS_DEFAULT_DEVICE_NAME "LOVELACE"
 
 /**
  * Initialize settings module (call once at startup)

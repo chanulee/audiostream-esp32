@@ -12,6 +12,19 @@ void pcm_capture_append(pcm_capture_t *c, const void *data, size_t bytes, bool a
     memcpy(c->data + c->used, data, bytes);
     c->used += bytes;
 }
+void pcm_capture_append_rate(pcm_capture_t *c, const void *data, size_t bytes, bool audio, uint32_t rate, unsigned seconds) {
+    if (!c->data || c->used == c->capacity || c->rate_changed || (!c->started && !audio)) return;
+    if (!c->started) {
+        size_t capacity=(size_t)seconds*rate*4;
+        if (!rate || !seconds || capacity > c->capacity) { c->rate_changed=true; return; }
+        c->sample_rate=rate;
+        c->capacity=capacity;
+    } else if (rate != c->sample_rate) {
+        c->rate_changed=true;
+        return;
+    }
+    pcm_capture_append(c, data, bytes, audio);
+}
 static void le32(uint8_t *p, uint32_t v) {
     for (unsigned i = 0; i < 4; i++) p[i] = (uint8_t)(v >> (8 * i));
 }

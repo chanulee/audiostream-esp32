@@ -30,6 +30,7 @@ class SpircHandler {
     SEEK,
     DEPLETED,
     FLUSH,
+    PLAY_REQUEST,
     PLAYBACK_START
   };
 

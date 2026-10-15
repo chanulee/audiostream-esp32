@@ -1,0 +1,21 @@
+{
+  "calculator": "via-current",
+  "inputs": {
+    "board_mm": 1.6,
+    "count": 1,
+    "derating": 0.7,
+    "hole_mm": 0.3,
+    "plating_um": 25.0,
+    "temp_rise_c": 10.0
+  },
+  "model": "IPC-2221-style barrel estimate with user-selected derating",
+  "parallel_resistance_ohm": 0.001239714162883705,
+  "single_via_capacity_a": 0.6282803345040615,
+  "single_via_resistance_ohm": 0.001239714162883705,
+  "total_capacity_a": 0.6282803345040615,
+  "warnings": [
+    "Current sharing between vias is not perfectly uniform.",
+    "Filled, capped, plugged, and unfilled vias can behave differently.",
+    "Use IPC-2152, the fabricator's data, or measurement for critical current paths."
+  ]
+}

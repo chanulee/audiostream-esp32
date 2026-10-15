@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LOVELACE · Silkscreen Studio</title>
+  <link rel="stylesheet" href="/editor.css">
+  <script src="/editor.js" defer></script>
+</head>
+<body>
+  <header>
+    <div><small>LOVELACE / AS-002</small><h1>Silkscreen Studio</h1></div>
+    <button id="save" class="primary" disabled>PCB에 저장</button>
+  </header>
+  <main>
+    <aside aria-label="실크 편집">
+      <label>보는 면<select id="side"><option value="B.SilkS">뒷면 · 바깥에서 보는 방향</option><option value="F.SilkS">앞면 · 부품이 있는 면</option></select></label>
+      <div class="actions"><button id="add-text">텍스트 추가</button><label class="file-button">SVG 불러오기<input id="upload" type="file" accept=".svg,image/svg+xml"></label></div>
+      <label>편집할 항목<select id="items" aria-label="편집할 항목"></select></label>
+      <fieldset id="properties" disabled>
+        <label id="text-label">텍스트<input id="text" maxlength="120"></label>
+        <div class="pair">
+          <label>X · mm<input id="x" type="number" step="0.1" min="0"></label>
+          <label>Y · mm<input id="y" type="number" step="0.1" min="0"></label>
+        </div>
+        <label>회전 · 시계 방향 °<input id="rotation" type="number" step="1" min="-360" max="360"></label>
+        <div id="text-fields" class="pair">
+          <label>글자 높이 · mm<input id="size" type="number" step="0.1" min="0.3" max="10"></label>
+          <label>선 두께 · mm<input id="thickness" type="number" step="0.01" min="0.05" max="1"></label>
+        </div>
+        <div id="svg-fields" hidden>
+          <div class="pair"><label>가로 · mm<input id="width" type="number" step="0.1" min="0.1"></label><label>세로 · mm<input id="height" type="number" readonly></label></div>
+          <label class="check"><input id="ignore-white" type="checkbox">흰 배경 제외</label>
+          <small>가로를 바꾸면 비율을 유지합니다. 색상은 모두 단색 잉크로 변환됩니다.</small>
+        </div>
+        <button id="delete" class="danger" type="button">선택 항목 삭제</button>
+      </fieldset>
+      <small>좌표 원점은 현재 보이는 면의 왼쪽 위입니다. 뒷면 미러는 저장할 때 자동 적용됩니다.</small>
+    </aside>
+    <section aria-label="PCB 배치 미리보기">
+      <div class="stage-heading"><span id="dimensions">보드 읽는 중…</span><span id="dirty">저장됨</span></div>
+      <div class="stage"><svg id="board" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="드래그로 실크 위치를 조절하는 PCB 미리보기"></svg></div>
+      <p class="hint">항목을 드래그하거나 X·Y를 입력하세요. SVG 형상은 저장 결과와 같으며, 텍스트 글꼴은 미리보기용입니다.</p>
+    </section>
+  </main>
+  <footer><div id="status" role="status" aria-live="polite">연결 중…</div><small>저장은 PCB·편집 배치를 업데이트합니다. 제작용 Gerber·ZIP은 보드 생성 명령으로 다시 만드세요.</small></footer>
+</body>
+</html>

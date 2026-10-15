@@ -1,0 +1,5767 @@
+(export
+	(version "E")
+	(design
+		(source "/Users/chanwoo/Documents/GitHub/audiostream-esp32/hardware/audiostream-s3/audiostream-s3.kicad_sch")
+		(date "2026-10-14T00:30:12")
+		(tool "Eeschema 10.0.6")
+		(sheet
+			(number "1")
+			(name "/")
+			(tstamps "/")
+			(title_block
+				(title "AudioStream ESP32-S3 / PCM5102A")
+				(company)
+				(rev "A prototype")
+				(date)
+				(source "audiostream-s3.kicad_sch")
+				(comment
+					(number "1")
+					(value "USB-C 5V; 3.3V digital + analog; real GND; no A2DP")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+	)
+	(components
+		(comp
+			(ref "C1")
+			(value "1uF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C1")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "4a9586f4-c084-5c58-a61d-68bd8dc7da27")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C2")
+			(value "100nF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C2")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "5c4dafe7-0f67-52c2-9d93-ff0ca211b13d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C3")
+			(value "10uF")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "57124b4f-c3bb-5908-8ef1-70dff612eec2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C4")
+			(value "10uF")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C4")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "742ec247-fb86-536e-9d05-a2ea9c8cd9af")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C5")
+			(value "10uF")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C5")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "5572aeec-9991-5e83-9406-57c4dbc59711")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C6")
+			(value "47uF")
+			(footprint "Capacitor_SMD:C_1206_3216Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_1206_3216Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C6")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "8cbfdd42-8e0e-5920-ae49-c493a81b9e5a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C7")
+			(value "10uF")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C7")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0731f687-ad13-541f-9c00-9632ec503936")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C8")
+			(value "1uF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C8")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "a22052be-637a-5691-89c2-5e9693e97297")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C9")
+			(value "10uF")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C9")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "1b8f4993-abf6-54a8-ad48-6862274f8560")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C10")
+			(value "100nF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C10")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "9c43b190-30aa-5813-8044-9ffb6c5f5015")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C11")
+			(value "10uF")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C11")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "7ba8f524-4161-5d44-b25e-1b335de41e4a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C12")
+			(value "2.2uF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C12")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "42324d90-a315-500c-b5c8-412fb35b7eaf")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C13")
+			(value "2.2uF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C13")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "a64d0edc-737b-5cc9-9c11-df15bfe78a83")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C14")
+			(value "100nF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C14")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2469b226-5916-50f2-af4d-a50d8488dd96")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C15")
+			(value "10uF")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C15")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "5aec0365-38ee-5b10-9bf8-5d6f6ad2f1b8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C16")
+			(value "100nF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C16")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "46323159-e2ed-5b95-83e4-90b356ec96f0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C17")
+			(value "10uF")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C17")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "f1bbb978-f9cb-56bb-9d0c-83513f22de13")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C18")
+			(value "100nF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C18")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2e21317c-39b6-52d8-af25-c469a03e5055")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C19")
+			(value "2.2nF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C19")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "091c9800-30d1-57b9-8489-cd6f64e65aae")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C20")
+			(value "2.2nF")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "C20")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "be1ed1db-715d-585b-867a-4a3c3b8e5cee")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D1")
+			(value "PESD5V0S1BA")
+			(footprint "Diode_SMD:D_SOD-323")
+			(fields
+				(field
+					(name "Footprint") "Diode_SMD:D_SOD-323")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "D1")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0456b7e5-86b3-578f-8e5a-638adb9f25bc")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D2")
+			(value "PESD5V0S1BA")
+			(footprint "Diode_SMD:D_SOD-323")
+			(fields
+				(field
+					(name "Footprint") "Diode_SMD:D_SOD-323")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "D2")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "8e28851a-4707-5f4d-899a-d63efa8fa7c7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D3")
+			(value "PESD5V0S1BA")
+			(footprint "Diode_SMD:D_SOD-323")
+			(fields
+				(field
+					(name "Footprint") "Diode_SMD:D_SOD-323")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "D3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "a2786fb0-cb32-5948-bcbd-4ec9f0490a4e")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F1")
+			(value "MF-MSMF075-2")
+			(footprint "Fuse:Fuse_1812_4532Metric")
+			(fields
+				(field
+					(name "Footprint") "Fuse:Fuse_1812_4532Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "F1")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "dbb03054-2be3-5672-85a5-ea41d88b54a4")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J1")
+			(value "HRO TYPE-C-31-M-12")
+			(footprint "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12")
+			(fields
+				(field
+					(name "Footprint") "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "J1")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2881635b-bd80-5854-939c-bd951b2bac4b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "A1")
+						)
+						(pin
+							(num "A12")
+						)
+						(pin
+							(num "B1")
+						)
+						(pin
+							(num "B12")
+						)
+						(pin
+							(num "SH")
+						)
+						(pin
+							(num "A4")
+						)
+						(pin
+							(num "A9")
+						)
+						(pin
+							(num "B4")
+						)
+						(pin
+							(num "B9")
+						)
+						(pin
+							(num "A5")
+						)
+						(pin
+							(num "B5")
+						)
+						(pin
+							(num "A6")
+						)
+						(pin
+							(num "B6")
+						)
+						(pin
+							(num "A7")
+						)
+						(pin
+							(num "B7")
+						)
+						(pin
+							(num "A8")
+						)
+						(pin
+							(num "B8")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J2")
+			(value "SJ1-3523N")
+			(footprint "Connector_Audio:Jack_3.5mm_CUI_SJ1-3523N_Horizontal")
+			(fields
+				(field
+					(name "Footprint") "Connector_Audio:Jack_3.5mm_CUI_SJ1-3523N_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "J2")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "c606526b-56d2-5b58-b7ce-71fa63b07109")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "T")
+						)
+						(pin
+							(num "R")
+						)
+						(pin
+							(num "S")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J3")
+			(value "UART recovery")
+			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical")
+			(fields
+				(field
+					(name "Footprint") "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "J3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0aef57db-e50e-519f-b6ef-7986a1628e8c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "L1")
+			(value "2.2uH")
+			(footprint "Inductor_SMD:L_Coilcraft_LPS4018")
+			(fields
+				(field
+					(name "Footprint") "Inductor_SMD:L_Coilcraft_LPS4018")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "L1")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0f77936a-df16-508f-be11-210c72b961eb")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R1")
+			(value "5.1k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R1")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "93159a71-9444-5c2f-befc-82eed73ebb3a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R2")
+			(value "5.1k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R2")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0e5e536f-626d-5456-8ba0-f2a53c06c47d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R3")
+			(value "22")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b2cab60d-59e4-5fc7-875f-8e78121b59c0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R4")
+			(value "22")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R4")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "d3f7162c-9abb-5115-b60d-33de9d1be7f4")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R5")
+			(value "10k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R5")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "8616f7f9-d6d9-5b4a-8e78-853ceb791ca5")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R6")
+			(value "10k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R6")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "614485ee-45a5-5d9a-8bc6-20ea1b2d7ab5")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R7")
+			(value "33")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R7")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "593f4c43-48af-58fb-abd6-b512bfe4ae4f")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R8")
+			(value "33")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R8")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "fcaca33c-4d9d-5fe3-9ab4-f6e54bc4c32b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R9")
+			(value "33")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R9")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0dfb858f-349e-531c-95ec-a1e38a228499")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R10")
+			(value "10k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R10")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "225a0d8a-8af9-579c-b0f0-b749cec748f6")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R11")
+			(value "470")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R11")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "38fe6d75-1a8e-5979-9114-9986ae1b2261")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R12")
+			(value "470")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "R12")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "af51ad05-ee62-5d20-8e19-121da9f6d1ea")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "SW1")
+			(value "TL3342F160QG")
+			(footprint "Button_Switch_SMD:SW_SPST_TL3342")
+			(fields
+				(field
+					(name "Footprint") "Button_Switch_SMD:SW_SPST_TL3342")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "SW1")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "3abcf682-126e-588c-a6d9-f07091b3679f")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "SW2")
+			(value "TL3342F160QG")
+			(footprint "Button_Switch_SMD:SW_SPST_TL3342")
+			(fields
+				(field
+					(name "Footprint") "Button_Switch_SMD:SW_SPST_TL3342")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "SW2")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "eb90c40b-381f-5ddd-820a-8bcec0205d6b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U1")
+			(value "ESP32-S3-WROOM-1-N16R8")
+			(footprint "RF_Module:ESP32-S3-WROOM-1")
+			(fields
+				(field
+					(name "Footprint") "RF_Module:ESP32-S3-WROOM-1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "U1")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2751c170-bc88-50e5-9109-5bba47276dac")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "22")
+						)
+						(pin
+							(num "23")
+						)
+						(pin
+							(num "24")
+						)
+						(pin
+							(num "25")
+						)
+						(pin
+							(num "26")
+						)
+						(pin
+							(num "27")
+						)
+						(pin
+							(num "28")
+						)
+						(pin
+							(num "29")
+						)
+						(pin
+							(num "30")
+						)
+						(pin
+							(num "31")
+						)
+						(pin
+							(num "32")
+						)
+						(pin
+							(num "33")
+						)
+						(pin
+							(num "34")
+						)
+						(pin
+							(num "35")
+						)
+						(pin
+							(num "36")
+						)
+						(pin
+							(num "37")
+						)
+						(pin
+							(num "38")
+						)
+						(pin
+							(num "39")
+						)
+						(pin
+							(num "40")
+						)
+						(pin
+							(num "41")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U2")
+			(value "PCM5102APWR")
+			(footprint "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm")
+			(fields
+				(field
+					(name "Footprint") "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "U2")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "3eeb8bd2-d5a3-5156-8008-328f5e4ce515")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "20")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U3")
+			(value "TPS62162DSGR")
+			(footprint "Package_SON:Texas_DSG0008A_WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm_ThermalVias")
+			(fields
+				(field
+					(name "Footprint") "Package_SON:Texas_DSG0008A_WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm_ThermalVias")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "U3")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "c378e1eb-d838-5b69-95a5-becd7ac11b8a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U4")
+			(value "TLV75533PDBVR")
+			(footprint "Package_TO_SOT_SMD:SOT-23-5")
+			(fields
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-5")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "U4")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b7f8c4d8-0de7-5d2c-bf05-7e476fe095d4")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U5")
+			(value "USBLC6-2SC6")
+			(footprint "Package_TO_SOT_SMD:SOT-23-6")
+			(fields
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-6")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "AudioStream")
+				(part "U5")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "audiostream-s3")
+			)
+			(property
+				(name "Sheetfile")
+				(value "audiostream-s3.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "1b484c83-cdbd-57a8-9bba-0a52a0f26874")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+					)
+				)
+			)
+		)
+	)
+	(groups)
+	(variants)
+	(libparts
+		(libpart
+			(lib "AudioStream")
+			(part "C1")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "1uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C10")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C11")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C12")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "2.2uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C13")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "2.2uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C14")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C15")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C16")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C17")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C18")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C19")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "2.2nF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C2")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C20")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "2.2nF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C3")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C4")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C5")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C6")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "47uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_1206_3216Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C7")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C8")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "1uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "C9")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "D1")
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "PESD5V0S1BA")
+				(field
+					(name "Footprint") "Diode_SMD:D_SOD-323")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "A1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "A2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "D2")
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "PESD5V0S1BA")
+				(field
+					(name "Footprint") "Diode_SMD:D_SOD-323")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "A1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "A2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "D3")
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "PESD5V0S1BA")
+				(field
+					(name "Footprint") "Diode_SMD:D_SOD-323")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "A1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "A2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "F1")
+			(fields
+				(field
+					(name "Reference") "F")
+				(field
+					(name "Value") "MF-MSMF075-2")
+				(field
+					(name "Footprint") "Fuse:Fuse_1812_4532Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "J1")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "HRO TYPE-C-31-M-12")
+				(field
+					(name "Footprint") "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "A1")
+					(name "A1")
+					(type "passive")
+				)
+				(pin
+					(num "A4")
+					(name "A4")
+					(type "passive")
+				)
+				(pin
+					(num "A5")
+					(name "A5")
+					(type "passive")
+				)
+				(pin
+					(num "A6")
+					(name "A6")
+					(type "passive")
+				)
+				(pin
+					(num "A7")
+					(name "A7")
+					(type "passive")
+				)
+				(pin
+					(num "A8")
+					(name "A8")
+					(type "passive")
+				)
+				(pin
+					(num "A9")
+					(name "A9")
+					(type "passive")
+				)
+				(pin
+					(num "A12")
+					(name "A12")
+					(type "passive")
+				)
+				(pin
+					(num "B1")
+					(name "B1")
+					(type "passive")
+				)
+				(pin
+					(num "B4")
+					(name "B4")
+					(type "passive")
+				)
+				(pin
+					(num "B5")
+					(name "B5")
+					(type "passive")
+				)
+				(pin
+					(num "B6")
+					(name "B6")
+					(type "passive")
+				)
+				(pin
+					(num "B7")
+					(name "B7")
+					(type "passive")
+				)
+				(pin
+					(num "B8")
+					(name "B8")
+					(type "passive")
+				)
+				(pin
+					(num "B9")
+					(name "B9")
+					(type "passive")
+				)
+				(pin
+					(num "B12")
+					(name "B12")
+					(type "passive")
+				)
+				(pin
+					(num "SH")
+					(name "SH")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "J2")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "SJ1-3523N")
+				(field
+					(name "Footprint") "Connector_Audio:Jack_3.5mm_CUI_SJ1-3523N_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "R")
+					(name "R")
+					(type "passive")
+				)
+				(pin
+					(num "S")
+					(name "S")
+					(type "passive")
+				)
+				(pin
+					(num "T")
+					(name "T")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "J3")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "UART recovery")
+				(field
+					(name "Footprint") "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "L1")
+			(fields
+				(field
+					(name "Reference") "L")
+				(field
+					(name "Value") "2.2uH")
+				(field
+					(name "Footprint") "Inductor_SMD:L_Coilcraft_LPS4018")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R1")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "5.1k")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R10")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "10k")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R11")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "470")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R12")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "470")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R2")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "5.1k")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R3")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "22")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R4")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "22")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R5")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "10k")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R6")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "10k")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R7")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "33")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R8")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "33")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "R9")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "33")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "SW1")
+			(fields
+				(field
+					(name "Reference") "SW")
+				(field
+					(name "Value") "TL3342F160QG")
+				(field
+					(name "Footprint") "Button_Switch_SMD:SW_SPST_TL3342")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "SW2")
+			(fields
+				(field
+					(name "Reference") "SW")
+				(field
+					(name "Value") "TL3342F160QG")
+				(field
+					(name "Footprint") "Button_Switch_SMD:SW_SPST_TL3342")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "U1")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "ESP32-S3-WROOM-1-N16R8")
+				(field
+					(name "Footprint") "RF_Module:ESP32-S3-WROOM-1")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "GND")
+					(type "power_in")
+				)
+				(pin
+					(num "2")
+					(name "3V3")
+					(type "power_in")
+				)
+				(pin
+					(num "3")
+					(name "EN")
+					(type "bidirectional")
+				)
+				(pin
+					(num "4")
+					(name "GPIO4")
+					(type "bidirectional")
+				)
+				(pin
+					(num "5")
+					(name "GPIO5")
+					(type "bidirectional")
+				)
+				(pin
+					(num "6")
+					(name "GPIO6")
+					(type "bidirectional")
+				)
+				(pin
+					(num "7")
+					(name "GPIO7")
+					(type "bidirectional")
+				)
+				(pin
+					(num "8")
+					(name "GPIO15")
+					(type "bidirectional")
+				)
+				(pin
+					(num "9")
+					(name "GPIO16")
+					(type "bidirectional")
+				)
+				(pin
+					(num "10")
+					(name "GPIO17")
+					(type "bidirectional")
+				)
+				(pin
+					(num "11")
+					(name "GPIO18")
+					(type "bidirectional")
+				)
+				(pin
+					(num "12")
+					(name "GPIO8")
+					(type "bidirectional")
+				)
+				(pin
+					(num "13")
+					(name "GPIO19")
+					(type "bidirectional")
+				)
+				(pin
+					(num "14")
+					(name "GPIO20")
+					(type "bidirectional")
+				)
+				(pin
+					(num "15")
+					(name "GPIO3")
+					(type "bidirectional")
+				)
+				(pin
+					(num "16")
+					(name "GPIO46")
+					(type "bidirectional")
+				)
+				(pin
+					(num "17")
+					(name "GPIO9")
+					(type "bidirectional")
+				)
+				(pin
+					(num "18")
+					(name "GPIO10")
+					(type "bidirectional")
+				)
+				(pin
+					(num "19")
+					(name "GPIO11")
+					(type "output")
+				)
+				(pin
+					(num "20")
+					(name "GPIO12")
+					(type "output")
+				)
+				(pin
+					(num "21")
+					(name "GPIO13")
+					(type "output")
+				)
+				(pin
+					(num "22")
+					(name "GPIO14")
+					(type "bidirectional")
+				)
+				(pin
+					(num "23")
+					(name "GPIO21")
+					(type "bidirectional")
+				)
+				(pin
+					(num "24")
+					(name "GPIO47")
+					(type "bidirectional")
+				)
+				(pin
+					(num "25")
+					(name "GPIO48")
+					(type "bidirectional")
+				)
+				(pin
+					(num "26")
+					(name "GPIO45")
+					(type "bidirectional")
+				)
+				(pin
+					(num "27")
+					(name "GPIO0")
+					(type "bidirectional")
+				)
+				(pin
+					(num "28")
+					(name "GPIO35")
+					(type "bidirectional")
+				)
+				(pin
+					(num "29")
+					(name "GPIO36")
+					(type "bidirectional")
+				)
+				(pin
+					(num "30")
+					(name "GPIO37")
+					(type "bidirectional")
+				)
+				(pin
+					(num "31")
+					(name "GPIO38")
+					(type "bidirectional")
+				)
+				(pin
+					(num "32")
+					(name "GPIO39")
+					(type "bidirectional")
+				)
+				(pin
+					(num "33")
+					(name "GPIO40")
+					(type "bidirectional")
+				)
+				(pin
+					(num "34")
+					(name "GPIO41")
+					(type "bidirectional")
+				)
+				(pin
+					(num "35")
+					(name "GPIO42")
+					(type "bidirectional")
+				)
+				(pin
+					(num "36")
+					(name "RXD0")
+					(type "bidirectional")
+				)
+				(pin
+					(num "37")
+					(name "TXD0")
+					(type "output")
+				)
+				(pin
+					(num "38")
+					(name "GPIO2")
+					(type "bidirectional")
+				)
+				(pin
+					(num "39")
+					(name "GPIO1")
+					(type "bidirectional")
+				)
+				(pin
+					(num "40")
+					(name "GND")
+					(type "power_in")
+				)
+				(pin
+					(num "41")
+					(name "EP_GND")
+					(type "power_in")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "U2")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "PCM5102APWR")
+				(field
+					(name "Footprint") "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "CPVDD")
+					(type "power_in")
+				)
+				(pin
+					(num "2")
+					(name "CAPP")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "CPGND")
+					(type "power_in")
+				)
+				(pin
+					(num "4")
+					(name "CAPM")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "VNEG")
+					(type "output")
+				)
+				(pin
+					(num "6")
+					(name "OUTL")
+					(type "output")
+				)
+				(pin
+					(num "7")
+					(name "OUTR")
+					(type "output")
+				)
+				(pin
+					(num "8")
+					(name "AVDD")
+					(type "power_in")
+				)
+				(pin
+					(num "9")
+					(name "AGND")
+					(type "power_in")
+				)
+				(pin
+					(num "10")
+					(name "DEMP")
+					(type "input")
+				)
+				(pin
+					(num "11")
+					(name "FLT")
+					(type "input")
+				)
+				(pin
+					(num "12")
+					(name "SCK")
+					(type "input")
+				)
+				(pin
+					(num "13")
+					(name "BCK")
+					(type "input")
+				)
+				(pin
+					(num "14")
+					(name "DIN")
+					(type "input")
+				)
+				(pin
+					(num "15")
+					(name "LRCK")
+					(type "input")
+				)
+				(pin
+					(num "16")
+					(name "FMT")
+					(type "input")
+				)
+				(pin
+					(num "17")
+					(name "XSMT")
+					(type "input")
+				)
+				(pin
+					(num "18")
+					(name "LDOO")
+					(type "output")
+				)
+				(pin
+					(num "19")
+					(name "DGND")
+					(type "power_in")
+				)
+				(pin
+					(num "20")
+					(name "DVDD")
+					(type "power_in")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "U3")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "TPS62162DSGR")
+				(field
+					(name "Footprint") "Package_SON:Texas_DSG0008A_WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm_ThermalVias")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "PGND")
+					(type "power_in")
+				)
+				(pin
+					(num "2")
+					(name "VIN")
+					(type "power_in")
+				)
+				(pin
+					(num "3")
+					(name "EN")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "AGND")
+					(type "power_in")
+				)
+				(pin
+					(num "5")
+					(name "FB")
+					(type "input")
+				)
+				(pin
+					(num "6")
+					(name "VOS")
+					(type "input")
+				)
+				(pin
+					(num "7")
+					(name "SW")
+					(type "power_out")
+				)
+				(pin
+					(num "8")
+					(name "PG")
+					(type "open_collector")
+				)
+				(pin
+					(num "9")
+					(name "EP_GND")
+					(type "power_in")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "U4")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "TLV75533PDBVR")
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-5")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "IN")
+					(type "power_in")
+				)
+				(pin
+					(num "2")
+					(name "GND")
+					(type "power_in")
+				)
+				(pin
+					(num "3")
+					(name "EN")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "NC")
+					(type "no_connect")
+				)
+				(pin
+					(num "5")
+					(name "OUT")
+					(type "power_out")
+				)
+			)
+		)
+		(libpart
+			(lib "AudioStream")
+			(part "U5")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "USBLC6-2SC6")
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-6")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "IO1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "IO2")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "IO2")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "VBUS")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "IO1")
+					(type "passive")
+				)
+			)
+		)
+	)
+	(libraries
+		(library
+			(logical "AudioStream")
+			(uri "${KIPRJMOD}/AudioStream.kicad_sym")
+		)
+	)
+	(nets
+		(net
+			(code "1")
+			(name "/+3V3_A")
+			(class "Default")
+			(node
+				(ref "C10")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C11")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C14")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C15")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C9")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "1")
+				(pinfunction "CPVDD_1")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U2")
+				(pin "8")
+				(pinfunction "AVDD_8")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U4")
+				(pin "5")
+				(pinfunction "OUT_5")
+				(pintype "power_out")
+			)
+		)
+		(net
+			(code "2")
+			(name "/+3V3_D")
+			(class "Default")
+			(node
+				(ref "C16")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C17")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C5")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C6")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "L1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R10")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R5")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R6")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "2")
+				(pinfunction "3V3_2")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U2")
+				(pin "20")
+				(pinfunction "DVDD_20")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U3")
+				(pin "6")
+				(pinfunction "VOS_6")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "3")
+			(name "/+5V")
+			(class "Default")
+			(node
+				(ref "C4")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C7")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C8")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "2")
+				(pinfunction "VIN_2")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U3")
+				(pin "3")
+				(pinfunction "EN_3")
+				(pintype "input")
+			)
+			(node
+				(ref "U4")
+				(pin "1")
+				(pinfunction "IN_1")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U4")
+				(pin "3")
+				(pinfunction "EN_3")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "4")
+			(name "/BCLK")
+			(class "Default")
+			(node
+				(ref "R7")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "13")
+				(pinfunction "BCK_13")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "5")
+			(name "/BCLK_SRC")
+			(class "Default")
+			(node
+				(ref "R7")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "19")
+				(pinfunction "GPIO11_19")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "6")
+			(name "/BOOT")
+			(class "Default")
+			(node
+				(ref "R6")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "SW1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "27")
+				(pinfunction "GPIO0_27")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "7")
+			(name "/CAPM")
+			(class "Default")
+			(node
+				(ref "C12")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "4")
+				(pinfunction "CAPM_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "8")
+			(name "/CAPP")
+			(class "Default")
+			(node
+				(ref "C12")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "2")
+				(pinfunction "CAPP_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "9")
+			(name "/CC1")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A5")
+				(pinfunction "A5_A5")
+				(pintype "passive")
+			)
+			(node
+				(ref "R1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "10")
+			(name "/CC2")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B5")
+				(pinfunction "B5_B5")
+				(pintype "passive")
+			)
+			(node
+				(ref "R2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "11")
+			(name "/DAC_L")
+			(class "Default")
+			(node
+				(ref "R11")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "6")
+				(pinfunction "OUTL_6")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "12")
+			(name "/DAC_R")
+			(class "Default")
+			(node
+				(ref "R12")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "7")
+				(pinfunction "OUTR_7")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "13")
+			(name "/DATA")
+			(class "Default")
+			(node
+				(ref "R8")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "14")
+				(pinfunction "DIN_14")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "14")
+			(name "/DATA_SRC")
+			(class "Default")
+			(node
+				(ref "R8")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "20")
+				(pinfunction "GPIO12_20")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "15")
+			(name "/EN")
+			(class "Default")
+			(node
+				(ref "C1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R5")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "SW2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "3")
+				(pinfunction "EN_3")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "16")
+			(name "/GND")
+			(class "Default")
+			(node
+				(ref "C1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C10")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C11")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C13")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C14")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C15")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C16")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C17")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C18")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C19")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C20")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C4")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C5")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C6")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C7")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C8")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C9")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "D1")
+				(pin "2")
+				(pinfunction "A2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "D2")
+				(pin "2")
+				(pinfunction "A2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "D3")
+				(pin "2")
+				(pinfunction "A2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "A1")
+				(pinfunction "A1_A1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "A12")
+				(pinfunction "A12_A12")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B1")
+				(pinfunction "B1_B1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B12")
+				(pinfunction "B12_B12")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "SH")
+				(pinfunction "SH_SH")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "S")
+				(pinfunction "S_S")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "SW1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "SW2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "1")
+				(pinfunction "GND_1")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U1")
+				(pin "40")
+				(pinfunction "GND_40")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U1")
+				(pin "41")
+				(pinfunction "EP_GND_41")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U2")
+				(pin "10")
+				(pinfunction "DEMP_10")
+				(pintype "input")
+			)
+			(node
+				(ref "U2")
+				(pin "11")
+				(pinfunction "FLT_11")
+				(pintype "input")
+			)
+			(node
+				(ref "U2")
+				(pin "12")
+				(pinfunction "SCK_12")
+				(pintype "input")
+			)
+			(node
+				(ref "U2")
+				(pin "16")
+				(pinfunction "FMT_16")
+				(pintype "input")
+			)
+			(node
+				(ref "U2")
+				(pin "19")
+				(pinfunction "DGND_19")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U2")
+				(pin "3")
+				(pinfunction "CPGND_3")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U2")
+				(pin "9")
+				(pinfunction "AGND_9")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U3")
+				(pin "1")
+				(pinfunction "PGND_1")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U3")
+				(pin "4")
+				(pinfunction "AGND_4")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U3")
+				(pin "5")
+				(pinfunction "FB_5")
+				(pintype "input")
+			)
+			(node
+				(ref "U3")
+				(pin "9")
+				(pinfunction "EP_GND_9")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U4")
+				(pin "2")
+				(pinfunction "GND_2")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U5")
+				(pin "2")
+				(pinfunction "GND_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "17")
+			(name "/LDOO")
+			(class "Default")
+			(node
+				(ref "C18")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "18")
+				(pinfunction "LDOO_18")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "18")
+			(name "/LINE_L")
+			(class "Default")
+			(node
+				(ref "C19")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D2")
+				(pin "1")
+				(pinfunction "A1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "T")
+				(pinfunction "T_T")
+				(pintype "passive")
+			)
+			(node
+				(ref "R11")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "19")
+			(name "/LINE_R")
+			(class "Default")
+			(node
+				(ref "C20")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D3")
+				(pin "1")
+				(pinfunction "A1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "R")
+				(pinfunction "R_R")
+				(pintype "passive")
+			)
+			(node
+				(ref "R12")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "20")
+			(name "/LRCLK")
+			(class "Default")
+			(node
+				(ref "R9")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "15")
+				(pinfunction "LRCK_15")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "21")
+			(name "/LRCLK_SRC")
+			(class "Default")
+			(node
+				(ref "R9")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "21")
+				(pinfunction "GPIO13_21")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "22")
+			(name "/SW")
+			(class "Default")
+			(node
+				(ref "L1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "7")
+				(pinfunction "SW_7")
+				(pintype "power_out")
+			)
+		)
+		(net
+			(code "23")
+			(name "/UART_RX")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "36")
+				(pinfunction "RXD0_36")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "24")
+			(name "/UART_TX")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "37")
+				(pinfunction "TXD0_37")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "25")
+			(name "/USB_DM")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A7")
+				(pinfunction "A7_A7")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B7")
+				(pinfunction "B7_B7")
+				(pintype "passive")
+			)
+			(node
+				(ref "R4")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "3")
+				(pinfunction "IO2_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "4")
+				(pinfunction "IO2_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "26")
+			(name "/USB_DM_MCU")
+			(class "Default")
+			(node
+				(ref "R4")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "13")
+				(pinfunction "GPIO19_13")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "27")
+			(name "/USB_DP")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A6")
+				(pinfunction "A6_A6")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B6")
+				(pinfunction "B6_B6")
+				(pintype "passive")
+			)
+			(node
+				(ref "R3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "1")
+				(pinfunction "IO1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "6")
+				(pinfunction "IO1_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "28")
+			(name "/USB_DP_MCU")
+			(class "Default")
+			(node
+				(ref "R3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "14")
+				(pinfunction "GPIO20_14")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "29")
+			(name "/VBUS")
+			(class "Default")
+			(node
+				(ref "D1")
+				(pin "1")
+				(pinfunction "A1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "A4")
+				(pinfunction "A4_A4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "A9")
+				(pinfunction "A9_A9")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B4")
+				(pinfunction "B4_B4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "B9")
+				(pinfunction "B9_B9")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "5")
+				(pinfunction "VBUS_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "30")
+			(name "/VNEG")
+			(class "Default")
+			(node
+				(ref "C13")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "5")
+				(pinfunction "VNEG_5")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "31")
+			(name "/XSMT")
+			(class "Default")
+			(node
+				(ref "R10")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "17")
+				(pinfunction "XSMT_17")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "32")
+			(name "unconnected-(J1-PadA8)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "A8")
+				(pinfunction "A8_A8")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "33")
+			(name "unconnected-(J1-PadB8)")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "B8")
+				(pinfunction "B8_B8")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "34")
+			(name "unconnected-(U1-GPIO1-Pad39)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "39")
+				(pinfunction "GPIO1_39")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "35")
+			(name "unconnected-(U1-GPIO2-Pad38)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "38")
+				(pinfunction "GPIO2_38")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "36")
+			(name "unconnected-(U1-GPIO3-Pad15)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "15")
+				(pinfunction "GPIO3_15")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "37")
+			(name "unconnected-(U1-GPIO4-Pad4)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "4")
+				(pinfunction "GPIO4_4")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "38")
+			(name "unconnected-(U1-GPIO5-Pad5)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "5")
+				(pinfunction "GPIO5_5")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "39")
+			(name "unconnected-(U1-GPIO6-Pad6)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "6")
+				(pinfunction "GPIO6_6")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "40")
+			(name "unconnected-(U1-GPIO7-Pad7)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "7")
+				(pinfunction "GPIO7_7")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "41")
+			(name "unconnected-(U1-GPIO8-Pad12)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "12")
+				(pinfunction "GPIO8_12")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "42")
+			(name "unconnected-(U1-GPIO9-Pad17)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "17")
+				(pinfunction "GPIO9_17")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "43")
+			(name "unconnected-(U1-GPIO10-Pad18)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "18")
+				(pinfunction "GPIO10_18")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "44")
+			(name "unconnected-(U1-GPIO14-Pad22)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "22")
+				(pinfunction "GPIO14_22")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "45")
+			(name "unconnected-(U1-GPIO15-Pad8)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "8")
+				(pinfunction "GPIO15_8")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "46")
+			(name "unconnected-(U1-GPIO16-Pad9)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "9")
+				(pinfunction "GPIO16_9")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "47")
+			(name "unconnected-(U1-GPIO17-Pad10)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "10")
+				(pinfunction "GPIO17_10")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "48")
+			(name "unconnected-(U1-GPIO18-Pad11)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "11")
+				(pinfunction "GPIO18_11")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "49")
+			(name "unconnected-(U1-GPIO21-Pad23)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "23")
+				(pinfunction "GPIO21_23")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "50")
+			(name "unconnected-(U1-GPIO35-Pad28)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "28")
+				(pinfunction "GPIO35_28")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "51")
+			(name "unconnected-(U1-GPIO36-Pad29)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "29")
+				(pinfunction "GPIO36_29")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "52")
+			(name "unconnected-(U1-GPIO37-Pad30)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "30")
+				(pinfunction "GPIO37_30")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "53")
+			(name "unconnected-(U1-GPIO38-Pad31)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "31")
+				(pinfunction "GPIO38_31")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "54")
+			(name "unconnected-(U1-GPIO39-Pad32)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "32")
+				(pinfunction "GPIO39_32")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "55")
+			(name "unconnected-(U1-GPIO40-Pad33)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "33")
+				(pinfunction "GPIO40_33")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "56")
+			(name "unconnected-(U1-GPIO41-Pad34)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "34")
+				(pinfunction "GPIO41_34")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "57")
+			(name "unconnected-(U1-GPIO42-Pad35)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "35")
+				(pinfunction "GPIO42_35")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "58")
+			(name "unconnected-(U1-GPIO45-Pad26)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "26")
+				(pinfunction "GPIO45_26")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "59")
+			(name "unconnected-(U1-GPIO46-Pad16)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "16")
+				(pinfunction "GPIO46_16")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "60")
+			(name "unconnected-(U1-GPIO47-Pad24)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "24")
+				(pinfunction "GPIO47_24")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "61")
+			(name "unconnected-(U1-GPIO48-Pad25)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "25")
+				(pinfunction "GPIO48_25")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "62")
+			(name "unconnected-(U3-PG-Pad8)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "8")
+				(pinfunction "PG_8")
+				(pintype "open_collector+no_connect")
+			)
+		)
+		(net
+			(code "63")
+			(name "unconnected-(U4-NC-Pad4)")
+			(class "Default")
+			(node
+				(ref "U4")
+				(pin "4")
+				(pinfunction "NC_4")
+				(pintype "no_connect")
+			)
+		)
+	)
+)

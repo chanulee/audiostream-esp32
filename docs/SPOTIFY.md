@@ -22,11 +22,11 @@ Client Secret과 재사용 로그인은 이 개발용 보드의 NVS에 저장됩
 
 - 두 소스 모두 같은 재생 태스크에서 I2S를 씁니다. 별도 태스크가 동시에 DAC를 쓰지 않습니다.
 - Spotify PCM은 64KB PSRAM FIFO에 넣습니다. 버퍼가 차면 디코더에 backpressure를 적용합니다.
-- AirPlay가 재생을 시작하면 Spotify를 일시정지하고 대기 PCM과 곡 알림을 초기화합니다.
-- AirPlay가 재생 중이면 Spotify가 출력 장치를 차지할 수 없습니다. AirPlay를 중단한 다음 Spotify 앱에서 다시 재생하세요.
+- AirPlay·Spotify·Bluetooth에 고정 우선순위는 없습니다. 새 재생/재개 요청이 출력을 가져옵니다. 이전 소스는 일시정지 요청(Spotify yield, AVRCP pause)을 받고 대기 PCM은 버립니다.
+- 검색과 AirPlay 세션은 유지합니다. AirPlay 2의 원격 MRP pause는 구현하지 않았으므로 송신 앱이 일시정지 상태로 바뀌는 것까지 보장하지 않습니다. 비활성 Spotify/AirPlay 세션의 늦은 flush/end/LED 이벤트는 현재 선택된 출력에 영향을 주지 않도록 처리합니다.
 - Spotify의 일시정지·다음·이전·탐색·볼륨을 처리하며, 기기의 재생 제어도 현재 소스에 전달합니다. 음소거는 볼륨 0과 이전 볼륨 복원으로 처리합니다.
 - 볼륨은 별도로 관리하고 변경 후 NVS에 저장합니다. 출력의 볼륨 램프·채널 선택·WAV 캡처를 공유합니다.
-- 현재 지원 프로필은 I2S / 44.1kHz 출력입니다. 이식한 Vorbis 경로는 44.1kHz stereo 스트림을 받으며, 다른 포맷은 오류를 기록하고 재생하지 않습니다. USB/S/PDIF, DAC 자체 볼륨 제어와 Bluetooth를 함께 켜는 프로필은 활성화하지 않습니다.
+- 현재 Spotify 요청 품질은 Ogg Vorbis 320kbps이며 실물 부하 검증은 남아 있습니다. 현재 지원 프로필은 I2S / 44.1kHz 출력입니다. 이식한 Vorbis 경로는 44.1kHz stereo 스트림을 받으며, 다른 포맷은 오류를 기록하고 재생하지 않습니다. LOVELACE 펌웨어는 Spotify와 Bluetooth를 함께 빌드합니다. 이 조합의 내부 RAM 여유와 Wi-Fi/BT 공존 상태의 끊김은 실기기에서 측정해야 합니다.
 
 곡 시작 알림은 PCM이 출력 FIFO에서 빠지는 시점에 보냅니다. 실제 I2S 출력과는 DMA 지연만큼 차이가 있습니다. 이는 정밀한 멀티룸 동기화 기능을 제공하지 않습니다.
 
@@ -47,10 +47,14 @@ Client Secret과 재사용 로그인은 이 개발용 보드의 NVS에 저장됩
 
 ## 확인한 범위
 
-- S3 펌웨어 빌드·링크.
+- `lovelace-as-002` (WROVER) 펌웨어 빌드·링크.
 - PCM FIFO 경계·랩어라운드·backpressure.
-- AirPlay 우선 전환, 중단 후 재개, 일시정지 시 버퍼 유지, flush 시 이전 PCM 삭제, 볼륨 범위.
+- AirPlay/Spotify/Bluetooth 출력 소유권 전환, 중단 후 재개, 일시정지 시 버퍼 유지, flush 시 이전 PCM 삭제, 볼륨 범위.
 - 연결 폼의 percent encoding, `+`, 중복 키, 잘못된 입력 거절.
 - WAV 헤더 및 Mac 다운로드의 파일 보존·잘린 데이터 검사.
 
 실제 기기 검색, Premium 계정 로그인, Spotify 서버/CDN 접근, 연속 곡 재생 및 음질은 보드와 본인의 계정으로 확인해야 합니다. 소스 출처와 배포 관련 조건은 [UPSTREAM.md](UPSTREAM.md)를 참고하세요.
+
+## 2026-10-14 기능 검토
+
+[공식 SDK / Soloist / 오픈소스 / Reddit 조사와 다중 휴대폰·Bluetooth·Flash 검토](CONNECT_RESEARCH.md)를 참고하세요. 같은 Spotify 계정의 다른 휴대폰 제어는 cspot SPIRC user 채널 구조가 처리할 수 있지만 실제 두 기기 검증은 남아 있습니다. 다른 계정으로의 자동 소유권 전환은 아직 구현하지 않았습니다. Shuffle/Repeat 메시지는 현재 수신 후 notify만 수행하므로 동작 지원으로 표시하지 않습니다.

@@ -38,24 +38,13 @@ static const char *TAG = "playback_ctrl";
 #define VOLUME_MIN_DB  (-30.0f)
 #define VOLUME_MAX_DB  0.0f
 
-static playback_source_t s_source = PLAYBACK_SOURCE_NONE;
 static bool s_muted = false;
 static float s_pre_mute_db = -15.0f;
 
 esp_err_t playback_control_init(void) {
   dacp_init();
   ESP_LOGI(TAG, "Playback control initialized");
-  return ESP_OK;
-}
-
-void playback_control_set_source(playback_source_t source) {
-  s_muted = false;
-  __atomic_store_n(&s_source, source, __ATOMIC_RELAXED);
-  ESP_LOGI(TAG, "Source set to %d", source);
-}
-
-playback_source_t playback_control_get_source(void) {
-  return __atomic_load_n(&s_source, __ATOMIC_RELAXED);
+  return playback_control_source_init();
 }
 
 // ============================================================================
@@ -152,7 +141,7 @@ void playback_control_play_pause(void) {
     break;
 #endif
   default:
-    ESP_LOGI(TAG, "Play/pause: no active source (source=%d)", s_source);
+    ESP_LOGI(TAG, "Play/pause: no active source (source=%d)", playback_control_get_source());
     break;
   }
 }
@@ -269,9 +258,17 @@ void playback_control_toggle_mute(void) {
     break;
 #endif
   default:
-    ESP_LOGI(TAG, "Toggle mute: no active source (source=%d)", s_source);
+    ESP_LOGI(TAG, "Toggle mute: no active source (source=%d)", playback_control_get_source());
     break;
   }
+}
+
+void playback_control_pairing_mode(void) {
+#ifdef CONFIG_BT_A2DP_ENABLE
+  bt_a2dp_sink_pairing_mode();
+#else
+  ESP_LOGI(TAG, "Pairing mode: Bluetooth not built");
+#endif
 }
 
 bool playback_control_is_muted(void) {
@@ -282,6 +279,9 @@ bool playback_control_is_muted(void) {
 }
 
 int playback_control_get_volume_percent(void) {
+#ifdef CONFIG_BT_A2DP_ENABLE
+  if (playback_control_get_source()==PLAYBACK_SOURCE_BLUETOOTH) return bt_a2dp_sink_volume_percent();
+#endif
 #ifdef CONFIG_SPOTIFY_ENABLED
   if (playback_control_get_source() == PLAYBACK_SOURCE_SPOTIFY) return spotify_volume_percent();
 #endif

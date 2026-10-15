@@ -2,17 +2,17 @@
 
 `firmware/`는 [rbouteiller/airplay-esp32](https://github.com/rbouteiller/airplay-esp32)의 커밋 `811d5f8af750096683dcec7c95d1cbc08c2f7601`에서 가져온 소스 스냅샷입니다. `.git` 디렉터리는 포함하지 않았습니다. 원본 README와 [라이선스](../firmware/LICENSE)를 보존했습니다. 해당 라이선스는 비상업적 사용만 허용하므로 상용 제품으로 판매하려면 저작권자의 별도 허가가 필요합니다.
 
-`components/u8g2` 서브모듈은 커밋 `764ee93150d23779ea9d8a7e8cae73efb60749d4`의 `csrc/`, `CMakeLists.txt`, `LICENSE`, `README.md`만 포함했습니다. ESP-IDF 빌드에 불필요한 도구·예제·문서 약 292MB를 제외했습니다. 폰트와 각 컴포넌트는 해당 디렉터리의 라이선스도 따릅니다.
+이 프로젝트에서 추가·변경한 내용:
 
-이 프로젝트에서 추가한 변경:
+- LOVELACE / AS-002 전용 PlatformIO 환경(`lovelace-as-002`, `lovelace-as-002-capture`)과 WROVER-E N8R8 설정. Flash 8MB 파티션(3MiB OTA 슬롯 2개 + SPIFFS).
+- 다른 보드, TAS57xx/TAS58xx/ES8311 DAC 드라이버와 EQ, 디스플레이(u8g2/LVGL), W5500 Ethernet, USB/S/PDIF 출력, 원본 문서 사이트를 제거했습니다. 원본 커밋에서 모두 복원할 수 있습니다.
+- 출력 소유권(`audio_source.c`): 하나의 재생 태스크가 AirPlay·Spotify·Bluetooth FIFO 중 선택된 소스를 읽습니다. 원본의 "BT 연결 시 AirPlay 중지"와 BT 라디오 suspend를 제거하고, 명시적 재생 요청이 출력을 가져가도록 바꿨습니다.
+- A2DP: PSRAM FIFO + prefill, AVRCP 재생 보고 또는 1.5초 이상 들리는 오디오만 출력 획득, 48kHz 스트림은 I2S 클럭 전환, 비활성 소스의 메타데이터 차단, 소프트웨어 볼륨.
+- PCM5102A처럼 하드웨어 볼륨이 없는 DAC에서 AirPlay 로컬 음소거가 동작하지 않던 문제 수정.
+- 선택적으로 빌드되는 `audio_capture` HTTP API와 호스트 테스트 가능한 `pcm_capture`/`pcm_fifo`, Mac용 WAV CLI.
+- Generic 보드의 비활성 mute GPIO(-1)가 음수 시프트로 컴파일되지 않도록 수정.
 
-- `audiostream-s3-capture` PlatformIO 환경과 DAC 없는 S3 N16R8 설정.
-- 선택적으로 빌드되는 `audio_capture` HTTP API와 호스트에서 테스트 가능한 `pcm_capture`.
-- I2S 출력 성공 시점의 PCM 캡처 훅.
-- Generic S3 보드의 비활성 mute GPIO(-1)가 음수 시프트로 컴파일되지 않도록 조건 수정.
-- Mac용 WAV 다운로드 CLI와 테스트.
-
-원본 PlatformIO 설정의 사용자별 `user_platformio.ini` 참조는 제거했습니다. 기본 환경은 캡처 프로필로 변경했습니다. 캡처 프로필은 PlatformIO espressif32 6.13.0 / ESP-IDF 5.5.3으로 고정했습니다. DAC 컴포넌트의 참고용 PDF 데이터시트도 제외했습니다. 원본의 다른 보드 환경은 유지하지만 이 프로젝트에서는 아직 검증하지 않았습니다.
+원본 PlatformIO 설정의 사용자별 `user_platformio.ini` 참조는 제거했습니다. PlatformIO espressif32 6.13.0 / ESP-IDF 5.5.3으로 고정했습니다.
 
 ## Spotify 엔진
 

@@ -1,0 +1,155 @@
+## OVLO divider (383k / 100k), TPS25947 OVLO pin threshold 1.20 V
+voltage-divider:
+  inputs:
+{
+    "r_bottom_ohm": 100000.0,
+    "r_top_ohm": 383000.0,
+    "target_vout_v": null,
+    "vin_v": 5.8
+}
+  vout_v: 1.20083
+  divider_current_a: 1.20083e-05
+  divider_current_ma: 0.0120083
+  total_power_w: 6.9648e-05
+  warnings:
+[
+    "The load must be negligible compared with the divider current, or include it in the calculation.",
+    "Check resistor voltage rating, tolerance, temperature coefficient, and ADC input impedance."
+]
+voltage-divider:
+  inputs:
+{
+    "r_bottom_ohm": 100000.0,
+    "r_top_ohm": 383000.0,
+    "target_vout_v": null,
+    "vin_v": 5.5
+}
+  vout_v: 1.13872
+  divider_current_a: 1.13872e-05
+  divider_current_ma: 0.0113872
+  total_power_w: 6.26294e-05
+  warnings:
+[
+    "The load must be negligible compared with the divider current, or include it in the calculation.",
+    "Check resistor voltage rating, tolerance, temperature coefficient, and ADC input impedance."
+]
+## Analog LDO TPS7A2033 at the OVLO edge
+ldo:
+  inputs:
+{
+    "ambient_c": 55.0,
+    "current_a": 0.03,
+    "dropout_v": 0.3,
+    "max_tj_c": 125.0,
+    "theta_ja_c_per_w": 250.0,
+    "vin_v": 5.8,
+    "vout_v": 3.3
+}
+  power_dissipation_w: 0.075
+  junction_temp_c: 73.75
+  temperature_margin_c: 51.25
+  thermal_pass: True
+  dropout_pass: True
+  warnings:
+[
+    "Use the datasheet's actual theta JA for the package, copper area, and airflow.",
+    "Check thermal shutdown, current limit, and maximum output current at the real ambient."
+]
+## Line-out RC
+rc-filter:
+  inputs:
+{
+    "capacitance_uf": 0.0022,
+    "resistance_ohm": 470.0
+}
+  tau_s: 1.034e-06
+  tau_ms: 0.001034
+  cutoff_hz: 153922
+  warnings:
+[
+    "This is an ideal first-order RC response.",
+    "Source impedance, load impedance, tolerance, leakage, and dielectric behavior change the result."
+]
+## +5V path at ILIM (0.67 A nominal, +15%)
+trace-width:
+  model: IPC-2221-style planning estimate
+  inputs:
+{
+    "ambient_c": 25.0,
+    "copper_oz": 1.0,
+    "current_a": 0.77,
+    "external": true,
+    "length_mm": 15.0,
+    "margin_percent": 25.0,
+    "temp_rise_c": 10.0
+}
+  required_width_mm: 0.210683
+  required_width_mil: 8.29461
+  recommended_width_mm: 0.263354
+  recommended_width_mil: 10.3683
+  selected_width_mm: 0.263354
+  selected_width_mil: 10.3683
+  resistance_ohm: 0.029882
+  voltage_drop_v: 0.0230092
+  voltage_drop_mv: 23.0092
+  power_loss_w: 0.0177171
+  conductor_temp_c: 35
+  drop_limit_mv: None
+  drop_limit_pass: None
+  warnings:
+[
+    "Use the fabricator's current rules, actual copper thickness, and thermal environment.",
+    "IPC-2152 or measured data is preferred for high-current, high-temperature, or safety-critical paths."
+]
+trace-width:
+  model: IPC-2221-style planning estimate
+  inputs:
+{
+    "ambient_c": 25.0,
+    "copper_oz": 1.0,
+    "current_a": 0.77,
+    "external": true,
+    "length_mm": 15.0,
+    "margin_percent": 25.0,
+    "temp_rise_c": 10.0
+}
+  required_width_mm: 0.210683
+  required_width_mil: 8.29461
+  recommended_width_mm: 0.263354
+  recommended_width_mil: 10.3683
+  selected_width_mm: 0.3
+  selected_width_mil: 11.811
+  resistance_ohm: 0.0262318
+  voltage_drop_v: 0.0201985
+  voltage_drop_mv: 20.1985
+  power_loss_w: 0.0155528
+  conductor_temp_c: 35
+  drop_limit_mv: None
+  drop_limit_pass: None
+  warnings:
+[
+    "Use the fabricator's current rules, actual copper thickness, and thermal environment.",
+    "IPC-2152 or measured data is preferred for high-current, high-temperature, or safety-critical paths."
+]
+## +3V3_D buck output vias (3 x 0.3 mm)
+via-current:
+  model: IPC-2221-style barrel estimate with user-selected derating
+  inputs:
+{
+    "board_mm": 1.6,
+    "count": 3,
+    "derating": 0.7,
+    "hole_mm": 0.3,
+    "plating_um": 20.0,
+    "temp_rise_c": 10.0
+}
+  single_via_capacity_a: 0.534434
+  total_capacity_a: 1.6033
+  single_via_resistance_ohm: 0.00154964
+  parallel_resistance_ohm: 0.000516548
+  warnings:
+[
+    "Current sharing between vias is not perfectly uniform.",
+    "Filled, capped, plugged, and unfilled vias can behave differently.",
+    "Use IPC-2152, the fabricator's data, or measurement for critical current paths."
+]

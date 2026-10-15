@@ -1,0 +1,1025 @@
+{
+  "board": {
+    "w": 55,
+    "h": 55,
+    "edge_clearance": 0.5,
+    "grid": 0.25,
+    "origin": [
+      0,
+      -55
+    ]
+  },
+  "zones": {},
+  "keepouts": [
+    {
+      "name": "antenna external keepout",
+      "rect": [
+        -1.5,
+        0,
+        46.5,
+        21
+      ],
+      "allow": [
+        "U1"
+      ]
+    },
+    {
+      "name": "M3 screw 1",
+      "circle": [
+        4,
+        -4,
+        3.5
+      ],
+      "allow": [
+        "H1"
+      ]
+    },
+    {
+      "name": "M3 screw 2",
+      "circle": [
+        51,
+        -4,
+        3.5
+      ],
+      "allow": [
+        "H2"
+      ]
+    },
+    {
+      "name": "M3 screw 3",
+      "circle": [
+        4,
+        -51,
+        3.5
+      ],
+      "allow": [
+        "H3"
+      ]
+    },
+    {
+      "name": "M3 screw 4",
+      "circle": [
+        51,
+        -51,
+        3.5
+      ],
+      "allow": [
+        "H4"
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "ref": "U1",
+      "x": 22.5,
+      "y": -10.1,
+      "w": 19.5,
+      "h": 20.2,
+      "rot": 0,
+      "grid": 0.005,
+      "class": "module",
+      "locked": true,
+      "allow_overhang": true
+    },
+    {
+      "ref": "U2",
+      "x": 39.0,
+      "y": -27.0,
+      "w": 7.7,
+      "h": 7.0,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "ic",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "U3",
+      "x": 20.0,
+      "y": -44.0,
+      "w": 3.0,
+      "h": 2.5,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "power",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "L1",
+      "x": 24.25,
+      "y": -45.25,
+      "w": 4.9,
+      "h": 4.4,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "power",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "U4",
+      "x": 40.0,
+      "y": -45.0,
+      "w": 4.1,
+      "h": 3.4,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "power",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "J1",
+      "x": 2.91,
+      "y": -27.0,
+      "w": 10.64,
+      "h": 9.42,
+      "rot": 270,
+      "grid": 0.005,
+      "class": "connector",
+      "locked": true,
+      "allow_overhang": true
+    },
+    {
+      "ref": "J2",
+      "x": 50.3,
+      "y": -39.0,
+      "w": 12.5,
+      "h": 14.5,
+      "rot": 90,
+      "grid": 0.005,
+      "class": "connector",
+      "locked": true,
+      "allow_overhang": true
+    },
+    {
+      "ref": "U5",
+      "x": 10.5,
+      "y": -27.0,
+      "w": 4.1,
+      "h": 3.4,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "ic",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "SW1",
+      "x": 7.0,
+      "y": -39.5,
+      "w": 8.5,
+      "h": 6.0,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "connector",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "SW2",
+      "x": 31.0,
+      "y": -37.5,
+      "w": 8.5,
+      "h": 6.0,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "connector",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "J3",
+      "x": 36.81,
+      "y": -51.5,
+      "w": 3.54,
+      "h": 11.16,
+      "rot": 90,
+      "grid": 0.005,
+      "class": "connector",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R1",
+      "x": 8.0,
+      "y": -20.25,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R2",
+      "x": 8.75,
+      "y": -33.75,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R3",
+      "x": 10.0,
+      "y": -18.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R4",
+      "x": 10.0,
+      "y": -15.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R5",
+      "x": 10.5,
+      "y": -10.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C1",
+      "x": 11.0,
+      "y": -4.75,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C2",
+      "x": 11.0,
+      "y": -2.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C3",
+      "x": 9.5,
+      "y": -7.75,
+      "w": 3.4,
+      "h": 1.96,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R6",
+      "x": 35.0,
+      "y": -21.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R7",
+      "x": 20.0,
+      "y": -23.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R8",
+      "x": 23.5,
+      "y": -23.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R9",
+      "x": 27.0,
+      "y": -23.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C4",
+      "x": 16.75,
+      "y": -43.5,
+      "w": 3.4,
+      "h": 1.96,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C5",
+      "x": 16.0,
+      "y": -39.0,
+      "w": 3.4,
+      "h": 1.96,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C6",
+      "x": 31.5,
+      "y": -44.0,
+      "w": 4.6,
+      "h": 2.3,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C7",
+      "x": 20.0,
+      "y": -39.0,
+      "w": 3.4,
+      "h": 1.96,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C8",
+      "x": 36.0,
+      "y": -45.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C9",
+      "x": 44.0,
+      "y": -48.0,
+      "w": 3.4,
+      "h": 1.96,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C10",
+      "x": 44.5,
+      "y": -30.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C11",
+      "x": 48.0,
+      "y": -31.0,
+      "w": 3.4,
+      "h": 1.96,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C12",
+      "x": 44.0,
+      "y": -27.75,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 90,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C13",
+      "x": 47.5,
+      "y": -27.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 90,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C14",
+      "x": 44.5,
+      "y": -24.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C15",
+      "x": 48.0,
+      "y": -23.0,
+      "w": 3.4,
+      "h": 1.96,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C16",
+      "x": 33.5,
+      "y": -30.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C17",
+      "x": 29.5,
+      "y": -31.5,
+      "w": 3.4,
+      "h": 1.96,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C18",
+      "x": 33.5,
+      "y": -28.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R10",
+      "x": 30.0,
+      "y": -27.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R11",
+      "x": 43.5,
+      "y": -18.75,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R12",
+      "x": 47.0,
+      "y": -18.75,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C19",
+      "x": 43.5,
+      "y": -16.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C20",
+      "x": 47.0,
+      "y": -16.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "D1",
+      "x": 24.0,
+      "y": -26.75,
+      "w": 3.2,
+      "h": 1.9,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "D2",
+      "x": 40.5,
+      "y": -34.75,
+      "w": 3.2,
+      "h": 1.9,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "D3",
+      "x": 40.5,
+      "y": -41.75,
+      "w": 3.2,
+      "h": 1.9,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "U6",
+      "x": 20.0,
+      "y": -34.0,
+      "w": 3.0,
+      "h": 3.0,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "power",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "SW3",
+      "x": 15.5,
+      "y": -50.625,
+      "w": 10.0,
+      "h": 8.75,
+      "rot": 0,
+      "grid": 0.005,
+      "class": "connector",
+      "locked": true,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R13",
+      "x": 17.0,
+      "y": -33.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R14",
+      "x": 17.0,
+      "y": -36.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 180,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R15",
+      "x": 23.75,
+      "y": -34.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R16",
+      "x": 23.75,
+      "y": -31.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R17",
+      "x": 27.25,
+      "y": -29.25,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C21",
+      "x": 20.0,
+      "y": -31.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C22",
+      "x": 23.75,
+      "y": -37.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R18",
+      "x": 35.0,
+      "y": -17.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "D4",
+      "x": 35.0,
+      "y": -14.0,
+      "w": 3.36,
+      "h": 1.9,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": true,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C23",
+      "x": 14.25,
+      "y": -27.0,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R19",
+      "x": 31.0,
+      "y": -47.5,
+      "w": 2.96,
+      "h": 1.46,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "passive",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "H1",
+      "x": 4.0,
+      "y": -4.0,
+      "w": 6.95,
+      "h": 6.95,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "mech",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "H2",
+      "x": 51.0,
+      "y": -4.0,
+      "w": 6.95,
+      "h": 6.95,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "mech",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "H3",
+      "x": 4.0,
+      "y": -51.0,
+      "w": 6.95,
+      "h": 6.95,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "mech",
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "H4",
+      "x": 51.0,
+      "y": -51.0,
+      "w": 6.95,
+      "h": 6.95,
+      "rot": 0,
+      "grid": 0.25,
+      "class": "mech",
+      "locked": false,
+      "allow_overhang": false
+    }
+  ],
+  "near": [
+    {
+      "a": "C1",
+      "b": "U1",
+      "max": 3,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "R5",
+      "b": "U1",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C2",
+      "b": "U1",
+      "max": 1,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C3",
+      "b": "U1",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C10",
+      "b": "U2",
+      "max": 1,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C14",
+      "b": "U2",
+      "max": 1,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C16",
+      "b": "U2",
+      "max": 1,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C18",
+      "b": "U2",
+      "max": 1,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C12",
+      "b": "U2",
+      "max": 1,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C13",
+      "b": "U2",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C11",
+      "b": "U2",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C15",
+      "b": "U2",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C17",
+      "b": "U2",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C8",
+      "b": "U4",
+      "max": 3,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C9",
+      "b": "U4",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C4",
+      "b": "U3",
+      "max": 2,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C5",
+      "b": "U3",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C6",
+      "b": "L1",
+      "max": 3,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "U5",
+      "b": "J1",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "R1",
+      "b": "J1",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "R2",
+      "b": "J1",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "D1",
+      "b": "U6",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "D2",
+      "b": "J2",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "D3",
+      "b": "J2",
+      "max": 5,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "L1",
+      "b": "U3",
+      "max": 3,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C23",
+      "b": "U5",
+      "max": 1,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C21",
+      "b": "U6",
+      "max": 1,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "R13",
+      "b": "U6",
+      "max": 2,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "R14",
+      "b": "U6",
+      "max": 2,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "R15",
+      "b": "U6",
+      "max": 2,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    },
+    {
+      "a": "C22",
+      "b": "U6",
+      "max": 3,
+      "why": "B1 supply decoupling / B9 protection / B14 CC termination"
+    }
+  ],
+  "apart": [
+    {
+      "a": "L1",
+      "b": "U2",
+      "min": 15,
+      "why": "B15 buck inductor at least 15 mm from DAC analog stage"
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "placement_readback_matches": true,
+  "inner_signal_tracks": 0,
+  "top_shell_trace_endpoints": [],
+  "non_45_degree_segments": [],
+  "nets": {
+    "+3V3_A": {
+      "length_mm": 41.033,
+      "minimum_width_mm": 0.15,
+      "vias": 1
+    },
+    "+3V3_D": {
+      "length_mm": 130.564,
+      "minimum_width_mm": 0.15,
+      "vias": 3
+    },
+    "+5V": {
+      "length_mm": 67.75,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "BCLK": {
+      "length_mm": 26.213,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "BCLK_SRC": {
+      "length_mm": 4.838,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "BOOT": {
+      "length_mm": 42.596,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    },
+    "CAPM": {
+      "length_mm": 2.595,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "CAPP": {
+      "length_mm": 2.645,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "CC1": {
+      "length_mm": 7.19,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "CC2": {
+      "length_mm": 6.388,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "DAC_L": {
+      "length_mm": 9.766,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "DAC_R": {
+      "length_mm": 9.801,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "DATA": {
+      "length_mm": 13.064,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    },
+    "DATA_SRC": {
+      "length_mm": 4.586,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "DVDT": {
+      "length_mm": 3.784,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "EN": {
+      "length_mm": 50.271,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "EN_FEED": {
+      "length_mm": 23.68,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    },
+    "GND": {
+      "length_mm": 375.534,
+      "minimum_width_mm": 0.15,
+      "vias": 26
+    },
+    "ILIM": {
+      "length_mm": 2.325,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "LDOO": {
+      "length_mm": 2.241,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "LINE_L": {
+      "length_mm": 27.618,
+      "minimum_width_mm": 0.2,
+      "vias": 1
+    },
+    "LINE_R": {
+      "length_mm": 35.945,
+      "minimum_width_mm": 0.2,
+      "vias": 1
+    },
+    "LRCLK": {
+      "length_mm": 21.283,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    },
+    "LRCLK_SRC": {
+      "length_mm": 5.509,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "OVLO": {
+      "length_mm": 4.062,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "POWER_EN": {
+      "length_mm": 34.312,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    },
+    "STATUS_A": {
+      "length_mm": 3.547,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "STATUS_GPIO": {
+      "length_mm": 10.058,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    },
+    "SW": {
+      "length_mm": 2.546,
+      "minimum_width_mm": 0.25,
+      "vias": 0
+    },
+    "UART_RX": {
+      "length_mm": 52.196,
+      "minimum_width_mm": 0.15,
+      "vias": 1
+    },
+    "UART_TX": {
+      "length_mm": 53.095,
+      "minimum_width_mm": 0.15,
+      "vias": 1
+    },
+    "USB_DM": {
+      "length_mm": 24.435,
+      "minimum_width_mm": 0.15,
+      "vias": 4
+    },
+    "USB_DM_MCU": {
+      "length_mm": 3.851,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "USB_DP": {
+      "length_mm": 18.697,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "USB_DP_MCU": {
+      "length_mm": 2.925,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "VBUS": {
+      "length_mm": 49.26,
+      "minimum_width_mm": 0.15,
+      "vias": 4
+    },
+    "VNEG": {
+      "length_mm": 13.788,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    },
+    "XSMT": {
+      "length_mm": 6.31,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    }
+  },
+  "warning": "Total net length includes branches; USB impedance/skew requires a pair-specific review using the fabricator stackup."
+}

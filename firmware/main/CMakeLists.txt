@@ -39,33 +39,18 @@ set( SRC_FILES
     "network/dns_server.c"
     "network/log_stream.c"
     "led.c"
-    "audio/eq_events.c"
     "buttons.c"
     "playback_control.c"
+    "audio/audio_source.c"
+    "audio/pcm_fifo.c"
     "dacp_client.c"
 )
 
-# Select audio output implementation at compile time. audio_output_common.c
-# carries weak defaults for the optional entry points, so a backend only has
-# to implement what it actually supports.
-list(APPEND SRC_FILES "audio/audio_output_common.c")
-if(CONFIG_AUDIO_OUTPUT_SPDIF)
-    list(APPEND SRC_FILES "audio/audio_output_spdif.c")
-elseif(CONFIG_AUDIO_OUTPUT_USB)
-    list(APPEND SRC_FILES "audio/audio_output_usb.c")
-else()
-    list(APPEND SRC_FILES "audio/audio_output.c")
-endif()
+list(APPEND SRC_FILES "audio/audio_output_common.c" "audio/audio_output.c")
 
 # Bluetooth A2DP sink (only available on ESP32 with Classic BT)
 if(CONFIG_BT_A2DP_ENABLE)
     list(APPEND SRC_FILES "audio/a2dp_sink.c")
-    list(APPEND SRC_FILES "bt_coex.c")
-endif()
-
-# W5500 SPI Ethernet
-if(CONFIG_ETH_W5500_ENABLED)
-    list(APPEND SRC_FILES "network/ethernet.c")
 endif()
 
 if(CONFIG_AUDIO_CAPTURE_ENABLED)
@@ -73,7 +58,7 @@ if(CONFIG_AUDIO_CAPTURE_ENABLED)
 endif()
 
 if(CONFIG_SPOTIFY_ENABLED)
-    list(APPEND SRC_FILES "audio/spotify_audio.c" "audio/pcm_fifo.c")
+    list(APPEND SRC_FILES "audio/spotify_audio.c")
 endif()
 
 set( INC_DIRS
@@ -102,11 +87,7 @@ set( DEPS
     esp_driver_ledc
     boards
     dac
-    dac_tas58xx
-    dac_tas57xx
-    display
     audio-resampler
-    esp_eth
     spiffs_storage
 )
 
@@ -114,23 +95,12 @@ if(CONFIG_SPOTIFY_ENABLED)
     list(APPEND DEPS spotify)
 endif()
 
-# Bluetooth component only needed when A2DP is enabled
-#if(CONFIG_BT_A2DP_ENABLE)
+if(CONFIG_BT_A2DP_ENABLE)
     list(APPEND DEPS bt)
-#endif()
-
-# Ethernet component only needed when W5500 is enabled
-#if(CONFIG_ETH_W5500_ENABLED)
-    list(APPEND DEPS esp_eth)
-#endif()
+endif()
 
 idf_component_register(
     SRCS ${SRC_FILES}
     INCLUDE_DIRS ${INC_DIRS}
     PRIV_REQUIRES ${DEPS}
 )
-
-# Enable function wrapping for abort() to intercept panics and mute GPIO
-if(CONFIG_BOARD_SQUEEZEAMP_COMMON)
-    target_link_libraries(${COMPONENT_LIB} INTERFACE "-Wl,--wrap=abort")
-endif()

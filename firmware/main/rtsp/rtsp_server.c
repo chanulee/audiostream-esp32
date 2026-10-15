@@ -269,7 +269,7 @@ cleanup:
 
   // Immediate: stop audio and NTP
   audio_receiver_stop();
-  audio_output_flush();
+  audio_output_flush_airplay();
   ntp_clock_stop();
 
   bool has_dacp_remote = conn && conn->protocol_version == 1 &&

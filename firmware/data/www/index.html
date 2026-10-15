@@ -76,16 +76,7 @@ input:focus{outline:none;border-color:#e94560}
 <option value='3'>Mono (L+R)</option>
 </select></div>
 <div id='chan-msg'></div></div>
-<div id='dual-group' style='display:none;margin-top:18px'>
-<div class='form-group'><label for='dual-mode'>DAC Configuration</label>
-<select id='dual-mode' onchange='saveDual()'>
-<option value='0'>2.1 (Satellites / Sub)</option>
-<option value='1'>Bi-Amp</option>
-</select></div>
-<div id='dual-msg'></div></div>
 <div id='spotify-link' style='display:none;margin-top:18px'><a href='/spotify' class='btn btn-secondary'>Spotify Connect Settings</a></div>
-<div id='eq-link' style='display:none;margin-top:18px'>
-<a href='/eq' class='btn btn-secondary'>EQ Settings</a></div>
 </div>
 <div class='card'><h2>Firmware Update</h2>
 <div class='file-row'><input type='file' id='fw-file' accept='.bin' style='display:none'>
@@ -102,6 +93,8 @@ input:focus{outline:none;border-color:#e94560}
 <div class='info-item'><label>Firmware</label><span id='info-fw'>-</span></div>
 <div class='info-item'><label>Uptime</label><span id='info-uptime'>-</span></div>
 <div class='info-item'><label>Last reset</label><span id='info-reset'>-</span></div>
+<div class='info-item'><label>Playing from</label><span id='info-source'>-</span></div>
+<div class='info-item'><label>Bluetooth</label><span id='info-bt'>-</span></div>
 <div class='info-item'><label>WiFi SSID</label><span id='info-ssid'>-</span></div>
 <div class='info-item'><label>WiFi RSSI</label><span id='info-rssi'>-</span></div>
 <div class='info-item'><label>WiFi Channel</label><span id='info-chan'>-</span></div>
@@ -152,9 +145,6 @@ async function loadChannel(){
   catch(e){console.warn('Could not load channel mode',e);}
   applyChanLabels();
   applyAmpLayout();}
-var dualDevices=1;
-var dualMode=0;
-var dualLoaded=false;
 var chanLocked=false;
 var chanDsp=false;
 /* A bi-amp flow crosses the two outputs over into one speaker, so the choice
@@ -166,15 +156,9 @@ function applyChanLabels(){
   o[0].text=chanDsp?'Both (L+R)/2':'Stereo';
   o[3].text=chanDsp?'Both (L+R)/2':'Mono (L+R)';
 }
-var DUAL_WARN={
-  0:'Switch to 2.1 (Satellites / Sub)?\n\nThe second amplifier is reconfigured as PBTL mono: its OUT_A and OUT_B terminals must be bridged together and wired to a single subwoofer.\n\nRewire before restarting.',
-  1:'Switch to Bi-Amp?\n\nBoth amplifiers run as stereo BTL, with OUT_A driving the woofer and OUT_B the tweeter of one speaker.\n\nIf OUT_A and OUT_B are still bridged for a PBTL subwoofer you MUST unbridge them first — leaving them shorted drives the two outputs against each other and can damage the amplifier and its output filters.'
-};
-/* With two amps the DAC configuration already fixes the routing, so per-output
-   channel selection has no meaning. */
 function applyAmpLayout(){
   document.getElementById('chan-group').style.display=
-    (chanLocked||dualDevices>1)?'none':'';
+    chanLocked?'none':'';
 }
 async function saveChannel(){
   var v=Number.parseInt(document.getElementById('chan-mode').value,10);
@@ -185,28 +169,6 @@ async function saveChannel(){
       chanLocked=!!d.locked;applyAmpLayout();}
     else{msg('chan-msg',d.error,'err');}}
   catch(e){msg('chan-msg','Error','err');console.error('saveChannel failed',e);}}
-async function loadDual(){
-  try{var r=await fetch('/api/audio/dual');if(!r.ok)return;var d=await r.json();
-    if(d.success&&d.devices>1){dualDevices=d.devices;dualMode=d.mode;
-      var sel=document.getElementById('dual-mode');
-      sel.value=String(d.mode);
-      if(!d.biamp){
-        sel.querySelector('option[value="1"]').disabled=true;
-        sel.querySelector('option[value="1"]').textContent='Bi-Amp (unavailable)';
-      }
-      document.getElementById('dual-group').style.display='';
-      if(d.restart_required){msg('dual-msg','Restart to apply the new wiring.','err');}}}
-  catch(e){console.warn('Could not load dual DAC mode',e);}
-  applyAmpLayout();}
-async function saveDual(){
-  var sel=document.getElementById('dual-mode');
-  var v=Number.parseInt(sel.value,10);
-  if(v!==dualMode&&!confirm(DUAL_WARN[v])){sel.value=String(dualMode);return;}
-  try{var r=await fetch('/api/audio/dual',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:v})});
-    var d=await r.json();
-    if(d.success){dualMode=v;msg('dual-msg','Saved! Rewire the speakers, then restart to apply.','ok');}
-    else{sel.value=String(dualMode);msg('dual-msg',d.error,'err');}}
-  catch(e){sel.value=String(dualMode);msg('dual-msg','Error','err');console.error('saveDual failed',e);}}
 async function saveName(){
   var n=document.getElementById('dev-name').value.trim();if(!n){msg('name-msg','Enter a name','err');return;}
   try{var r=await fetch('/api/device/name',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n})});
@@ -223,8 +185,7 @@ async function restart(){
 async function loadInfo(){
   try{var r=await fetch('/api/system/info');var d=await r.json();
     if(d.success){var i=d.info;document.getElementById('spotify-link').style.display=i.spotify_enabled?'':'none';var b=document.getElementById('status-bar');
-      if(i.eth_connected){b.className='status-bar ok';b.innerHTML='Ethernet: '+i.ip;}
-      else if(i.wifi_connected){b.className='status-bar ok';b.innerHTML='WiFi: '+i.ip;}
+      if(i.wifi_connected){b.className='status-bar ok';b.innerHTML='WiFi: '+i.ip;}
       else{b.className='status-bar err';b.innerHTML='Not connected - Configure WiFi below';}
       document.getElementById('info-ip').textContent=i.ip||'-';
       document.getElementById('info-mac').textContent=i.mac||'-';
@@ -241,10 +202,8 @@ async function loadInfo(){
       document.getElementById('info-chan').textContent=i.wifi_channel||'-';
       document.getElementById('info-phy').textContent=i.wifi_phy||'-';
       document.getElementById('info-bssid').textContent=i.wifi_bssid||'-';
-      if(i.eq_supported||i.sub_supported){document.getElementById('eq-link').style.display='';}
-      /* Only a TAS58xx build registers /api/audio/dual; asking anyway logs a
-         warning on the device for every page load. */
-      if(i.dual_supported&&!dualLoaded){dualLoaded=true;loadDual();}
+      document.getElementById('info-source').textContent=i.source||'-';
+      document.getElementById('info-bt').textContent=i.bt_enabled?(i.bt_connected?'connected':'discoverable'):'off';
       document.getElementById('dev-name').placeholder=i.device_name||'';}}catch(e){}}
 window.onload=function(){
   document.getElementById('fw-file').onchange=function(e){var f=e.target.files[0];
