@@ -1,0 +1,22 @@
+{
+  "skill_repository": "https://github.com/studio-edul/pcb-layout-skill",
+  "skill_revision": "6284cc8c0fdbfda9452a63540a85510a3d2dbf37",
+  "eda": "KiCad 10.0.6",
+  "api": "pcbnew Python API",
+  "easyeda_pro_api_used": false,
+  "router": "FreeRouting 2.5.0",
+  "status": "prototype: unresolved Major findings in REVIEW.md",
+  "visual_review": "Top/bottom Gerber and 3D opened; all four copper layers opened; some component 3D models unavailable.",
+  "checks": [
+    "placement_check",
+    "baseline_diff",
+    "pcbcalc trace-width/via-current",
+    "KiCad ERC/DRC",
+    "native pin-map/position audit",
+    "18 supply-pad distance checks",
+    "audit_release",
+    "gerber_check netcheck/render/diff",
+    "host tests",
+    "lovelace-as-001 firmware build"
+  ]
+}

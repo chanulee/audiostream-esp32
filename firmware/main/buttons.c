@@ -32,7 +32,7 @@ static const char *TAG = "buttons";
 #define DEBOUNCE_MS      50   // Stable period before accepting state change
 #define REPEAT_DELAY_MS  500  // Hold duration before auto-repeat starts
 #define REPEAT_INTERVAL  200  // Auto-repeat interval for volume buttons
-#define LONG_PRESS_MS    3000 // Play/pause long press for deep sleep
+#define LONG_PRESS_MS    3000 // Play/pause hold: deep sleep, or BT pairing
 #define DOUBLE_CLICK_MS  350  // Window to detect a second play/pause press
 #define ACTION_QUEUE_LEN 8
 
@@ -96,11 +96,9 @@ static void button_action_task(void *pvParameters) {
         playback_control_prev();
         break;
       case BTN_LONG_PRESS:
-        // Deep sleep — this is handled in the timer callback; just log
-        // in case the action fires (shouldn't normally happen since
-        // long_press_timer_cb calls esp_deep_sleep_start immediately)
-        ESP_LOGW(TAG,
-                 "Long press action received (deep sleep already attempted)");
+        // Single-button UI: hold = Bluetooth pairing. Otherwise the timer
+        // callback has already powered the board off.
+        playback_control_pairing_mode();
         break;
       case BTN_CHANNEL_CYCLE:
         audio_output_cycle_channel_mode();
@@ -198,14 +196,21 @@ static void long_press_timer_cb(TimerHandle_t timer) {
     btn->click_count = 0;
   }
 
+#if CONFIG_BTN_SINGLE_BUTTON_UI
+  // No power switch on single-button boards: hold means "pair a new phone".
+  ESP_LOGI(TAG, "Long press detected — Bluetooth pairing mode");
+  post_button_action(BTN_LONG_PRESS);
+#else
   ESP_LOGI(TAG, "Long press detected — powering off");
   gpio_wakeup_enable(CONFIG_BTN_PLAY_PAUSE_GPIO, GPIO_INTR_LOW_LEVEL);
   esp_sleep_enable_gpio_wakeup();
   board_power_off();
+#endif
 }
 
 // Double-click window expired — dispatch based on how many presses we saw.
-// 1 press  -> play/pause; 2 presses -> cycle channel mode (L/R/stereo).
+// 1 press  -> play/pause; 2 presses -> cycle channel mode (L/R/stereo), or
+// next track with the single-button UI.
 static void click_timer_cb(TimerHandle_t timer) {
   int id = (int)(intptr_t)pvTimerGetTimerID(timer);
   button_state_t *btn = &buttons[id];
@@ -214,7 +219,11 @@ static void click_timer_cb(TimerHandle_t timer) {
 
   if (count >= 2) {
     btn->click_count = 0;
+#if CONFIG_BTN_SINGLE_BUTTON_UI
+    post_button_action(BTN_NEXT);
+#else
     post_button_action(BTN_CHANNEL_CYCLE);
+#endif
   } else if (count == 1 && !btn->pressed) {
     btn->click_count = 0;
     post_button_action(BTN_PLAY_PAUSE);

@@ -16,6 +16,16 @@
  */
 
 #include "audio_output.h"
+#include "playback_control.h"
+
+void audio_output_flush_airplay(void) {
+  playback_control_lock_output();
+  playback_source_t source = playback_control_get_source();
+  if (source == PLAYBACK_SOURCE_AIRPLAY || source == PLAYBACK_SOURCE_NONE) {
+    audio_output_flush();
+  }
+  playback_control_unlock_output();
+}
 
 __attribute__((weak)) bool audio_output_get_pipeline_us(int64_t *now_us,
                                                         uint32_t *pipeline_us) {

@@ -29,5 +29,17 @@ int main(void) {
     assert(clip.used == 0 && !clip.started);
     pcm_capture_append(&clip, audio, 8, true);
     assert(!memcmp(data, audio, 8));
-    puts("PCM capture tests passed");
+    static uint8_t large[48000*4];
+    pcm_capture_reset(&clip, large, sizeof(large));
+    pcm_capture_append_rate(&clip, audio, 8, true, 48000, 1);
+    assert(clip.sample_rate==48000 && clip.capacity==48000*4);
+    pcm_capture_wav_header(header, clip.capacity, clip.sample_rate);
+    assert(read32(header+24)==48000 && read32(header+28)==192000);
+    pcm_capture_append_rate(&clip, audio, 8, true, 44100, 1);
+    assert(clip.rate_changed && clip.used==8); // never mix clocks in one WAV
+    pcm_capture_reset(&clip, large, sizeof(large));
+    pcm_capture_append_rate(&clip, silence, 8, false, 48000, 1);
+    pcm_capture_append_rate(&clip, audio, 8, true, 44100, 1);
+    assert(!clip.rate_changed && clip.capacity==44100*4 && clip.sample_rate==44100);
+    puts("PCM capture and 44.1/48 kHz transition tests passed");
 }

@@ -1,0 +1,191 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-15T00:06:16",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        },
+        {
+            "description": "Footprint not found in libraries",
+            "key": "lib_footprint_issues"
+        },
+        {
+            "description": "Footprint doesn't match copy in library",
+            "key": "lib_footprint_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "lovelace-as-002.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "Via [+3V3_D] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 1.25,
+                        "y": 2.48
+                    },
+                    "uuid": "ccc29392-e243-4801-9bf3-8bff91b399a4"
+                },
+                {
+                    "description": "Pad 1 [+3V3_D] of R5 on F.Cu",
+                    "pos": {
+                        "x": 1.19,
+                        "y": 3.75
+                    },
+                    "uuid": "a2b17add-6c90-4e17-b70c-f9621317c835"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": [
+        {
+            "description": "Items shorting two nets (nets USB_DP and GND)",
+            "items": [
+                {
+                    "description": "Track [USB_DP] on F.Cu, length 6.4875 mm",
+                    "pos": {
+                        "x": 6.4875,
+                        "y": 27.35
+                    },
+                    "uuid": "016438ab-8ea3-4af7-aeb4-902016269424"
+                },
+                {
+                    "description": "Pad 2 [GND] of C23 on F.Cu",
+                    "pos": {
+                        "x": 8.3,
+                        "y": 27.32
+                    },
+                    "uuid": "e8b61c5e-92c6-46f2-985b-e8e41a7ae745"
+                }
+            ],
+            "severity": "error",
+            "type": "shorting_items"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 0.4,
+                        "y": 0.4
+                    },
+                    "uuid": "81b30bef-1cf6-4a2e-a036-0238d031236e"
+                },
+                {
+                    "description": "Pad 2 [GND] of R2 on F.Cu",
+                    "pos": {
+                        "x": 10.41,
+                        "y": 29.75
+                    },
+                    "uuid": "7a432ef3-9cc7-476e-86ba-d0d2683a41b4"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 0.4,
+                        "y": 0.4
+                    },
+                    "uuid": "81b30bef-1cf6-4a2e-a036-0238d031236e"
+                },
+                {
+                    "description": "Pad 2 [GND] of C23 on F.Cu",
+                    "pos": {
+                        "x": 8.3,
+                        "y": 27.32
+                    },
+                    "uuid": "e8b61c5e-92c6-46f2-985b-e8e41a7ae745"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Front solder mask aperture bridges items with different nets",
+            "items": [
+                {
+                    "description": "Track [USB_DP] on F.Cu, length 6.4875 mm",
+                    "pos": {
+                        "x": 6.4875,
+                        "y": 27.35
+                    },
+                    "uuid": "016438ab-8ea3-4af7-aeb4-902016269424"
+                },
+                {
+                    "description": "Pad 2 [GND] of C23 on F.Cu",
+                    "pos": {
+                        "x": 8.3,
+                        "y": 27.32
+                    },
+                    "uuid": "e8b61c5e-92c6-46f2-985b-e8e41a7ae745"
+                }
+            ],
+            "severity": "error",
+            "type": "solder_mask_bridge"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [DVDT] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 14.9,
+                        "y": 38.425
+                    },
+                    "uuid": "8d205055-a60e-4f51-8fe5-59fefdfaf557"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        },
+        {
+            "description": "Via is not connected or connected on only one layer",
+            "items": [
+                {
+                    "description": "Via [DVDT] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 15.17,
+                        "y": 40.1
+                    },
+                    "uuid": "ed3913ea-9c67-4f00-a0dd-e025fbb8486d"
+                }
+            ],
+            "severity": "warning",
+            "type": "via_dangling"
+        }
+    ]
+}

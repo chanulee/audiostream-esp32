@@ -29,10 +29,15 @@ typedef enum {
 esp_err_t playback_control_init(void);
 
 /**
- * Set the current audio source. Called by main.c when AirPlay or
- * Bluetooth connects/disconnects.
+ * Select output on an explicit playback start/resume, never on connection.
  */
 void playback_control_set_source(playback_source_t source);
+esp_err_t playback_control_source_init(void);
+void playback_control_release_source(playback_source_t expected);
+void playback_control_set_playing(playback_source_t expected, bool playing);
+/* Lock order: output lock, then a source FIFO. Never acquire in reverse. */
+void playback_control_lock_output(void);
+void playback_control_unlock_output(void);
 
 /**
  * Get the current audio source.
@@ -63,6 +68,12 @@ void playback_control_next(void);
  * Skip to previous track.
  */
 void playback_control_prev(void);
+
+/**
+ * Drop the connected Bluetooth phone (if any) and become discoverable so a
+ * new phone can pair. No-op without Bluetooth.
+ */
+void playback_control_pairing_mode(void);
 
 /**
  * Toggle mute/unmute (AirPlay only — mirrors local mute logic from play/pause).

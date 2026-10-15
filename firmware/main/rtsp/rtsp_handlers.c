@@ -1711,7 +1711,7 @@ static void handle_pause(int socket, rtsp_conn_t *conn,
   // send a fresh SETRATEANCHORTIME (rate=1) anchor on resume that re-aligns
   // the buffered frames to the correct wall-clock position.
   audio_receiver_pause();
-  audio_output_flush();
+  audio_output_flush_airplay();
   conn->stream_paused = true;
 
   rtsp_send_ok(socket, conn, req->cseq);
@@ -1726,7 +1726,7 @@ static void handle_flush(int socket, rtsp_conn_t *conn,
   // Plain AirPlay 1 FLUSH — always immediate.
   ESP_LOGI(TAG, "FLUSH received");
   audio_receiver_seek_flush();
-  audio_output_flush();
+  audio_output_flush_airplay();
   rtsp_send_ok(socket, conn, req->cseq);
 }
 
@@ -1779,7 +1779,7 @@ static void handle_flushbuffered(int socket, rtsp_conn_t *conn,
   if (!has_deferred) {
     // Immediate flush: discard everything and reset now.
     audio_receiver_seek_flush();
-    audio_output_flush();
+    audio_output_flush_airplay();
   }
 
   rtsp_send_ok(socket, conn, req->cseq);
@@ -1817,7 +1817,7 @@ static void handle_teardown(int socket, rtsp_conn_t *conn,
     rtsp_events_emit(RTSP_EVENT_PAUSED, NULL);
   }
   audio_receiver_stop();
-  audio_output_flush();
+  audio_output_flush_airplay();
   // Drop PTP lock + offset history.  AirPlay group rejoins reuse the same
   // PTP master clock_id; without this, ptp_clock_set_master_clock_id() on
   // the next session early-returns and reuses stale samples accumulated
@@ -1902,7 +1902,7 @@ static void handle_setrateanchortime(int socket, rtsp_conn_t *conn,
     rtsp_events_emit(RTSP_EVENT_PAUSED, NULL);
     conn->stream_paused = true;
     audio_receiver_pause();
-    audio_output_flush();
+    audio_output_flush_airplay();
   } else {
     ESP_LOGI(TAG, "SETRATEANCHORTIME: rate=%.1f -> RESUMING (was_paused=%d)",
              rate, conn->stream_paused);

@@ -1,24 +1,10 @@
-/**
- * Bluetooth A2DP Sink implementation for ESP32.
- *
- * Uses the ESP-IDF Bluedroid stack to receive A2DP audio (SBC codec,
- * decoded internally to PCM) and play it through the shared I2S output.
- *
- * Architecture:
- *   BT stack → data callback → ringbuffer → I2S writer task → I2S DMA
- *
- * Integration with AirPlay:
- *   - On BT connect:    notify main → stop AirPlay services
- *   - On BT disconnect: notify main → restart AirPlay services
- *   - LED/display updates via rtsp_events (reuses the same event types)
- *   - AVRCP metadata → RTSP_EVENT_METADATA for display
- */
-
 #include "a2dp_sink.h"
 #include "spiram_task.h"
+#include "pcm_fifo.h"
+#include "playback_control.h"
+#include "esp_heap_caps.h"
+#include <math.h>
 
-#include "audio_output.h"
-#include "dac.h"
 #include "led.h"
 #include "rtsp_events.h"
 #include "settings.h"
@@ -33,7 +19,6 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
-#include "freertos/ringbuf.h"
 #include "freertos/semphr.h"
 #include "freertos/task.h"
 
@@ -47,21 +32,18 @@ static const char *TAG = "bt_a2dp";
 /* Configuration                                                              */
 /* ========================================================================== */
 
-#define RINGBUF_SIZE     ((size_t)16 * 1024)
-#define RINGBUF_PREFETCH (RINGBUF_SIZE * 6 / 10)
-
+// ~185 ms at 44.1 kHz stereo; playback starts once PREFILL is reached so the
+// first SBC bursts do not underrun the I2S writer.
+#define RINGBUF_SIZE    ((size_t)32 * 1024)
+#define RINGBUF_PREFILL (RINGBUF_SIZE * 4 / 10)
+// A stream that starts while another source owns the output (phone keyboard
+// clicks, notification sounds) claims it only after this much non-silent PCM
+// or an explicit AVRCP "playing" report.
+#define CLAIM_AUDIBLE_MS 1500
+#define SILENCE_LEVEL    64
 #define BT_TASK_STACK 4096
-#define BT_TASK_PRIO  (configMAX_PRIORITIES - 3)
-#define BT_TASK_QLEN  10
-
-#define I2S_TASK_STACK 2560
-#define I2S_TASK_PRIO  7
-
-#if CONFIG_FREERTOS_UNICORE
-#define I2S_TASK_CORE 0
-#else
-#define I2S_TASK_CORE 1
-#endif
+#define BT_TASK_PRIO 5
+#define BT_TASK_QLEN 16
 
 /* ========================================================================== */
 /* BT App Task Types                                                          */
@@ -80,41 +62,24 @@ enum { BT_APP_SIG_WORK_DISPATCH = 0 };
 enum { BT_APP_EVT_STACK_UP = 0 };
 
 /* ========================================================================== */
-/* Ringbuffer mode                                                            */
-/* ========================================================================== */
-
-typedef enum {
-  RINGBUF_MODE_PREFETCHING,
-  RINGBUF_MODE_PROCESSING,
-  RINGBUF_MODE_DROPPING,
-} ringbuf_mode_t;
-
-/* ========================================================================== */
 /* State                                                                      */
 /* ========================================================================== */
-
-static bt_a2dp_state_cb_t s_state_cb = NULL;
-static volatile bool s_connected = false;
-static volatile bool s_audio_started = false;
-static volatile bool s_avrc_playing = false; /* AVRCP play state (instant) */
-static volatile bool s_i2s_task_running = false;
+static volatile bool s_connected;
+static volatile bool s_audio_started;
+static volatile bool s_avrc_playing;
 static bool s_bt_discoverable = true;
-// Radio suspended (controller+bluedroid disabled) to free WiFi airtime while
-// AirPlay is streaming.  Reversible without a reboot: memory is retained.
-static bool s_bt_suspended = false;
-// Advertised BT device name, saved so it can be re-applied after a resume.
-static char s_device_name[64] = {0};
-static uint8_t s_avrc_volume = 64; /* 0-127, AVRCP absolute volume */
-static volatile bool s_vol_ntf_pending =
-    false; /* phone registered for volume change */
-
-static RingbufHandle_t s_ringbuf = NULL;
-static SemaphoreHandle_t s_i2s_sem = NULL;
-static ringbuf_mode_t s_ringbuf_mode = RINGBUF_MODE_PREFETCHING;
-
-static TaskHandle_t s_bt_task_handle = NULL;
-static TaskHandle_t s_i2s_task_handle = NULL;
-static QueueHandle_t s_bt_task_queue = NULL;
+static char s_device_name[64];
+static esp_bd_addr_t s_peer_bda;
+static uint8_t s_avrc_volume = 64;
+static volatile bool s_vol_ntf_pending;
+static volatile bool s_claim_pending;
+static uint32_t s_audible_bytes;
+static bool s_primed;
+static pcm_fifo_t s_fifo;
+static SemaphoreHandle_t s_fifo_lock;
+static TaskHandle_t s_bt_task_handle;
+static QueueHandle_t s_bt_task_queue;
+static void send_passthrough(uint8_t key_code);
 
 static uint32_t s_sample_rate = 44100;
 
@@ -163,129 +128,123 @@ static void bt_app_task(void *arg) {
   }
 }
 
-/* ========================================================================== */
-/* I2S Writer Task — reads ringbuffer, writes to I2S                          */
-/* ========================================================================== */
-
-static void bt_i2s_writer_task(void *arg) {
-  // Wait for ringbuffer to reach prefetch level
-  xSemaphoreTake(s_i2s_sem, portMAX_DELAY);
-
-  int16_t silence[256] = {0};
-
-  while (s_i2s_task_running) {
-    size_t item_size = 0;
-    void *data =
-        xRingbufferReceiveUpTo(s_ringbuf, &item_size, pdMS_TO_TICKS(20), 512);
-    if (data != NULL && item_size > 0) {
-      audio_output_write(data, item_size, portMAX_DELAY);
-      vRingbufferReturnItem(s_ringbuf, data);
-    } else {
-      // Buffer underrun — write silence to keep I2S fed
-      audio_output_write(silence, sizeof(silence), pdMS_TO_TICKS(10));
-    }
-  }
-
-  s_i2s_task_handle = NULL;
-  vTaskDelete(NULL);
+static void clear_pcm(void) {
+  xSemaphoreTake(s_fifo_lock, portMAX_DELAY);
+  pcm_fifo_clear(&s_fifo);
+  s_primed = false;
+  xSemaphoreGive(s_fifo_lock);
 }
 
-static void i2s_task_start(void) {
-  if (s_i2s_task_handle != NULL) {
+static bool bt_is_source(void) {
+  return playback_control_get_source() == PLAYBACK_SOURCE_BLUETOOTH;
+}
+
+// Runs on bt_app_task. Takes the shared output for an explicit Bluetooth play.
+static void claim_output(uint16_t event, void *param) {
+  (void)event;
+  (void)param;
+  s_claim_pending = false;
+  if (!s_connected || !s_audio_started || bt_is_source()) {
     return;
   }
-
-  s_ringbuf_mode = RINGBUF_MODE_PREFETCHING;
-
-  if (s_ringbuf == NULL) {
-    s_ringbuf = xRingbufferCreate(RINGBUF_SIZE, RINGBUF_TYPE_BYTEBUF);
-  }
-  if (s_i2s_sem == NULL) {
-    s_i2s_sem = xSemaphoreCreateBinary();
-  }
-
-  s_i2s_task_running = true;
-  xTaskCreatePinnedToCore(bt_i2s_writer_task, "bt_i2s", I2S_TASK_STACK, NULL,
-                          I2S_TASK_PRIO, &s_i2s_task_handle, I2S_TASK_CORE);
+  clear_pcm();
+  playback_control_set_source(PLAYBACK_SOURCE_BLUETOOTH);
 }
 
-static void i2s_task_stop(void) {
-  s_i2s_task_running = false;
-
-  // Unblock the writer if it's waiting on the semaphore
-  if (s_i2s_sem) {
-    xSemaphoreGive(s_i2s_sem);
+static void on_remote_playing(bool playing) {
+  bool was_playing = s_avrc_playing;
+  s_avrc_playing = playing;
+  if (playing && !was_playing && s_audio_started) {
+    claim_output(0, NULL);
   }
+}
 
-  // Wait for the task to exit
-  int timeout = 20;
-  while (s_i2s_task_handle != NULL && timeout-- > 0) {
-    vTaskDelay(pdMS_TO_TICKS(50));
-  }
-
-  // Flush and free the ringbuffer so heap is returned before AirPlay restarts
-  if (s_ringbuf) {
-    void *data;
-    size_t size;
-    while ((data = xRingbufferReceive(s_ringbuf, &size, 0)) != NULL) {
-      vRingbufferReturnItem(s_ringbuf, data);
+static bool pcm_audible(const uint8_t *data, uint32_t len) {
+  const int16_t *pcm = (const int16_t *)data;
+  for (uint32_t i = 0; i < len / 2; i += 8) {
+    if (pcm[i] > SILENCE_LEVEL || pcm[i] < -SILENCE_LEVEL) {
+      return true;
     }
-    vRingbufferDelete(s_ringbuf);
-    s_ringbuf = NULL;
   }
-
-  if (s_i2s_sem) {
-    vSemaphoreDelete(s_i2s_sem);
-    s_i2s_sem = NULL;
-  }
-
-  // Reset sample rate to AirPlay default
-  audio_output_set_sample_rate(44100);
-  audio_output_flush();
+  return false;
 }
 
-/* ========================================================================== */
-/* A2DP data callback — BT stack context → ringbuffer                         */
-/* ========================================================================== */
+static void emit_metadata(const rtsp_event_data_t *data) {
+  if (bt_is_source()) {
+    rtsp_events_emit(RTSP_EVENT_METADATA, data);
+  }
+}
 
+static void pause_remote(uint16_t event, void *param) {
+  (void)event; (void)param;
+  send_passthrough(ESP_AVRC_PT_CMD_PAUSE);
+}
+
+void bt_a2dp_sink_yield(void) {
+  clear_pcm();
+  bt_app_work_dispatch(pause_remote, 0, NULL, 0);
+}
+
+// Bluedroid task context: never block on the output lock here.
 static void bt_a2dp_data_cb(const uint8_t *data, uint32_t len) {
-  // Snapshot the ringbuf handle so it can't be freed between the NULL
-  // check and the API calls (i2s_task_stop sets s_ringbuf = NULL).
-  RingbufHandle_t rb = s_ringbuf;
-  if (rb == NULL || len == 0) {
+  if (!s_audio_started || len == 0) {
     return;
   }
-
-  // Feed LED VU meter from the decoded PCM
-  led_audio_feed((const int16_t *)data, len / 4);
-
-  size_t free_size = xRingbufferGetCurFreeSize(rb);
-
-  switch (s_ringbuf_mode) {
-  case RINGBUF_MODE_PREFETCHING:
-    xRingbufferSend(rb, data, len, 0);
-    if ((RINGBUF_SIZE - free_size + len) >= RINGBUF_PREFETCH) {
-      s_ringbuf_mode = RINGBUF_MODE_PROCESSING;
-      xSemaphoreGive(s_i2s_sem);
+  if (!bt_is_source()) {
+    if (!s_claim_pending) {
+      return;
     }
-    break;
-
-  case RINGBUF_MODE_PROCESSING:
-    if (free_size < (size_t)len) {
-      s_ringbuf_mode = RINGBUF_MODE_DROPPING;
-      ESP_LOGW(TAG, "Ringbuf full, dropping");
-    } else {
-      xRingbufferSend(rb, data, len, 0);
+    s_audible_bytes = pcm_audible(data, len) ? s_audible_bytes + len : 0;
+    if (s_audible_bytes >= s_sample_rate / 1000 * 4 * CLAIM_AUDIBLE_MS) {
+      s_claim_pending = false;
+      bt_app_work_dispatch(claim_output, 0, NULL, 0);
     }
-    break;
-
-  case RINGBUF_MODE_DROPPING:
-    if (free_size > RINGBUF_PREFETCH) {
-      s_ringbuf_mode = RINGBUF_MODE_PROCESSING;
-      xRingbufferSend(rb, data, len, 0);
-    }
-    break;
+    return;
   }
+  xSemaphoreTake(s_fifo_lock, portMAX_DELAY);
+  // Stereo frames only. Drop whole callbacks rather than replaying old data.
+  if (bt_is_source() && len % 4 == 0 && len <= s_fifo.capacity - s_fifo.used) {
+    pcm_fifo_write(&s_fifo, data, len);
+  }
+  xSemaphoreGive(s_fifo_lock);
+}
+
+size_t bt_a2dp_sink_read(int16_t *pcm, size_t max_frames) {
+  if (!s_fifo_lock || !s_audio_started) {
+    return 0;
+  }
+  xSemaphoreTake(s_fifo_lock, portMAX_DELAY);
+  size_t bytes = 0;
+  if (!s_primed && s_fifo.used >= RINGBUF_PREFILL) {
+    s_primed = true;
+  }
+  if (s_primed) {
+    bytes = pcm_fifo_read(&s_fifo, pcm, max_frames * 4);
+    // Underrun: rebuild the cushion instead of playing every tiny burst.
+    if (s_fifo.used == 0) {
+      s_primed = false;
+    }
+  }
+  xSemaphoreGive(s_fifo_lock);
+  return bytes / 4;
+}
+
+uint32_t bt_a2dp_sink_sample_rate(void) {
+  return __atomic_load_n(&s_sample_rate, __ATOMIC_RELAXED);
+}
+
+// AVRCP 0..127 maps to -30..0 dB, matching the AirPlay volume range.
+int32_t bt_a2dp_sink_volume_q15(void) {
+  uint8_t volume = __atomic_load_n(&s_avrc_volume, __ATOMIC_RELAXED);
+  if (!volume) {
+    return 0;
+  }
+  float db = ((float)volume / 127.0f) * 30.0f - 30.0f;
+  return (int32_t)(32768.0f * powf(10.0f, db / 20.0f));
+}
+
+int bt_a2dp_sink_volume_percent(void) {
+  return (s_avrc_volume * 100 + 63) / 127;
 }
 
 /* ========================================================================== */
@@ -304,17 +263,9 @@ static void bt_a2dp_evt_handler(uint16_t event, void *param) {
     } else if (state == ESP_A2D_CONNECTION_STATE_CONNECTED) {
       ESP_LOGI(TAG, "A2DP connected");
       s_connected = true;
+      memcpy(s_peer_bda, a2d->conn_stat.remote_bda, sizeof(s_peer_bda));
 
-      // Notify main app to disable AirPlay (stops playback task + RTSP)
-      if (s_state_cb) {
-        s_state_cb(true);
-      }
-
-      // Start BT playback
-      i2s_task_start();
-
-      // LED/display: show connected state
-      rtsp_events_emit(RTSP_EVENT_CLIENT_CONNECTED, NULL);
+      clear_pcm();
 
       // Don't accept more connections while connected
       esp_bt_gap_set_scan_mode(ESP_BT_NON_CONNECTABLE, ESP_BT_NON_DISCOVERABLE);
@@ -326,19 +277,11 @@ static void bt_a2dp_evt_handler(uint16_t event, void *param) {
       s_connected = false;
       s_audio_started = false;
       s_avrc_playing = false;
+      s_claim_pending = false;
 
-      // Stop BT playback
-      i2s_task_stop();
-
-      // LED/display: show disconnected state
-      rtsp_events_emit(RTSP_EVENT_DISCONNECTED, NULL);
-
-      // Notify main app to re-enable AirPlay (restarts playback + RTSP)
-      if (s_state_cb) {
-        s_state_cb(false);
-      }
-
-      // Discoverable state is managed by main via set_discoverable()
+      clear_pcm();
+      playback_control_release_source(PLAYBACK_SOURCE_BLUETOOTH);
+      bt_a2dp_sink_set_discoverable(true);
 
       // Persist the last-used volume to NVS once at disconnect
       settings_persist_bt_volume();
@@ -350,12 +293,25 @@ static void bt_a2dp_evt_handler(uint16_t event, void *param) {
     esp_a2d_audio_state_t state = a2d->audio_stat.state;
     if (state == ESP_A2D_AUDIO_STATE_STARTED) {
       ESP_LOGI(TAG, "Audio stream started");
-      s_audio_started = true;
-      rtsp_events_emit(RTSP_EVENT_PLAYING, NULL);
+      if (!s_audio_started) {
+        clear_pcm();
+        s_audio_started = true;
+        s_audible_bytes = 0;
+        // An idle output or an explicit AVRCP play is a real request. Anything
+        // else must prove itself as sustained audio first.
+        if (playback_control_get_source() == PLAYBACK_SOURCE_NONE ||
+            s_avrc_playing) {
+          claim_output(0, NULL);
+        } else {
+          s_claim_pending = true;
+        }
+      }
     } else {
       ESP_LOGI(TAG, "Audio stream stopped/suspended");
       s_audio_started = false;
-      rtsp_events_emit(RTSP_EVENT_PAUSED, NULL);
+      s_claim_pending = false;
+      clear_pcm();
+      playback_control_set_playing(PLAYBACK_SOURCE_BLUETOOTH, false);
     }
     break;
   }
@@ -375,7 +331,7 @@ static void bt_a2dp_evt_handler(uint16_t event, void *param) {
         s_sample_rate = 16000;
       }
       ESP_LOGI(TAG, "SBC sample rate: %" PRIu32 " Hz", s_sample_rate);
-      audio_output_set_sample_rate(s_sample_rate);
+      // The single output task changes clocks at its next buffer boundary.
     }
     break;
   }
@@ -472,7 +428,7 @@ static void bt_avrc_ct_evt_handler(uint16_t event, void *param) {
       ESP_LOGI(TAG, "Metadata attr %d: %s", attr_id, dst);
 
       // Emit metadata event after each attribute update
-      rtsp_events_emit(RTSP_EVENT_METADATA, &meta_data);
+      emit_metadata(&meta_data);
     }
     free(text);
     break;
@@ -494,16 +450,14 @@ static void bt_avrc_ct_evt_handler(uint16_t event, void *param) {
     if (position_ms != 0xFFFFFFFF) {
       meta_data.metadata.position_secs = position_ms / 1000;
     }
-    rtsp_events_emit(RTSP_EVENT_METADATA, &meta_data);
+    emit_metadata(&meta_data);
 
     // Emit play state from AVRCP (faster than A2D audio state)
     if (status == ESP_AVRC_PLAYBACK_PLAYING) {
-      s_avrc_playing = true;
-      rtsp_events_emit(RTSP_EVENT_PLAYING, NULL);
+      on_remote_playing(true);
     } else if (status == ESP_AVRC_PLAYBACK_PAUSED ||
                status == ESP_AVRC_PLAYBACK_STOPPED) {
-      s_avrc_playing = false;
-      rtsp_events_emit(RTSP_EVENT_PAUSED, NULL);
+      on_remote_playing(false);
     }
     break;
   }
@@ -530,12 +484,10 @@ static void bt_avrc_ct_evt_handler(uint16_t event, void *param) {
       esp_avrc_ct_send_get_play_status_cmd(0);
 
       if (status == ESP_AVRC_PLAYBACK_PLAYING) {
-        s_avrc_playing = true;
-        rtsp_events_emit(RTSP_EVENT_PLAYING, NULL);
+        on_remote_playing(true);
       } else if (status == ESP_AVRC_PLAYBACK_PAUSED ||
                  status == ESP_AVRC_PLAYBACK_STOPPED) {
-        s_avrc_playing = false;
-        rtsp_events_emit(RTSP_EVENT_PAUSED, NULL);
+        on_remote_playing(false);
       }
       // Re-register
       esp_avrc_ct_send_register_notification_cmd(
@@ -546,7 +498,7 @@ static void bt_avrc_ct_evt_handler(uint16_t event, void *param) {
 
       if (pos_ms != 0xFFFFFFFF) {
         meta_data.metadata.position_secs = pos_ms / 1000;
-        rtsp_events_emit(RTSP_EVENT_METADATA, &meta_data);
+        emit_metadata(&meta_data);
       }
       // Re-register
       esp_avrc_ct_send_register_notification_cmd(
@@ -586,8 +538,12 @@ static void bt_avrc_ct_cb(esp_avrc_ct_cb_event_t event,
     local.meta_rsp.attr_text = copy;
   }
 
-  bt_app_work_dispatch(bt_avrc_ct_evt_handler, (uint16_t)event, &local,
-                       sizeof(esp_avrc_ct_cb_param_t));
+  // On a full queue the deep-copied metadata text would otherwise leak.
+  if (!bt_app_work_dispatch(bt_avrc_ct_evt_handler, (uint16_t)event, &local,
+                            sizeof(esp_avrc_ct_cb_param_t)) &&
+      event == ESP_AVRC_CT_METADATA_RSP_EVT) {
+    free(local.meta_rsp.attr_text);
+  }
 }
 
 /* ========================================================================== */
@@ -605,14 +561,9 @@ static void bt_avrc_tg_evt_handler(uint16_t event, void *param) {
 
   case ESP_AVRC_TG_SET_ABSOLUTE_VOLUME_CMD_EVT: {
     uint8_t volume = tg->set_abs_vol.volume; // 0-127
-    s_avrc_volume = volume;
+    s_avrc_volume = volume > 127 ? 127 : volume;
+    settings_set_bt_volume(s_avrc_volume);
     ESP_LOGD(TAG, "Set absolute volume: %d/127", volume);
-
-    // Map 0-127 → -30..0 dB and apply to DAC
-    // dac_set_volume does I2C — safe here because bt_app_task dispatches
-    // sequentially, but keep it lightweight
-    float volume_db = ((float)volume / 127.0f) * 30.0f - 30.0f;
-    dac_set_volume(volume_db);
     break;
   }
 
@@ -681,26 +632,23 @@ static void bt_gap_cb(esp_bt_gap_cb_event_t event,
 }
 
 /* ========================================================================== */
-/* Stack-up handler — called when Bluedroid is (re-)enabled                   */
+/* Stack-up handler — called once Bluedroid is enabled                        */
 /* ========================================================================== */
 
-// Register the GAP/AVRC/A2DP profiles.  Shared by the initial stack-up path
-// and bt_a2dp_sink_resume(), so a suspend/resume cycle re-registers the L2CAP
-// PSMs cleanly instead of relying on them surviving esp_bluedroid_disable().
+// Register the GAP/AVRC/A2DP profiles on stack-up.
 static void bt_register_profiles(void) {
   // GAP
   esp_bt_gap_register_callback(bt_gap_cb);
 
-  // (Re-)apply the advertised device name.  Required after a resume because
-  // the name does not survive esp_bluedroid_disable().
+  // Apply the advertised device name.
   if (s_device_name[0] != '\0') {
     esp_bt_gap_set_device_name(s_device_name);
   }
 
 #ifdef CONFIG_BT_SSP_ENABLED
-  // Secure Simple Pairing — numeric comparison for BT 2.1+ devices
+  // Secure Simple Pairing, Just Works: the board has no display or keypad.
   esp_bt_sp_param_t param_type = ESP_BT_SP_IOCAP_MODE;
-  esp_bt_io_cap_t iocap = ESP_BT_IO_CAP_IO;
+  esp_bt_io_cap_t iocap = ESP_BT_IO_CAP_NONE;
   esp_bt_gap_set_security_param(param_type, &iocap, sizeof(uint8_t));
 #endif
 
@@ -733,37 +681,14 @@ static void bt_register_profiles(void) {
   esp_a2d_sink_init();
 }
 
-// Deregister the profiles before suspending so their L2CAP PSMs (0x0019 AVDTP,
-// 0x0017 AVCTP) are torn down cleanly rather than during bluedroid disable.
-// Order matters: Bluedroid requires AVRC (TG then CT) to be deinited *before*
-// A2DP, otherwise it logs "AVRC should deinit in advance of A2DP".
-static void bt_deinit_profiles(void) {
-  esp_avrc_tg_deinit();
-  esp_avrc_ct_deinit();
-  esp_a2d_sink_deinit();
-}
-
-// Apply the saved connectable/discoverable preference.  Assumes bluedroid is
-// enabled and the profiles are registered.
-static void bt_apply_scan_mode(void) {
-  if (s_bt_discoverable) {
-    esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
-  } else {
-    esp_bt_gap_set_scan_mode(ESP_BT_NON_CONNECTABLE, ESP_BT_NON_DISCOVERABLE);
-  }
-}
-
-// Push the saved BT volume to the DAC (falls back to 64 / -15 dB if none
-// stored).  Applied on stack-up and on resume, so the first A2DP playback
-// after a suspend/resume cycle starts at the correct level instead of whatever
-// AirPlay last set, without waiting for an AVRCP volume update.
+// Load the saved AVRCP volume (64 / -15 dB if none) so the first A2DP stream
+// starts at the last Bluetooth level instead of waiting for the phone.
 static void bt_restore_saved_volume(void) {
   uint8_t saved_vol;
   if (settings_get_bt_volume(&saved_vol) == ESP_OK) {
     s_avrc_volume = saved_vol;
   }
   float volume_db = ((float)s_avrc_volume / 127.0f) * 30.0f - 30.0f;
-  dac_set_volume(volume_db);
   ESP_LOGI(TAG, "BT volume restored: %d/127 (%.1f dB)", s_avrc_volume,
            volume_db);
 }
@@ -796,9 +721,21 @@ static void bt_stack_evt_handler(uint16_t event, void *param) {
 /* Public API                                                                 */
 /* ========================================================================== */
 
-esp_err_t bt_a2dp_sink_init(const char *device_name,
-                            bt_a2dp_state_cb_t state_cb) {
-  s_state_cb = state_cb;
+esp_err_t bt_a2dp_sink_init(const char *device_name) {
+  // The FIFO lives as long as the firmware, so stack callbacks never see it
+  // freed.
+  s_fifo_lock = xSemaphoreCreateMutex();
+  void *storage =
+      heap_caps_malloc(RINGBUF_SIZE, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+  if (!s_fifo_lock || !storage) {
+    free(storage);
+    if (s_fifo_lock) {
+      vSemaphoreDelete(s_fifo_lock);
+    }
+    s_fifo_lock = NULL;
+    return ESP_ERR_NO_MEM;
+  }
+  pcm_fifo_init(&s_fifo, storage, RINGBUF_SIZE);
 
   ESP_LOGI(TAG, "Initializing Bluetooth A2DP Sink: %s", device_name);
 
@@ -836,8 +773,7 @@ esp_err_t bt_a2dp_sink_init(const char *device_name,
     return err;
   }
 
-  // Save the device name so it can be re-applied after a suspend/resume; the
-  // stack-up profile registration (bt_register_profiles) applies it.
+  // bt_register_profiles() applies the name again on stack-up.
   snprintf(s_device_name, sizeof(s_device_name), "%s", device_name);
   esp_bt_gap_set_device_name(device_name);
 
@@ -862,15 +798,31 @@ esp_err_t bt_a2dp_sink_init(const char *device_name,
   return ESP_OK;
 }
 
+// Runs on bt_app_task. The disconnect event re-enables discovery.
+static void enter_pairing_mode(uint16_t event, void *param) {
+  (void)event;
+  (void)param;
+  if (s_connected) {
+    ESP_LOGI(TAG, "Pairing mode: disconnecting current phone");
+    esp_a2d_sink_disconnect(s_peer_bda);
+  } else {
+    ESP_LOGI(TAG, "Pairing mode: discoverable");
+    bt_a2dp_sink_set_discoverable(true);
+  }
+}
+
+void bt_a2dp_sink_pairing_mode(void) {
+  bt_app_work_dispatch(enter_pairing_mode, 0, NULL, 0);
+}
+
 bool bt_a2dp_sink_is_connected(void) {
   return s_connected;
 }
 
 void bt_a2dp_sink_set_discoverable(bool discoverable) {
   s_bt_discoverable = discoverable;
-  if (s_connected || s_bt_suspended) {
-    // Suspended: only the saved preference is updated; the scan mode is
-    // re-applied by bt_a2dp_sink_resume().
+  if (s_connected) {
+    // One phone at a time: the preference applies after it disconnects.
     return;
   }
   if (discoverable) {
@@ -881,162 +833,6 @@ void bt_a2dp_sink_set_discoverable(bool discoverable) {
     esp_bt_gap_set_scan_mode(ESP_BT_NON_CONNECTABLE, ESP_BT_NON_DISCOVERABLE);
   }
 }
-
-bool bt_a2dp_sink_is_suspended(void) {
-  return s_bt_suspended;
-}
-
-static esp_err_t bt_suspend_locked(void) {
-  if (s_bt_suspended) {
-    return ESP_OK;
-  }
-  if (s_connected) {
-    // A phone is actively streaming over BT — don't pull the radio out from
-    // under it.  (Shouldn't happen while AirPlay is the active source.)
-    ESP_LOGW(TAG, "Not suspending BT: A2DP device connected");
-    return ESP_ERR_INVALID_STATE;
-  }
-
-  ESP_LOGI(TAG, "Suspending Bluetooth radio (freeing airtime for WiFi)");
-  // Stop accepting connections before tearing the radio down.
-  esp_bt_gap_set_scan_mode(ESP_BT_NON_CONNECTABLE, ESP_BT_NON_DISCOVERABLE);
-
-  // Deregister profiles first so their L2CAP PSMs are removed cleanly (avoids
-  // the "PSM not found for deregistration" warnings during bluedroid disable).
-  bt_deinit_profiles();
-
-  // Re-check after tearing down the A2DP/AVRC profiles: a device may have
-  // completed its connection during the scan-mode/deinit window (between the
-  // initial s_connected check and here).  Now that the profiles are gone no
-  // new connection can complete, so if one did, abort the suspend and restore
-  // the profiles rather than disabling the radio out from under a live link.
-  if (s_connected) {
-    ESP_LOGW(TAG, "BT connected mid-suspend — aborting, restoring profiles");
-    bt_register_profiles();
-    bt_apply_scan_mode();
-    return ESP_ERR_INVALID_STATE;
-  }
-
-  esp_err_t err = esp_bluedroid_disable();
-  if (err != ESP_OK) {
-    // Bluedroid is still enabled; re-register the profiles we just tore down
-    // so BT stays functional rather than being left half-dismantled.
-    ESP_LOGE(TAG, "bluedroid disable failed: %s — restoring profiles",
-             esp_err_to_name(err));
-    bt_register_profiles();
-    bt_apply_scan_mode();
-    return err;
-  }
-  err = esp_bt_controller_disable();
-  if (err != ESP_OK) {
-    // Roll bluedroid back up and re-register the profiles so BT is restored to
-    // a working, non-suspended state instead of being bricked until reboot.
-    ESP_LOGE(TAG, "controller disable failed: %s — rolling back",
-             esp_err_to_name(err));
-    if (esp_bluedroid_enable() == ESP_OK) {
-      bt_register_profiles();
-      bt_apply_scan_mode();
-    } else {
-      ESP_LOGE(TAG, "bluedroid re-enable failed during rollback — "
-                    "BT unavailable until reboot");
-    }
-    return err;
-  }
-
-  s_bt_suspended = true;
-  return ESP_OK;
-}
-
-static esp_err_t bt_resume_locked(void) {
-  if (!s_bt_suspended) {
-    return ESP_OK;
-  }
-
-  ESP_LOGI(TAG, "Resuming Bluetooth radio");
-  esp_err_t err = esp_bt_controller_enable(ESP_BT_MODE_CLASSIC_BT);
-  if (err != ESP_OK) {
-    ESP_LOGE(TAG, "controller enable failed: %s", esp_err_to_name(err));
-    return err;
-  }
-  err = esp_bluedroid_enable();
-  if (err != ESP_OK) {
-    ESP_LOGE(TAG, "bluedroid enable failed: %s", esp_err_to_name(err));
-    esp_bt_controller_disable(); // roll back to a consistent suspended state
-    return err;
-  }
-
-  s_bt_suspended = false;
-  // Re-register the profiles torn down in suspend, restore the connectable/
-  // discoverable state, and re-apply the saved BT volume to the DAC (AirPlay
-  // may have changed it) so post-resume A2DP starts at the right level.
-  bt_register_profiles();
-  bt_apply_scan_mode();
-  bt_restore_saved_volume();
-  return ESP_OK;
-}
-
-// ---------------------------------------------------------------------------
-// Suspend/resume mutate the Bluedroid stack (profile deinit/init, controller
-// enable/disable).  They must not run directly on the caller's (coex) task
-// because bt_app_task keeps dispatching A2DP/AVRC handlers — tearing the stack
-// down or rebuilding it under an in-flight callback races them.  Instead run
-// the operation on bt_app_task itself (the same serialised queue that stack-up
-// uses) and block the caller until it finishes, returning its result.
-// ---------------------------------------------------------------------------
-typedef struct {
-  esp_err_t (*fn)(void);
-  esp_err_t result;
-  SemaphoreHandle_t done;
-} bt_sync_op_t;
-
-// Only ever one op is in flight: bt_run_on_app_task blocks until it completes,
-// and its sole caller (the coex task) issues them serially.
-static bt_sync_op_t *s_pending_op;
-
-static void bt_sync_op_runner(uint16_t event, void *param) {
-  (void)event;
-  (void)param;
-  bt_sync_op_t *op = s_pending_op;
-  op->result = op->fn();
-  xSemaphoreGive(op->done);
-}
-
-static esp_err_t bt_run_on_app_task(esp_err_t (*fn)(void)) {
-  if (!s_bt_task_queue) {
-    return ESP_ERR_INVALID_STATE;
-  }
-  // If somehow invoked from bt_app_task itself, run inline — dispatching to our
-  // own queue and then blocking on it would dead-lock.
-  if (xTaskGetCurrentTaskHandle() == s_bt_task_handle) {
-    return fn();
-  }
-
-  bt_sync_op_t op = {.fn = fn, .result = ESP_FAIL, .done = NULL};
-  op.done = xSemaphoreCreateBinary();
-  if (!op.done) {
-    return ESP_ERR_NO_MEM;
-  }
-  s_pending_op = &op;
-  if (!bt_app_work_dispatch(bt_sync_op_runner, 0, NULL, 0)) {
-    vSemaphoreDelete(op.done);
-    return ESP_FAIL;
-  }
-  xSemaphoreTake(op.done, portMAX_DELAY);
-  vSemaphoreDelete(op.done);
-  return op.result;
-}
-
-esp_err_t bt_a2dp_sink_suspend(void) {
-  return bt_run_on_app_task(bt_suspend_locked);
-}
-
-esp_err_t bt_a2dp_sink_resume(void) {
-  return bt_run_on_app_task(bt_resume_locked);
-}
-
-// ============================================================================
-// AVRCP passthrough commands for hardware button control
-// ============================================================================
 
 static void send_passthrough(uint8_t key_code) {
   if (!s_connected) {
@@ -1090,8 +886,7 @@ void bt_a2dp_send_volume_up(void) {
     new_vol = 127;
   }
   s_avrc_volume = new_vol;
-  float volume_db = ((float)new_vol / 127.0f) * 30.0f - 30.0f;
-  dac_set_volume(volume_db);
+  settings_set_bt_volume(new_vol);
   notify_volume_changed();
   ESP_LOGI(TAG, "AVRCP: volume up -> %d/127", new_vol);
 }
@@ -1104,8 +899,7 @@ void bt_a2dp_send_volume_down(void) {
     new_vol = 0;
   }
   s_avrc_volume = new_vol;
-  float volume_db = ((float)new_vol / 127.0f) * 30.0f - 30.0f;
-  dac_set_volume(volume_db);
+  settings_set_bt_volume(new_vol);
   notify_volume_changed();
   ESP_LOGI(TAG, "AVRCP: volume down -> %d/127", new_vol);
 }

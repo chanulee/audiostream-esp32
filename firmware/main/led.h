@@ -19,6 +19,9 @@ typedef enum {
  */
 void led_init(void);
 
+/** Update playback indication without emitting an AirPlay protocol event. */
+void led_set_playback_status(bool connected, bool playing);
+
 /**
  * Feed audio samples for VU meter mode.
  * Call this from the audio path when playing.

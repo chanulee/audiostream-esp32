@@ -45,6 +45,13 @@ class CaptureTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.run_capture(wav_bytes()[:-4])
 
+    def test_rate_change_aborts_without_download(self):
+        status = json.dumps({'state': 'rate_changed', 'sample_rate': 48000}).encode()
+        with patch.object(module, 'request', return_value=status) as request:
+            with self.assertRaisesRegex(ValueError, '주파수'):
+                module.capture('http://receiver', 1, 'unused.wav')
+            self.assertEqual(request.call_count, 1)
+
     def test_timeout_before_download(self):
         status = json.dumps({'state': 'armed', 'sample_rate': 44100}).encode()
         with patch.object(module, 'request', return_value=status) as request:

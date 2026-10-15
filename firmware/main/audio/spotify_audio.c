@@ -3,16 +3,18 @@
 #include "spotify.h"
 #include "pcm_fifo.h"
 #include "audio_output.h"
+#include "audio_receiver.h"
 #include "rtsp_events.h"
 #include "playback_control.h"
 #include "settings.h"
+#include "led.h"
 #include "esp_heap_caps.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 
 static SemaphoreHandle_t lock;
 static pcm_fifo_t fifo;
-static bool selected, paused, airplay_playing;
+static bool selected, paused;
 static uint64_t written, played;
 static int32_t volume_q15=16384;
 static void flush_locked(void) {
@@ -21,39 +23,38 @@ static void flush_locked(void) {
 }
 static bool begin(void) {
     xSemaphoreTake(lock, portMAX_DELAY);
-    bool allowed=!airplay_playing;
-    if (allowed) {
-        selected=true; paused=false; flush_locked();
-        playback_control_set_source(PLAYBACK_SOURCE_SPOTIFY);
-    }
+    selected=true; paused=false; flush_locked();
     xSemaphoreGive(lock);
-    if (allowed) {
-        audio_output_flush();
-    }
-    return allowed;
+    playback_control_set_source(PLAYBACK_SOURCE_SPOTIFY);
+    return true;
 }
 static void pause_audio(bool value) {
     xSemaphoreTake(lock, portMAX_DELAY);
-    // Resume only while AirPlay is idle; a paused buffer may be retained.
-    if (!value && !selected && !airplay_playing) selected=true;
-    paused=value || airplay_playing;
-    if (selected && !paused) playback_control_set_source(PLAYBACK_SOURCE_SPOTIFY);
+    if (!value && !selected) { selected=true; flush_locked(); }
+    paused=value;
     xSemaphoreGive(lock);
-    audio_output_flush();
+    if (!value) playback_control_set_source(PLAYBACK_SOURCE_SPOTIFY);
+    else playback_control_set_playing(PLAYBACK_SOURCE_SPOTIFY, false);
 }
 static void end(void) {
     xSemaphoreTake(lock, portMAX_DELAY);
-    bool was_selected=selected;
     selected=false; paused=true; flush_locked();
-    if (was_selected) playback_control_set_source(PLAYBACK_SOURCE_AIRPLAY);
     xSemaphoreGive(lock);
-    audio_output_flush();
+    playback_control_release_source(PLAYBACK_SOURCE_SPOTIFY);
 }
 static void flush(void) {
+    playback_control_lock_output();
     xSemaphoreTake(lock, portMAX_DELAY);
     flush_locked();
     xSemaphoreGive(lock);
-    audio_output_flush();
+    if (playback_control_get_source()==PLAYBACK_SOURCE_SPOTIFY) audio_output_flush();
+    playback_control_unlock_output();
+}
+void spotify_audio_yield(void) {
+    xSemaphoreTake(lock, portMAX_DELAY);
+    selected=false; paused=true; flush_locked();
+    xSemaphoreGive(lock);
+    spotify_command(SPOTIFY_YIELD);
 }
 static void volume(uint16_t value) {
     __atomic_store_n(&volume_q15, (int32_t)((uint32_t)value*32768/65535), __ATOMIC_RELAXED);
@@ -63,7 +64,7 @@ int32_t spotify_audio_volume_q15(void) {
 }
 static size_t write_pcm(const uint8_t *pcm, size_t bytes) {
     xSemaphoreTake(lock, portMAX_DELAY);
-    size_t result=selected && !paused ? pcm_fifo_write(&fifo, pcm, bytes) : 0;
+    size_t result=selected && !paused && playback_control_get_source()==PLAYBACK_SOURCE_SPOTIFY ? pcm_fifo_write(&fifo, pcm, bytes) : 0;
     written+=result/4;
     xSemaphoreGive(lock);
     return result;
@@ -89,21 +90,6 @@ static uint64_t played_frames(void) {
     xSemaphoreGive(lock);
     return result;
 }
-static void airplay_event(rtsp_event_t event, const rtsp_event_data_t *data, void *user) {
-    (void)data; (void)user;
-    bool yield=false;
-    xSemaphoreTake(lock, portMAX_DELAY);
-    if (event==RTSP_EVENT_PLAYING) {
-        airplay_playing=true;
-        yield=selected;
-        selected=false; paused=true; flush_locked();
-        playback_control_set_source(PLAYBACK_SOURCE_AIRPLAY);
-    } else if (event==RTSP_EVENT_PAUSED || event==RTSP_EVENT_DISCONNECTED) {
-        airplay_playing=false;
-    }
-    xSemaphoreGive(lock);
-    if (yield) { audio_output_flush(); spotify_command(SPOTIFY_YIELD); }
-}
 esp_err_t spotify_audio_init(void) {
     lock=xSemaphoreCreateMutex();
     void *data=heap_caps_malloc(64*1024, MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
@@ -114,6 +100,5 @@ esp_err_t spotify_audio_init(void) {
     char name[65];
     settings_get_device_name(name, sizeof(name));
     esp_err_t err=spotify_init(name, &callbacks);
-    if (err==ESP_OK && rtsp_events_register(airplay_event, NULL)!=0) err=ESP_ERR_NO_MEM;
     return err;
 }

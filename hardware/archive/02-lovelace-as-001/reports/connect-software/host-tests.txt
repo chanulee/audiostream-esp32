@@ -1,0 +1,16 @@
+PCM capture tests passed
+PCM FIFO wrap/backpressure tests passed
+Spotify/AirPlay output arbitration tests passed
+Spotify form trust-boundary tests passed
+test_timeout_before_download (test_capture.CaptureTest.test_timeout_before_download) ... 캡처 준비 완료. iPhone/Mac에서 이 기기를 AirPlay 또는 Spotify Connect 출력으로 선택하고 재생하세요.
+ok
+test_truncated_download_preserves_destination (test_capture.CaptureTest.test_truncated_download_preserves_destination) ... 캡처 준비 완료. iPhone/Mac에서 이 기기를 AirPlay 또는 Spotify Connect 출력으로 선택하고 재생하세요.
+ok
+test_valid_wav (test_capture.CaptureTest.test_valid_wav) ... 캡처 준비 완료. iPhone/Mac에서 이 기기를 AirPlay 또는 Spotify Connect 출력으로 선택하고 재생하세요.
+ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+OK
+저장 완료: /var/folders/f8/qtxgxl3j4cdbhh5qnmdd8bvm0000gn/T/tmpcz1236vm/clip.wav (1초, stereo PCM16)

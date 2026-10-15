@@ -1,0 +1,3 @@
+Release audit: hardware/lovelace-as-001/fabrication-review
+  files=16 errors=0 warnings=0
+  file kinds: bom=1, bottom_copper=1, bottom_mask=1, bottom_silk=1, cpl=1, drill=2, gerber_job=1, inner_copper_1=1, inner_copper_2=1, other=2, outline=1, top_copper=1, top_mask=1, top_silk=1

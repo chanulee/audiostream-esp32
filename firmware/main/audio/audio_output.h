@@ -51,6 +51,9 @@ void audio_output_start(void);
  */
 void audio_output_flush(void);
 
+/** Flush an AirPlay session without interrupting another selected source. */
+void audio_output_flush_airplay(void);
+
 /**
  * Stop the AirPlay playback task (for yielding I2S to another source)
  */

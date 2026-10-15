@@ -1,0 +1,17 @@
+{
+  "calculator": "voltage-divider",
+  "divider_current_a": 1.2e-05,
+  "divider_current_ma": 0.012,
+  "inputs": {
+    "r_bottom_ohm": 100000.0,
+    "r_top_ohm": 348000.0,
+    "target_vout_v": null,
+    "vin_v": 5.376
+  },
+  "total_power_w": 6.451200000000001e-05,
+  "vout_v": 1.2,
+  "warnings": [
+    "The load must be negligible compared with the divider current, or include it in the calculation.",
+    "Check resistor voltage rating, tolerance, temperature coefficient, and ADC input impedance."
+  ]
+}

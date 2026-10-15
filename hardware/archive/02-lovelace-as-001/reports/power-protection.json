@@ -1,0 +1,11 @@
+{
+  "ovlo_nominal_v": 5.376,
+  "ovlo_min_v": 5.2916145454545465,
+  "ovlo_max_v": 5.4875606006006,
+  "resistor_tolerance_percent": 0.1,
+  "input_capacitance_uf": 0.1,
+  "efuse_ilim_nominal_a": 0.6713426853707415,
+  "ilim_tolerance_assumed_percent": 15,
+  "dvdt_cap_nf": 10,
+  "warning": "Static threshold calculation, not proof of fast-transient safety or USB certification; bench testing remains."
+}

@@ -1,0 +1,2 @@
+INFO top occupancy 25% of usable area (relaxed; 24% of the whole board; usable = board - edge band - keep-outs)
+SUMMARY ERROR 0, WARN 0

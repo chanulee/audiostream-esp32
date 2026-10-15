@@ -1,0 +1,5 @@
+# 8MB flash: 2 x 3MiB OTA slots + SPIFFS (components/boards/partitions.csv).
+# CONFIG_ESPTOOLPY_FLASHSIZE_16MB is not set
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="8MB"
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="components/boards/partitions.csv"

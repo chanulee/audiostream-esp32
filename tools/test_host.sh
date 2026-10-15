@@ -10,9 +10,11 @@ clang -std=c11 -Wall -Wextra -Werror -fsanitize=address,undefined \
   -I firmware/main/audio tests/test_pcm_fifo.c firmware/main/audio/pcm_fifo.c -o "$build_dir/fifo"
 "$build_dir/fifo"
 clang -std=c11 -Wall -Wextra -Werror -fsanitize=address,undefined \
+  -DCONFIG_SPOTIFY_ENABLED=1 -DCONFIG_BT_A2DP_ENABLE=1 \
   -I tests/stubs -I firmware/main/audio -I firmware/main/rtsp -I firmware/main \
   -I firmware/components/spotify tests/test_spotify_audio.c \
-  firmware/main/audio/spotify_audio.c firmware/main/audio/pcm_fifo.c -o "$build_dir/arbitration"
+  firmware/main/audio/spotify_audio.c firmware/main/audio/pcm_fifo.c \
+  firmware/main/audio/audio_source.c firmware/main/audio/audio_output_common.c -o "$build_dir/arbitration"
 "$build_dir/arbitration"
 clang++ -std=c++20 -Wall -Wextra -Werror -fsanitize=address,undefined \
   -I firmware/components/spotify tests/test_spotify_form.cpp \

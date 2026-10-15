@@ -1,0 +1,1213 @@
+[
+  {
+    "ref": "U1",
+    "value": "ESP32-S3-WROOM-1-N16R8",
+    "footprint": "RF_Module:ESP32-S3-WROOM-1",
+    "x": 25,
+    "y": 6.75,
+    "rot": 0,
+    "nets": {
+      "1": "GND",
+      "2": "+3V3_D",
+      "3": "EN",
+      "13": "USB_DM_MCU",
+      "14": "USB_DP_MCU",
+      "19": "BCLK_SRC",
+      "20": "DATA_SRC",
+      "21": "LRCLK_SRC",
+      "27": "BOOT",
+      "36": "UART_RX",
+      "37": "UART_TX",
+      "40": "GND",
+      "41": "GND"
+    },
+    "mpn": "ESP32-S3-WROOM-1-N16R8",
+    "pin_names": {
+      "1": "GND",
+      "2": "3V3",
+      "3": "EN",
+      "4": "GPIO4",
+      "5": "GPIO5",
+      "6": "GPIO6",
+      "7": "GPIO7",
+      "8": "GPIO15",
+      "9": "GPIO16",
+      "10": "GPIO17",
+      "11": "GPIO18",
+      "12": "GPIO8",
+      "13": "GPIO19",
+      "14": "GPIO20",
+      "15": "GPIO3",
+      "16": "GPIO46",
+      "17": "GPIO9",
+      "18": "GPIO10",
+      "19": "GPIO11",
+      "20": "GPIO12",
+      "21": "GPIO13",
+      "22": "GPIO14",
+      "23": "GPIO21",
+      "24": "GPIO47",
+      "25": "GPIO48",
+      "26": "GPIO45",
+      "27": "GPIO0",
+      "28": "GPIO35",
+      "29": "GPIO36",
+      "30": "GPIO37",
+      "31": "GPIO38",
+      "32": "GPIO39",
+      "33": "GPIO40",
+      "34": "GPIO41",
+      "35": "GPIO42",
+      "36": "RXD0",
+      "37": "TXD0",
+      "38": "GPIO2",
+      "39": "GPIO1",
+      "40": "GND",
+      "41": "EP_GND"
+    },
+    "kind": "module",
+    "local_courtyard": [
+      -9.75,
+      -6.75,
+      9.75,
+      13.45
+    ]
+  },
+  {
+    "ref": "U2",
+    "value": "PCM5102APWR",
+    "footprint": "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm",
+    "x": 56,
+    "y": 30,
+    "rot": 180,
+    "nets": {
+      "1": "+3V3_A",
+      "2": "CAPP",
+      "3": "GND",
+      "4": "CAPM",
+      "5": "VNEG",
+      "6": "DAC_L",
+      "7": "DAC_R",
+      "8": "+3V3_A",
+      "9": "GND",
+      "10": "GND",
+      "11": "GND",
+      "12": "GND",
+      "13": "BCLK",
+      "14": "DATA",
+      "15": "LRCLK",
+      "16": "GND",
+      "17": "XSMT",
+      "18": "LDOO",
+      "19": "GND",
+      "20": "+3V3_D"
+    },
+    "mpn": "PCM5102APWR",
+    "pin_names": {
+      "1": "CPVDD",
+      "2": "CAPP",
+      "3": "CPGND",
+      "4": "CAPM",
+      "5": "VNEG",
+      "6": "OUTL",
+      "7": "OUTR",
+      "8": "AVDD",
+      "9": "AGND",
+      "10": "DEMP",
+      "11": "FLT",
+      "12": "SCK",
+      "13": "BCK",
+      "14": "DIN",
+      "15": "LRCK",
+      "16": "FMT",
+      "17": "XSMT",
+      "18": "LDOO",
+      "19": "DGND",
+      "20": "DVDD"
+    },
+    "kind": "ic",
+    "local_courtyard": [
+      -3.85,
+      -3.5,
+      3.85,
+      3.5
+    ]
+  },
+  {
+    "ref": "U3",
+    "value": "TPS62162DSGR",
+    "footprint": "Package_SON:Texas_DSG0008A_WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm_ThermalVias",
+    "x": 25,
+    "y": 40,
+    "rot": 0,
+    "nets": {
+      "1": "GND",
+      "2": "+5V",
+      "3": "+5V",
+      "4": "GND",
+      "5": "GND",
+      "6": "+3V3_D",
+      "7": "SW",
+      "9": "GND"
+    },
+    "mpn": "TPS62162DSGR",
+    "pin_names": {
+      "1": "PGND",
+      "2": "VIN",
+      "3": "EN",
+      "4": "AGND",
+      "5": "FB",
+      "6": "VOS",
+      "7": "SW",
+      "8": "PG",
+      "9": "EP_GND"
+    },
+    "kind": "power",
+    "local_courtyard": [
+      -1.5,
+      -1.25,
+      1.5,
+      1.25
+    ]
+  },
+  {
+    "ref": "L1",
+    "value": "2.2uH",
+    "footprint": "Inductor_SMD:L_Coilcraft_LPS4018",
+    "x": 30.5,
+    "y": 40,
+    "rot": 0,
+    "nets": {
+      "1": "SW",
+      "2": "+3V3_D"
+    },
+    "mpn": "LPS4018-222MRC",
+    "pin_names": {},
+    "kind": "power",
+    "local_courtyard": [
+      -2.45,
+      -2.2,
+      2.45,
+      2.2
+    ]
+  },
+  {
+    "ref": "U4",
+    "value": "TLV75533PDBVR",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+    "x": 54,
+    "y": 44,
+    "rot": 0,
+    "nets": {
+      "1": "+5V",
+      "2": "GND",
+      "3": "+5V",
+      "5": "+3V3_A"
+    },
+    "mpn": "TLV75533PDBVR",
+    "pin_names": {
+      "1": "IN",
+      "2": "GND",
+      "3": "EN",
+      "4": "NC",
+      "5": "OUT"
+    },
+    "kind": "power",
+    "local_courtyard": [
+      -2.05,
+      -1.7,
+      2.05,
+      1.7
+    ]
+  },
+  {
+    "ref": "J1",
+    "value": "HRO TYPE-C-31-M-12",
+    "footprint": "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12",
+    "x": 4.75,
+    "y": 42,
+    "rot": 270,
+    "nets": {
+      "A1": "GND",
+      "A12": "GND",
+      "B1": "GND",
+      "B12": "GND",
+      "SH": "GND",
+      "A4": "VBUS",
+      "A9": "VBUS",
+      "B4": "VBUS",
+      "B9": "VBUS",
+      "A5": "CC1",
+      "B5": "CC2",
+      "A6": "USB_DP",
+      "B6": "USB_DP",
+      "A7": "USB_DM",
+      "B7": "USB_DM"
+    },
+    "mpn": "HRO TYPE-C-31-M-12",
+    "pin_names": {},
+    "kind": "connector",
+    "local_courtyard": [
+      -5.32,
+      -5.27,
+      5.32,
+      4.15
+    ]
+  },
+  {
+    "ref": "J2",
+    "value": "SJ1-3523N",
+    "footprint": "Connector_Audio:Jack_3.5mm_CUI_SJ1-3523N_Horizontal",
+    "x": 76,
+    "y": 30,
+    "rot": 90,
+    "nets": {
+      "T": "LINE_L",
+      "R": "LINE_R",
+      "S": "GND"
+    },
+    "mpn": "SJ1-3523N",
+    "pin_names": {},
+    "kind": "connector",
+    "local_courtyard": [
+      -6.25,
+      -7.95,
+      6.25,
+      6.55
+    ]
+  },
+  {
+    "ref": "U5",
+    "value": "USBLC6-2SC6",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+    "x": 13.5,
+    "y": 42,
+    "rot": 0,
+    "nets": {
+      "1": "USB_DP",
+      "2": "GND",
+      "3": "USB_DM",
+      "4": "USB_DM",
+      "5": "VBUS",
+      "6": "USB_DP"
+    },
+    "mpn": "USBLC6-2SC6",
+    "pin_names": {
+      "1": "IO1",
+      "2": "GND",
+      "3": "IO2",
+      "4": "IO2",
+      "5": "VBUS",
+      "6": "IO1"
+    },
+    "kind": "ic",
+    "local_courtyard": [
+      -2.05,
+      -1.7,
+      2.05,
+      1.7
+    ]
+  },
+  {
+    "ref": "F1",
+    "value": "MF-MSMF075-2",
+    "footprint": "Fuse:Fuse_1812_4532Metric",
+    "x": 13.5,
+    "y": 51,
+    "rot": 0,
+    "nets": {
+      "1": "VBUS",
+      "2": "+5V"
+    },
+    "mpn": "MF-MSMF075-2",
+    "pin_names": {},
+    "kind": "power",
+    "local_courtyard": [
+      -2.95,
+      -1.95,
+      2.95,
+      1.95
+    ]
+  },
+  {
+    "ref": "SW1",
+    "value": "TL3342F160QG",
+    "footprint": "Button_Switch_SMD:SW_SPST_TL3342",
+    "x": 7,
+    "y": 28,
+    "rot": 0,
+    "nets": {
+      "1": "BOOT",
+      "2": "GND"
+    },
+    "mpn": "TL3342F160QG",
+    "pin_names": {},
+    "kind": "connector",
+    "local_courtyard": [
+      -4.25,
+      -3.0,
+      4.25,
+      3.0
+    ]
+  },
+  {
+    "ref": "SW2",
+    "value": "TL3342F160QG",
+    "footprint": "Button_Switch_SMD:SW_SPST_TL3342",
+    "x": 40,
+    "y": 28,
+    "rot": 0,
+    "nets": {
+      "1": "EN",
+      "2": "GND"
+    },
+    "mpn": "TL3342F160QG",
+    "pin_names": {},
+    "kind": "connector",
+    "local_courtyard": [
+      -4.25,
+      -3.0,
+      4.25,
+      3.0
+    ]
+  },
+  {
+    "ref": "J3",
+    "value": "UART recovery",
+    "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
+    "x": 41,
+    "y": 48,
+    "rot": 0,
+    "nets": {
+      "1": "GND",
+      "2": "UART_TX",
+      "3": "UART_RX",
+      "4": "+3V3_D"
+    },
+    "mpn": "2.54mm male header",
+    "pin_names": {},
+    "kind": "connector",
+    "local_courtyard": [
+      -1.77,
+      -1.77,
+      1.77,
+      9.39
+    ]
+  },
+  {
+    "ref": "R1",
+    "value": "5.1k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 8.5,
+    "y": 35,
+    "rot": 0,
+    "nets": {
+      "1": "CC1",
+      "2": "GND"
+    },
+    "mpn": "Yageo 5.1k 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R2",
+    "value": "5.1k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 8.5,
+    "y": 32.5,
+    "rot": 0,
+    "nets": {
+      "1": "CC2",
+      "2": "GND"
+    },
+    "mpn": "Yageo 5.1k 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R3",
+    "value": "22",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 12,
+    "y": 18,
+    "rot": 0,
+    "nets": {
+      "1": "USB_DP",
+      "2": "USB_DP_MCU"
+    },
+    "mpn": "Yageo 22 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R4",
+    "value": "22",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 12,
+    "y": 15.5,
+    "rot": 0,
+    "nets": {
+      "1": "USB_DM",
+      "2": "USB_DM_MCU"
+    },
+    "mpn": "Yageo 22 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R5",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 12.5,
+    "y": 8.5,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_D",
+      "2": "EN"
+    },
+    "mpn": "Yageo 10k 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C1",
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 12.5,
+    "y": 5.5,
+    "rot": 0,
+    "nets": {
+      "1": "EN",
+      "2": "GND"
+    },
+    "mpn": "1uF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C2",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 13,
+    "y": 2.75,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_D",
+      "2": "GND"
+    },
+    "mpn": "100nF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C3",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "x": 12,
+    "y": 12,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_D",
+      "2": "GND"
+    },
+    "mpn": "10uF X7R 10V 0805",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.7,
+      -0.98,
+      1.7,
+      0.98
+    ]
+  },
+  {
+    "ref": "R6",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 38.5,
+    "y": 21.5,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_D",
+      "2": "BOOT"
+    },
+    "mpn": "Yageo 10k 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R7",
+    "value": "33",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 22.5,
+    "y": 23.5,
+    "rot": 0,
+    "nets": {
+      "1": "BCLK_SRC",
+      "2": "BCLK"
+    },
+    "mpn": "Yageo 33 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R8",
+    "value": "33",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 26,
+    "y": 23.5,
+    "rot": 0,
+    "nets": {
+      "1": "DATA_SRC",
+      "2": "DATA"
+    },
+    "mpn": "Yageo 33 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R9",
+    "value": "33",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 29.5,
+    "y": 23.5,
+    "rot": 0,
+    "nets": {
+      "1": "LRCLK_SRC",
+      "2": "LRCLK"
+    },
+    "mpn": "Yageo 33 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C4",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "x": 21.75,
+    "y": 39.5,
+    "rot": 180,
+    "nets": {
+      "1": "+5V",
+      "2": "GND"
+    },
+    "mpn": "10uF X7R 10V 0805",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.7,
+      -0.98,
+      1.7,
+      0.98
+    ]
+  },
+  {
+    "ref": "C5",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "x": 18,
+    "y": 35.5,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_D",
+      "2": "GND"
+    },
+    "mpn": "10uF X7R 10V 0805",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.7,
+      -0.98,
+      1.7,
+      0.98
+    ]
+  },
+  {
+    "ref": "C6",
+    "value": "47uF",
+    "footprint": "Capacitor_SMD:C_1206_3216Metric",
+    "x": 36.5,
+    "y": 40,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_D",
+      "2": "GND"
+    },
+    "mpn": "GRM31CR61A476KE15L",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -2.3,
+      -1.15,
+      2.3,
+      1.15
+    ]
+  },
+  {
+    "ref": "C7",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "x": 20.5,
+    "y": 51,
+    "rot": 0,
+    "nets": {
+      "1": "+5V",
+      "2": "GND"
+    },
+    "mpn": "10uF X7R 10V 0805",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.7,
+      -0.98,
+      1.7,
+      0.98
+    ]
+  },
+  {
+    "ref": "C8",
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 50,
+    "y": 44,
+    "rot": 0,
+    "nets": {
+      "1": "+5V",
+      "2": "GND"
+    },
+    "mpn": "1uF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C9",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "x": 58,
+    "y": 44,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_A",
+      "2": "GND"
+    },
+    "mpn": "10uF X7R 10V 0805",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.7,
+      -0.98,
+      1.7,
+      0.98
+    ]
+  },
+  {
+    "ref": "C10",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 61.5,
+    "y": 33.75,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_A",
+      "2": "GND"
+    },
+    "mpn": "100nF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C11",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "x": 65,
+    "y": 36,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_A",
+      "2": "GND"
+    },
+    "mpn": "10uF X7R 10V 0805",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.7,
+      -0.98,
+      1.7,
+      0.98
+    ]
+  },
+  {
+    "ref": "C12",
+    "value": "2.2uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 61.5,
+    "y": 31,
+    "rot": 90,
+    "nets": {
+      "1": "CAPP",
+      "2": "CAPM"
+    },
+    "mpn": "2.2uF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C13",
+    "value": "2.2uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 61.5,
+    "y": 24,
+    "rot": 90,
+    "nets": {
+      "1": "VNEG",
+      "2": "GND"
+    },
+    "mpn": "2.2uF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C14",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 61.5,
+    "y": 28,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_A",
+      "2": "GND"
+    },
+    "mpn": "100nF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C15",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "x": 65,
+    "y": 26,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_A",
+      "2": "GND"
+    },
+    "mpn": "10uF X7R 10V 0805",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.7,
+      -0.98,
+      1.7,
+      0.98
+    ]
+  },
+  {
+    "ref": "C16",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 50.5,
+    "y": 33.5,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_D",
+      "2": "GND"
+    },
+    "mpn": "100nF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C17",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0805_2012Metric",
+    "x": 46.5,
+    "y": 33.5,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_D",
+      "2": "GND"
+    },
+    "mpn": "10uF X7R 10V 0805",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.7,
+      -0.98,
+      1.7,
+      0.98
+    ]
+  },
+  {
+    "ref": "C18",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 50.5,
+    "y": 31,
+    "rot": 0,
+    "nets": {
+      "1": "LDOO",
+      "2": "GND"
+    },
+    "mpn": "100nF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R10",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 47.5,
+    "y": 28.5,
+    "rot": 0,
+    "nets": {
+      "1": "+3V3_D",
+      "2": "XSMT"
+    },
+    "mpn": "Yageo 10k 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R11",
+    "value": "470",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 64,
+    "y": 19,
+    "rot": 0,
+    "nets": {
+      "1": "DAC_L",
+      "2": "LINE_L"
+    },
+    "mpn": "Yageo 470 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "R12",
+    "value": "470",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "x": 67.5,
+    "y": 19,
+    "rot": 0,
+    "nets": {
+      "1": "DAC_R",
+      "2": "LINE_R"
+    },
+    "mpn": "Yageo 470 0603 1%",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C19",
+    "value": "2.2nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 71,
+    "y": 19,
+    "rot": 0,
+    "nets": {
+      "1": "LINE_L",
+      "2": "GND"
+    },
+    "mpn": "2.2nF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "C20",
+    "value": "2.2nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "x": 74.5,
+    "y": 19,
+    "rot": 0,
+    "nets": {
+      "1": "LINE_R",
+      "2": "GND"
+    },
+    "mpn": "2.2nF X7R 10V 0603",
+    "pin_names": {},
+    "kind": "passive",
+    "local_courtyard": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ]
+  },
+  {
+    "ref": "D1",
+    "value": "PESD5V0S1BA",
+    "footprint": "Diode_SMD:D_SOD-323",
+    "x": 12.25,
+    "y": 37.5,
+    "rot": 0,
+    "nets": {
+      "1": "VBUS",
+      "2": "GND"
+    },
+    "mpn": "PESD5V0S1BA,115",
+    "pin_names": {
+      "1": "A1",
+      "2": "A2"
+    },
+    "kind": "passive",
+    "local_courtyard": [
+      -1.6,
+      -0.95,
+      1.6,
+      0.95
+    ]
+  },
+  {
+    "ref": "D2",
+    "value": "PESD5V0S1BA",
+    "footprint": "Diode_SMD:D_SOD-323",
+    "x": 71.5,
+    "y": 21.5,
+    "rot": 0,
+    "nets": {
+      "1": "LINE_L",
+      "2": "GND"
+    },
+    "mpn": "PESD5V0S1BA,115",
+    "pin_names": {
+      "1": "A1",
+      "2": "A2"
+    },
+    "kind": "passive",
+    "local_courtyard": [
+      -1.6,
+      -0.95,
+      1.6,
+      0.95
+    ]
+  },
+  {
+    "ref": "D3",
+    "value": "PESD5V0S1BA",
+    "footprint": "Diode_SMD:D_SOD-323",
+    "x": 75,
+    "y": 21.5,
+    "rot": 0,
+    "nets": {
+      "1": "LINE_R",
+      "2": "GND"
+    },
+    "mpn": "PESD5V0S1BA,115",
+    "pin_names": {
+      "1": "A1",
+      "2": "A2"
+    },
+    "kind": "passive",
+    "local_courtyard": [
+      -1.6,
+      -0.95,
+      1.6,
+      0.95
+    ]
+  },
+  {
+    "ref": "H1",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "x": 4,
+    "y": 4,
+    "rot": 0,
+    "nets": {},
+    "mpn": "M3",
+    "pin_names": {},
+    "kind": "mech",
+    "local_courtyard": [
+      0.0,
+      0.0,
+      3.45,
+      0.0
+    ]
+  },
+  {
+    "ref": "H2",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "x": 76,
+    "y": 4,
+    "rot": 0,
+    "nets": {},
+    "mpn": "M3",
+    "pin_names": {},
+    "kind": "mech",
+    "local_courtyard": [
+      0.0,
+      0.0,
+      3.45,
+      0.0
+    ]
+  },
+  {
+    "ref": "H3",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "x": 4,
+    "y": 56,
+    "rot": 0,
+    "nets": {},
+    "mpn": "M3",
+    "pin_names": {},
+    "kind": "mech",
+    "local_courtyard": [
+      0.0,
+      0.0,
+      3.45,
+      0.0
+    ]
+  },
+  {
+    "ref": "H4",
+    "value": "M3",
+    "footprint": "MountingHole:MountingHole_3.2mm_M3",
+    "x": 76,
+    "y": 56,
+    "rot": 0,
+    "nets": {},
+    "mpn": "M3",
+    "pin_names": {},
+    "kind": "mech",
+    "local_courtyard": [
+      0.0,
+      0.0,
+      3.45,
+      0.0
+    ]
+  }
+]

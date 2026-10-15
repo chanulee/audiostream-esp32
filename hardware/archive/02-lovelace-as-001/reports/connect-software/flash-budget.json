@@ -1,0 +1,15 @@
+{
+  "profile": "lovelace-s3-8m",
+  "chip": "esp32s3",
+  "configured_flash_bytes": 8388608,
+  "ota_slots": 2,
+  "ota_slot_bytes": 3145728,
+  "firmware_image_bytes": 2035200,
+  "ota_slot_free_bytes": 1110528,
+  "filesystem_partition_bytes": 1966080,
+  "filesystem_image_bytes": 1966080,
+  "spotify_requested_codec": "OGG_VORBIS_320",
+  "psram_bytes": 8388608,
+  "hardware": "AS-001 still uses ESP32-S3-WROOM-1-N16R8; Bluetooth requires hardware change",
+  "limitation": "Flash fit/build verified, peak runtime heap/CPU/network/audio and two real phones not verified."
+}

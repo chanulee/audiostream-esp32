@@ -1,9 +1,10 @@
 /**
  * @file board.c
- * @brief ESP32 Generic board implementation
+ * @brief LOVELACE AS-003 board implementation
  *
- * Minimal implementation for generic ESP32 dev boards with external I2S DAC.
- * No board-specific initialization required.
+ * PCM5102A is configured by strap pins (I2S, internal PLL); its XSMT soft
+ * mute is the mute GPIO. It starts muted: audio_output.c unmutes once the I2S
+ * clocks run, so boot, reset and clock changes do not pop.
  */
 
 #include "iot_board.h"
@@ -12,11 +13,11 @@
 #include "esp_check.h"
 #include "esp_log.h"
 
-static const char TAG[] = "ESP32-Generic";
+static const char TAG[] = "LOVELACE";
 
 static bool s_board_initialized = false;
 
-#ifdef CONFIG_MUTE_GPIO
+#if defined(CONFIG_MUTE_GPIO) && CONFIG_MUTE_GPIO >= 0
 static esp_err_t init_mute_gpio(void) {
   if (CONFIG_MUTE_GPIO < 0) {
     return ESP_OK;
@@ -32,12 +33,11 @@ static esp_err_t init_mute_gpio(void) {
   esp_err_t err = gpio_config(&io_conf);
   ESP_RETURN_ON_ERROR(err, TAG, "Failed to configure mute GPIO");
 
-  // Initialize to unmuted state — set opposite of active level
-  gpio_set_level(CONFIG_MUTE_GPIO, !CONFIG_MUTE_GPIO_LEVEL);
+  // Start muted; audio_output.c releases the mute once I2S is clocking.
+  gpio_set_level(CONFIG_MUTE_GPIO, CONFIG_MUTE_GPIO_LEVEL);
 
-  ESP_LOGI(TAG, "Mute GPIO %d initialized (active %s, init %s)",
-           CONFIG_MUTE_GPIO, CONFIG_MUTE_GPIO_LEVEL ? "high" : "low",
-           CONFIG_MUTE_GPIO_LEVEL ? "low" : "high");
+  ESP_LOGI(TAG, "Mute GPIO %d initialized (active %s, muted)",
+           CONFIG_MUTE_GPIO, CONFIG_MUTE_GPIO_LEVEL ? "high" : "low");
   return ESP_OK;
 }
 #endif
@@ -61,7 +61,7 @@ esp_err_t iot_board_init(void) {
     return ESP_OK;
   }
 
-#ifdef CONFIG_MUTE_GPIO
+#if defined(CONFIG_MUTE_GPIO) && CONFIG_MUTE_GPIO >= 0
   esp_err_t err = init_mute_gpio();
   if (err != ESP_OK) {
     return err;
@@ -69,7 +69,7 @@ esp_err_t iot_board_init(void) {
 #endif
 
   s_board_initialized = true;
-  ESP_LOGI(TAG, "Generic board initialized (no board-specific init needed)");
+  ESP_LOGI(TAG, "Board initialized");
   return ESP_OK;
 }
 

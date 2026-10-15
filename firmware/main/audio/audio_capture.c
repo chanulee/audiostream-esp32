@@ -10,23 +10,24 @@
 static SemaphoreHandle_t lock;
 static pcm_capture_t clip;
 static bool downloading;
+static unsigned capture_seconds;
 static esp_err_t error(httpd_req_t *r, const char *status, const char *message) {
     httpd_resp_set_status(r, status);
     return httpd_resp_send(r, message, HTTPD_RESP_USE_STRLEN);
 }
-void audio_capture_feed(const void *data, size_t bytes, bool audio) {
+void audio_capture_feed(const void *data, size_t bytes, bool audio, uint32_t rate) {
     if (!lock) return;
     xSemaphoreTake(lock, portMAX_DELAY);
-    pcm_capture_append(&clip, data, bytes, audio);
+    pcm_capture_append_rate(&clip, data, bytes, audio, rate, capture_seconds);
     xSemaphoreGive(lock);
 }
 static esp_err_t status_handler(httpd_req_t *r) {
     char body[192];
     xSemaphoreTake(lock, portMAX_DELAY);
-    const char *state = !clip.data ? "idle" : clip.used == clip.capacity ? "complete" :
+    const char *state = clip.rate_changed ? "rate_changed" : !clip.data ? "idle" : clip.used == clip.capacity ? "complete" :
                         clip.started ? "recording" : "armed";
     snprintf(body, sizeof(body), "{\"state\":\"%s\",\"frames\":%u,\"target_frames\":%u,\"sample_rate\":%u,\"channels\":2,\"bits\":16}",
-             state, (unsigned)(clip.used / 4), (unsigned)(clip.capacity / 4), CONFIG_OUTPUT_SAMPLE_RATE_HZ);
+             state, (unsigned)(clip.used / 4), (unsigned)(clip.capacity / 4), (unsigned)clip.sample_rate);
     xSemaphoreGive(lock);
     httpd_resp_set_type(r, "application/json");
     httpd_resp_set_hdr(r, "Cache-Control", "no-store");
@@ -40,7 +41,7 @@ static esp_err_t start_handler(httpd_req_t *r) {
     long seconds = strtol(seconds_text, &end, 10);
     if (!*seconds_text || *end || seconds < 1 || seconds > 10)
         return error(r, "400 Bad Request", "seconds must be an integer from 1 to 10");
-    size_t bytes = (size_t)seconds * CONFIG_OUTPUT_SAMPLE_RATE_HZ * 4;
+    size_t bytes = (size_t)seconds * 48000 * 4;
     xSemaphoreTake(lock, portMAX_DELAY);
     if (downloading) {
         xSemaphoreGive(lock);
@@ -56,21 +57,23 @@ static esp_err_t start_handler(httpd_req_t *r) {
         free(clip.data);
         pcm_capture_reset(&clip, data, bytes);
     } else pcm_capture_reset(&clip, clip.data, bytes);
+    capture_seconds=(unsigned)seconds;
     xSemaphoreGive(lock);
     return status_handler(r);
 }
 static esp_err_t wav_handler(httpd_req_t *r) {
     xSemaphoreTake(lock, portMAX_DELAY);
-    if (!clip.data || clip.used != clip.capacity || downloading) {
+    if (!clip.data || clip.rate_changed || clip.used != clip.capacity || downloading) {
         xSemaphoreGive(lock);
         return error(r, "409 Conflict", "capture is not complete");
     }
     downloading = true;
     const uint8_t *data = clip.data;
     size_t bytes = clip.used;
+    uint32_t rate=clip.sample_rate;
     xSemaphoreGive(lock);
     uint8_t header[44];
-    pcm_capture_wav_header(header, bytes, CONFIG_OUTPUT_SAMPLE_RATE_HZ);
+    pcm_capture_wav_header(header, bytes, rate);
     httpd_resp_set_type(r, "audio/wav");
     httpd_resp_set_hdr(r, "Cache-Control", "no-store");
     esp_err_t result = httpd_resp_send_chunk(r, (const char *)header, sizeof(header));

@@ -1,0 +1,164 @@
+{
+  "placement_readback_matches": true,
+  "inner_signal_tracks": 0,
+  "top_shell_trace_endpoints": [],
+  "non_45_degree_segments": [],
+  "nets": {
+    "+3V3_A": {
+      "length_mm": 40.372,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "+3V3_D": {
+      "length_mm": 140.161,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "+5V": {
+      "length_mm": 51.391,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "BCLK": {
+      "length_mm": 35.131,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "BCLK_SRC": {
+      "length_mm": 4.838,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "BOOT": {
+      "length_mm": 41.501,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    },
+    "CAPM": {
+      "length_mm": 3.142,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "CAPP": {
+      "length_mm": 2.984,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "CC1": {
+      "length_mm": 11.355,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "CC2": {
+      "length_mm": 16.715,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "DAC_L": {
+      "length_mm": 14.749,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "DAC_R": {
+      "length_mm": 16.39,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    },
+    "DATA": {
+      "length_mm": 32.576,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "DATA_SRC": {
+      "length_mm": 4.586,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "EN": {
+      "length_mm": 53.429,
+      "minimum_width_mm": 0.15,
+      "vias": 3
+    },
+    "GND": {
+      "length_mm": 367.875,
+      "minimum_width_mm": 0.15,
+      "vias": 23
+    },
+    "LDOO": {
+      "length_mm": 4.86,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "LINE_L": {
+      "length_mm": 12.379,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "LINE_R": {
+      "length_mm": 28.392,
+      "minimum_width_mm": 0.15,
+      "vias": 1
+    },
+    "LRCLK": {
+      "length_mm": 30.648,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "LRCLK_SRC": {
+      "length_mm": 5.509,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "SW": {
+      "length_mm": 2.889,
+      "minimum_width_mm": 0.25,
+      "vias": 0
+    },
+    "UART_RX": {
+      "length_mm": 50.89,
+      "minimum_width_mm": 0.15,
+      "vias": 1
+    },
+    "UART_TX": {
+      "length_mm": 50.02,
+      "minimum_width_mm": 0.15,
+      "vias": 1
+    },
+    "USB_DM": {
+      "length_mm": 36.82,
+      "minimum_width_mm": 0.15,
+      "vias": 4
+    },
+    "USB_DM_MCU": {
+      "length_mm": 4.351,
+      "minimum_width_mm": 0.15,
+      "vias": 0
+    },
+    "USB_DP": {
+      "length_mm": 35.564,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "USB_DP_MCU": {
+      "length_mm": 3.425,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "VBUS": {
+      "length_mm": 26.351,
+      "minimum_width_mm": 0.2,
+      "vias": 0
+    },
+    "VNEG": {
+      "length_mm": 7.88,
+      "minimum_width_mm": 0.15,
+      "vias": 2
+    },
+    "XSMT": {
+      "length_mm": 8.381,
+      "minimum_width_mm": 0.2,
+      "vias": 2
+    }
+  },
+  "warning": "Total net length includes branches; USB impedance/skew requires a pair-specific review using the fabricator stackup."
+}

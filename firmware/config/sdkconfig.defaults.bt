@@ -1,8 +1,5 @@
-# Bluetooth A2DP Sink defaults (ESP32 Classic BT only)
-# Include this in sdkconfig for boards that support Classic Bluetooth.
-# These options are ignored on ESP32-S3/C3/etc which lack Classic BT.
-#
-# To enable: Component config → Bluetooth → then these are set automatically.
+# Bluetooth A2DP sink (ESP32 Classic BT). Wi-Fi services stay up while a
+# phone is connected; the output goes to whichever source last asked to play.
 
 CONFIG_BT_ENABLED=y
 CONFIG_BTDM_CTRL_MODE_BR_EDR_ONLY=y
@@ -11,10 +8,7 @@ CONFIG_BT_CLASSIC_ENABLED=y
 CONFIG_BT_A2DP_ENABLE=y
 CONFIG_ESP_COEX_SW_COEXIST_ENABLE=y
 
-# Security Setup
-# SSP requires a screen on the device to show the code
-CONFIG_BT_SSP_ENABLED=n
-CONFIG_BT_PIN_CODE="05032026"
+# Pairing is set per board (LOVELACE: SSP Just Works + legacy PIN 0000).
 
 
 # Disable BLE host stack — A2DP uses Classic BT only.  Disabling BLE avoids
@@ -32,12 +26,10 @@ CONFIG_BT_ACL_CONNECTIONS=1
 # Classic BT are both active.
 CONFIG_BT_ALLOCATION_FROM_SPIRAM_FIRST=y
 
-# WiFi buffer pressure vs. AirPlay realtime UDP resilience — a balance.
-# AirPlay is stopped while BT is streaming, so these only matter for the
-# WiFi/AirPlay path.  Kept modest to stay well clear of the BT+WiFi OOM
-# ceiling (the BT controller/Bluedroid stack already claims ~100 KB of
-# internal DRAM), while giving the realtime (ALAC) UDP path enough RX
-# headroom to reduce packet loss.
+# Wi-Fi buffers: kept modest to stay clear of the BT + Wi-Fi OOM ceiling (the
+# BT controller / Bluedroid stack claims ~100 KB of internal DRAM) while giving
+# the realtime (ALAC) UDP path enough RX headroom. Measure on hardware with
+# Spotify TLS, AirPlay and A2DP all active before raising them.
 CONFIG_ESP_WIFI_STATIC_RX_BUFFER_NUM=8
 CONFIG_ESP_WIFI_DYNAMIC_RX_BUFFER_NUM=24
 CONFIG_ESP_WIFI_DYNAMIC_TX_BUFFER_NUM=16
@@ -56,13 +48,10 @@ CONFIG_SPIRAM_MALLOC_ALWAYSINTERNAL=1024
 
 # TCP receive window for data flowing TO the device (uploads, OTA, buffered
 # AAC). SND_BUF stays small — device→peer bulk sends are rare and irrelevant here.
-# NOTE: while the BT controller is active, WiFi/BT coexistence pins the
-# effective RTT (~200 ms, delayed-ACK under bursty coex RX), so this window has
-# little effect (measured ~0.6 Mbit/s regardless of size).  It only pays off
-# once BT is suspended during AirPlay (see bt_a2dp_sink_suspend), when the radio
-# is clear and receive throughput jumps (~4 Mbit/s).  TCP buffers allocate as
-# small pbuf chains on demand, so this costs aggregate internal heap (worst case
-# ~55 KB free), not the largest-free-block.
+# Upstream measured ~0.6 Mbit/s TCP receive while the BT controller is active
+# (coexistence pins the RTT near 200 ms). LOVELACE keeps BT active so phones can
+# always connect; buffered AirPlay and Spotify 320 kbps fit that rate, but it
+# has to be confirmed on hardware.
 CONFIG_LWIP_TCP_SND_BUF_DEFAULT=2880
 CONFIG_LWIP_TCP_WND_DEFAULT=15840
 

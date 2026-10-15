@@ -41,7 +41,8 @@ SpircHandler::SpircHandler(std::shared_ptr<cspot::Context> ctx) {
 
     // Send playback start event, pause/unpause per request
     sendEvent(EventType::PLAYBACK_START, (int)track->requestedPosition);
-    sendEvent(EventType::PLAY_PAUSE, paused);
+    // Decoder readiness is not a new user request and cannot reclaim another source.
+    if (paused) sendEvent(EventType::PLAY_PAUSE, true);
   };
 
   this->ctx = ctx;
@@ -187,6 +188,8 @@ void SpircHandler::handleFrame(std::vector<uint8_t>& data) {
       }
 
       playbackState->setActive(true);
+      bool paused = playbackState->remoteFrame.state.status == PlayStatus_kPlayStatusPause;
+      if (!paused) sendEvent(EventType::PLAY_REQUEST);
 
       playbackState->updatePositionMs(playbackState->remoteFrame.position);
       playbackState->setPlaybackState(PlaybackState::State::Playing);
@@ -200,7 +203,7 @@ void SpircHandler::handleFrame(std::vector<uint8_t>& data) {
       this->notify();
 
       // Stop the current track, if any
-      trackPlayer->resetState();
+      trackPlayer->resetState(paused);
       break;
     }
     case MessageType_kMessageTypeReplace: {

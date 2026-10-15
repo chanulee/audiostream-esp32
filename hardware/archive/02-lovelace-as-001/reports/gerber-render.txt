@@ -1,0 +1,6 @@
+top: wrote hardware/lovelace-as-001/gerber_top.png; silk on mask openings 0.000 mm2 (the fab clips it)
+bottom: wrote hardware/lovelace-as-001/gerber_bottom.png; silk on mask openings 0.000 mm2 (the fab clips it)
+      lovelace-as-001-F_Cu.gtl: copper to board edge min 0.505 mm at (5.08, -0.50)
+      lovelace-as-001-In1_Cu.g1: copper to board edge min 0.505 mm at (5.08, -0.50)
+      lovelace-as-001-In2_Cu.g2: copper to board edge min 0.505 mm at (5.12, -0.50)
+      lovelace-as-001-B_Cu.gbl: copper to board edge min 0.505 mm at (5.08, -0.50)

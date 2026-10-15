@@ -1,5 +1,9 @@
 #include "audio_output.h"
 #include "audio_capture.h"
+#include "playback_control.h"
+#ifdef CONFIG_BT_A2DP_ENABLE
+#include "a2dp_sink.h"
+#endif
 #ifdef CONFIG_SPOTIFY_ENABLED
 #include "spotify_audio.h"
 #endif
@@ -13,18 +17,14 @@
 #include "driver/gpio.h"
 #include "esp_attr.h"
 #include "esp_check.h"
+#include "esp_rom_sys.h"
+#include "esp_system.h"
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "audio_receiver.h"
 #include <inttypes.h>
 #include <stdlib.h>
-#ifdef CONFIG_DAC_TAS58XX
-#include "dac_tas58xx.h"
-#endif
-#ifdef CONFIG_DAC_TAS57XX
-#include "dac_tas57xx.h"
-#endif
 
 // SIDE NOTE; providing power from GPIO pins is capped ~20mA.
 #if CONFIG_I2S_GND_IO >= 0
@@ -49,6 +49,12 @@
 #define I2S_DMA_DESC_NUM  8
 #define I2S_DMA_FRAME_NUM 256
 
+// PCM5102A XSMT soft mute: the ramp takes 150 samples + 0.2 ms (3.6 ms at
+// 44.1 kHz) and needs running clocks. Unmute only after the DAC's PLL has
+// locked onto a fresh clock (a few ms of silence).
+#define DAC_MUTE_RAMP_MS 5
+#define DAC_LOCK_MS      20
+
 /* Max output frames after resampling one input frame */
 #define MAX_RESAMPLE_FRAMES \
   ((size_t)((FRAME_SAMPLES + 2) * ((double)OUTPUT_RATE / 44100) + 16))
@@ -64,6 +70,7 @@ static volatile bool flush_requested = false;
 static volatile bool playback_running = false;
 static TaskHandle_t playback_task_handle = NULL;
 static volatile int source_rate = 44100;
+static uint32_t hardware_rate = OUTPUT_RATE;
 static volatile bool resample_reinit_needed = false;
 static volatile audio_channel_mode_t channel_mode = AUDIO_CHANNEL_STEREO;
 
@@ -127,28 +134,44 @@ static uint32_t output_queued_frames(void) {
  * left and right to pick from downstream — the DSP's input mixer makes the
  * selection instead, and the software downmix has to stand aside. */
 bool audio_output_channel_mode_in_dsp(void) {
-#ifdef CONFIG_DAC_TAS57XX
-  return dac_tas57xx_has_input_mix();
-#else
   return false;
+}
+
+static void dac_mute(bool mute) {
+#if CONFIG_MUTE_GPIO >= 0
+  gpio_set_level(CONFIG_MUTE_GPIO,
+                 mute ? CONFIG_MUTE_GPIO_LEVEL : !CONFIG_MUTE_GPIO_LEVEL);
+#else
+  (void)mute;
 #endif
+}
+
+// Stopping the I2S clocks under a playing DAC pops; ramp the output down
+// first and back up once the new clock has settled.
+static void i2s_restart_muted(const i2s_std_clk_config_t *clk_cfg) {
+  dac_mute(true);
+  vTaskDelay(pdMS_TO_TICKS(DAC_MUTE_RAMP_MS));
+  i2s_channel_disable(tx_handle);
+  if (clk_cfg) {
+    ESP_ERROR_CHECK(i2s_channel_reconfig_std_clock(tx_handle, clk_cfg));
+  }
+  output_cursor_reset();
+  i2s_channel_enable(tx_handle);
+  vTaskDelay(pdMS_TO_TICKS(DAC_LOCK_MS));
+  dac_mute(false);
+}
+
+// esp_restart() (OTA, settings) stops the clocks too.
+static void dac_mute_on_shutdown(void) {
+  dac_mute(true);
+  esp_rom_delay_us(DAC_MUTE_RAMP_MS * 1000);
 }
 
 static void push_channel_mode_to_dsp(audio_channel_mode_t mode) {
-#ifdef CONFIG_DAC_TAS57XX
-  dac_tas57xx_set_input_source(mode == AUDIO_CHANNEL_LEFT ? TAS57XX_INPUT_LEFT
-                               : mode == AUDIO_CHANNEL_RIGHT
-                                   ? TAS57XX_INPUT_RIGHT
-                                   : TAS57XX_INPUT_MIX);
-#else
   (void)mode;
-#endif
 }
 
 static void apply_volume(int16_t *buf, size_t n, int32_t target) {
-#ifdef CONFIG_DAC_CONTROLS_VOLUME
-  (void)buf; (void)n; (void)target;
-#else
   // Ramp toward the target gain instead of applying volume changes
   // instantly.  An abrupt gain step mid-waveform is a discontinuity scaled
   // by the signal's current amplitude — the classic volume "zipper" click,
@@ -172,7 +195,6 @@ static void apply_volume(int16_t *buf, size_t n, int32_t target) {
     }
     buf[i] = (int16_t)(((int32_t)buf[i] * cur_q15) >> 15);
   }
-#endif
 }
 
 // Apply the selected channel mode to an interleaved stereo buffer (L,R,...).
@@ -203,6 +225,57 @@ static void apply_channel_mode(int16_t *buf, size_t frames) {
   }
 }
 
+// The selected source decides the I2S clock: A2DP may negotiate 48 kHz, every
+// other source is decoded or resampled to OUTPUT_RATE.
+static uint32_t source_hardware_rate(playback_source_t source) {
+#ifdef CONFIG_BT_A2DP_ENABLE
+  if (source == PLAYBACK_SOURCE_BLUETOOTH) {
+    return bt_a2dp_sink_sample_rate();
+  }
+#endif
+  (void)source;
+  return OUTPUT_RATE;
+}
+
+static size_t source_read(playback_source_t source, int16_t *pcm,
+                          size_t max_frames) {
+  size_t frames = 0;
+  switch (source) {
+  case PLAYBACK_SOURCE_AIRPLAY:
+    frames = audio_receiver_read(pcm, max_frames);
+    break;
+#ifdef CONFIG_SPOTIFY_ENABLED
+  case PLAYBACK_SOURCE_SPOTIFY:
+    spotify_audio_read(pcm, max_frames, &frames);
+    break;
+#endif
+#ifdef CONFIG_BT_A2DP_ENABLE
+  case PLAYBACK_SOURCE_BLUETOOTH:
+    frames = bt_a2dp_sink_read(pcm, max_frames);
+    break;
+#endif
+  default:
+    break;
+  }
+  return frames;
+}
+
+static int32_t source_gain_q15(playback_source_t source) {
+  switch (source) {
+#ifdef CONFIG_SPOTIFY_ENABLED
+  case PLAYBACK_SOURCE_SPOTIFY:
+    return spotify_audio_volume_q15();
+#endif
+#ifdef CONFIG_BT_A2DP_ENABLE
+  case PLAYBACK_SOURCE_BLUETOOTH:
+    return bt_a2dp_sink_volume_q15();
+#endif
+  default:
+    // PCM5102A has no hardware volume; local AirPlay mute is applied here.
+    return playback_control_is_muted() ? 0 : airplay_get_volume_q15();
+  }
+}
+
 static void playback_task(void *arg) {
   int16_t *pcm = malloc((size_t)(FRAME_SAMPLES + 1) * 2 * sizeof(int16_t));
   int16_t *silence = calloc((size_t)FRAME_SAMPLES * 2, sizeof(int16_t));
@@ -219,6 +292,12 @@ static void playback_task(void *arg) {
 
   size_t written;
   while (playback_running) {
+    playback_control_lock_output();
+    playback_source_t source = playback_control_get_source();
+    uint32_t desired_rate = source_hardware_rate(source);
+    if (hardware_rate != desired_rate) {
+      audio_output_set_sample_rate(desired_rate);
+    }
     if (resample_reinit_needed) {
       resample_reinit_needed = false;
       audio_resample_init((uint32_t)source_rate, OUTPUT_RATE, 2);
@@ -226,28 +305,18 @@ static void playback_task(void *arg) {
     if (flush_requested) {
       flush_requested = false;
       audio_resample_reset();
-      i2s_channel_disable(tx_handle);
-      output_cursor_reset();
-      i2s_channel_enable(tx_handle);
+      i2s_restart_muted(NULL);
     }
-    size_t samples;
-    bool spotify_selected = false;
-#ifdef CONFIG_SPOTIFY_ENABLED
-    spotify_selected = spotify_audio_read(pcm, FRAME_SAMPLES + 1, &samples);
-#endif
-    if (!spotify_selected) samples = audio_receiver_read(pcm, FRAME_SAMPLES + 1);
+    size_t samples = source_read(source, pcm, FRAME_SAMPLES + 1);
     if (samples > 0) {
       int16_t *play_buf = pcm;
       size_t play_samples = samples;
-      if (!spotify_selected && audio_resample_is_active()) {
+      if (source == PLAYBACK_SOURCE_AIRPLAY && audio_resample_is_active()) {
         play_samples = audio_resample_process(pcm, samples, resample_buf,
                                               MAX_RESAMPLE_FRAMES);
         play_buf = resample_buf;
       }
-      int32_t gain = airplay_get_volume_q15();
-#ifdef CONFIG_SPOTIFY_ENABLED
-      if (spotify_selected) gain = spotify_audio_volume_q15();
-#endif
+      int32_t gain = source_gain_q15(source);
       apply_volume(play_buf, play_samples * 2, gain);
       apply_channel_mode(play_buf, play_samples);
       led_audio_feed(play_buf, play_samples);
@@ -258,10 +327,9 @@ static void playback_task(void *arg) {
                            (uint64_t)(written / (2U * sizeof(int16_t))),
                            __ATOMIC_RELAXED);
 #ifdef CONFIG_AUDIO_CAPTURE_ENABLED
-        audio_capture_feed(play_buf, written, true);
+        audio_capture_feed(play_buf, written, true, hardware_rate);
 #endif
       }
-      taskYIELD();
     } else {
       // Receiver underflow — output a frame of silence.  Block on the DMA
       // write (portMAX_DELAY) so the write itself paces the loop, instead of a
@@ -274,12 +342,15 @@ static void playback_task(void *arg) {
                            (uint64_t)(written / (2U * sizeof(int16_t))),
                            __ATOMIC_RELAXED);
 #ifdef CONFIG_AUDIO_CAPTURE_ENABLED
-        audio_capture_feed(silence, written, false);
+        audio_capture_feed(silence, written, false, hardware_rate);
 #endif
       }
     }
+    playback_control_unlock_output();
+    taskYIELD();
   }
 
+  free(resample_buf);
   free(pcm);
   free(silence);
   playback_task_handle = NULL;
@@ -362,6 +433,10 @@ esp_err_t audio_output_init(void) {
                       "channel enable failed");
   ESP_LOGI(TAG, "I2S initialized: Rate=%u, DMA_Desc=%d, DMA_Frame=%d",
            (unsigned int)OUTPUT_RATE, I2S_DMA_DESC_NUM, I2S_DMA_FRAME_NUM);
+  // The DAC has been muted since reset (board pull-down, iot_board_init).
+  vTaskDelay(pdMS_TO_TICKS(DAC_LOCK_MS));
+  dac_mute(false);
+  esp_register_shutdown_handler(dac_mute_on_shutdown);
 
   // MCLK/BCLK/LRCK are now running. Some codecs need this edge to finish their
   // clock setup; amplifiers that manage power from board RTSP events can ignore
@@ -410,15 +485,11 @@ esp_err_t audio_output_write(const void *data, size_t bytes, TickType_t wait) {
 }
 
 void audio_output_set_sample_rate(uint32_t rate) {
-  // Only safe to call when no writer task is actively using I2S
-  // (AirPlay playback task must be stopped, BT calls this before
-  // the I2S writer task starts consuming data)
+  // Called only by the single writer, holding the output lock.
   ESP_LOGI(TAG, "Setting sample rate to %" PRIu32 " Hz", rate);
-  i2s_channel_disable(tx_handle);
   i2s_std_clk_config_t clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(rate);
-  i2s_channel_reconfig_std_clock(tx_handle, &clk_cfg);
-  output_cursor_reset();
-  i2s_channel_enable(tx_handle);
+  i2s_restart_muted(&clk_cfg);
+  hardware_rate = rate;
   dac_on_i2s_started();
 }
 
@@ -451,7 +522,7 @@ uint32_t audio_output_get_hardware_latency_us(void) {
   return (uint32_t)((((uint64_t)(2 * I2S_DMA_DESC_NUM - 1) * I2S_DMA_FRAME_NUM *
                       1000000ULL) /
                      2) /
-                    OUTPUT_RATE);
+                    hardware_rate);
 }
 
 bool audio_output_get_pipeline_us(int64_t *now_us, uint32_t *pipeline_us) {
@@ -465,7 +536,7 @@ bool audio_output_get_pipeline_us(int64_t *now_us, uint32_t *pipeline_us) {
     *now_us = esp_timer_get_time();
   }
   if (pipeline_us) {
-    *pipeline_us = (uint32_t)(((uint64_t)queued * 1000000ULL) / OUTPUT_RATE);
+    *pipeline_us = (uint32_t)(((uint64_t)queued * 1000000ULL) / hardware_rate);
   }
   return true;
 }
@@ -477,16 +548,6 @@ uint32_t audio_output_get_underruns(void) {
 /* With two amplifiers the DAC configuration already fixes the routing, so a
  * channel selection on top of that would only mute a speaker. */
 bool audio_output_channel_mode_locked(void) {
-#ifdef CONFIG_DAC_TAS58XX
-  if (dac_tas58xx_get_device_count() > 1) {
-    return true;
-  }
-#endif
-#ifdef CONFIG_DAC_TAS57XX
-  if (dac_tas57xx_get_device_count() > 1) {
-    return true;
-  }
-#endif
   return false;
 }
 
