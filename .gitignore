@@ -10,6 +10,9 @@ fp-info-cache
 *.silk-backup.kicad_pcb
 silkscreen.json.bak
 # Per-build scratch of make_board.sh: router intermediates, last render set
-hardware/lovelace-as-002/reports/krt/
-hardware/lovelace-as-002/renders/previous/
-hardware/lovelace-as-002/.render-bare/
+hardware/lovelace-as-*/reports/krt/
+hardware/lovelace-as-*/renders/previous/
+hardware/lovelace-as-*/.render-bare/
+# KiCad per-user view state
+*.kicad_prl
+hardware/archive/*/.render-bare/

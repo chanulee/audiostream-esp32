@@ -178,7 +178,7 @@ $('save').addEventListener('click',()=>withBusy(async()=>{
 }));
 window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
 (async()=>{
-  try{state=await (await api('/api/state')).json();$('dimensions').textContent=`${state.width} × ${state.height} mm · AS-002 rev C`;
+  try{state=await (await api('/api/state')).json();$('dimensions').textContent=`${state.width} × ${state.height} mm · ${state.id} rev ${state.rev}`;$('board-id').textContent=`LOVELACE / ${state.id}`;
     $('x').max=state.width;$('y').max=state.height;$('width').max=state.width;$('save').disabled=false;
     refresh();await loadBackground();status('배치 준비 완료. 저장 전에는 원본 파일이 바뀌지 않습니다.');
   }catch(exc){error(exc);}

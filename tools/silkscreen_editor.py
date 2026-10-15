@@ -17,6 +17,14 @@ ROOT = Path(__file__).resolve().parents[1]
 KICAD = Path(os.environ.get('KICAD', '/Volumes/KiCad/KiCad/KiCad.app/Contents'))
 
 
+def current_board():
+    """The board hardware/versions.json marks current, and its plan header."""
+    versions = json.loads((ROOT / 'hardware/versions.json').read_text())['versions']
+    folder = ROOT / 'hardware' / next(v['dir'] for v in versions if v['status'] == 'current')
+    plan = json.loads((folder / 'placement.json').read_text())['board']
+    return folder / f"{plan['name']}.kicad_pcb", plan
+
+
 def revision(board_path, layout_path):
     return hashlib.sha256(board_path.read_bytes() + b'\0' + (layout_path.read_bytes() if layout_path.exists() else b'')).hexdigest()
 
@@ -67,14 +75,15 @@ def main():
             raise SystemExit('KiCad 10을 /Volumes/KiCad에 마운트하거나 KICAD 환경변수를 설정하세요.')
         os.execv(str(python), [str(python), str(Path(__file__).resolve()), *sys.argv[1:]])
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--board', type=Path, default=ROOT / 'hardware/lovelace-as-002/lovelace-as-002.kicad_pcb')
+    parser.add_argument('--board', type=Path, default=current_board()[0])
     parser.add_argument('--port', type=int, default=8765)
     args = parser.parse_args()
     board_path = args.board.resolve()
-    sys.path.insert(0, str(ROOT / 'hardware/lovelace-as-002'))
+    sys.path.insert(0, str(board_path.parent))
     from silkscreen import read_layout, LAYOUT_FILE
     plan = json.loads((board_path.parent / 'placement.json').read_text())
     width, height = plan['board']['w'], plan['board']['h']
+    board_id, board_rev = plan['board'].get('id', board_path.stem), plan['board'].get('rev', '')
     token = secrets.token_urlsafe(32)
     web = ROOT / 'tools/silkscreen-editor'
     cache = {}
@@ -111,6 +120,7 @@ def main():
                 if self.path == '/api/state':
                     board = p.LoadBoard(str(board_path))
                     self.send(dict(width=width, height=height, board=str(board_path),
+                                   id=board_id, rev=board_rev,
                                    revision=revision(board_path, board_path.parent / LAYOUT_FILE),
                                    layout=read_layout(board, board_path.parent, width, height)))
                 elif self.path in ('/api/background/F', '/api/background/B'):

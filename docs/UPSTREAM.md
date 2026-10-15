@@ -4,7 +4,7 @@
 
 이 프로젝트에서 추가·변경한 내용:
 
-- LOVELACE / AS-002 전용 PlatformIO 환경(`lovelace-as-002`, `lovelace-as-002-capture`)과 WROVER-E N8R8 설정. Flash 8MB 파티션(3MiB OTA 슬롯 2개 + SPIFFS).
+- LOVELACE / AS-003 전용 PlatformIO 환경(`lovelace-as-003`, `lovelace-as-003-capture`)과 WROVER-E N8R8 설정. Flash 8MB 파티션(3MiB OTA 슬롯 2개 + SPIFFS).
 - 다른 보드, TAS57xx/TAS58xx/ES8311 DAC 드라이버와 EQ, 디스플레이(u8g2/LVGL), W5500 Ethernet, USB/S/PDIF 출력, 원본 문서 사이트를 제거했습니다. 원본 커밋에서 모두 복원할 수 있습니다.
 - 출력 소유권(`audio_source.c`): 하나의 재생 태스크가 AirPlay·Spotify·Bluetooth FIFO 중 선택된 소스를 읽습니다. 원본의 "BT 연결 시 AirPlay 중지"와 BT 라디오 suspend를 제거하고, 명시적 재생 요청이 출력을 가져가도록 바꿨습니다.
 - A2DP: PSRAM FIFO + prefill, AVRCP 재생 보고 또는 1.5초 이상 들리는 오디오만 출력 획득, 48kHz 스트림은 I2S 클럭 전환, 비활성 소스의 메타데이터 차단, 소프트웨어 볼륨.

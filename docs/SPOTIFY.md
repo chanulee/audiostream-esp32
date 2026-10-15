@@ -47,7 +47,7 @@ Client Secret과 재사용 로그인은 이 개발용 보드의 NVS에 저장됩
 
 ## 확인한 범위
 
-- `lovelace-as-002` (WROVER) 펌웨어 빌드·링크.
+- `lovelace-as-003` (WROVER) 펌웨어 빌드·링크.
 - PCM FIFO 경계·랩어라운드·backpressure.
 - AirPlay/Spotify/Bluetooth 출력 소유권 전환, 중단 후 재개, 일시정지 시 버퍼 유지, flush 시 이전 PCM 삭제, 볼륨 범위.
 - 연결 폼의 percent encoding, `+`, 중복 키, 잘못된 입력 거절.

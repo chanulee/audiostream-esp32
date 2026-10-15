@@ -4,7 +4,7 @@ menu "Board Configuration"
         default BOARD_ESP32_GENERIC
 
         config BOARD_ESP32_GENERIC
-            bool "LOVELACE AS-002 (ESP32-WROVER-E + PCM5102A)"
+            bool "LOVELACE AS-003 (ESP32-WROVER-E + PCM5102A)"
             depends on IDF_TARGET_ESP32
     endchoice
 

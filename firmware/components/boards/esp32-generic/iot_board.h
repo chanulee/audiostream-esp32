@@ -3,7 +3,7 @@
 #include "board_common.h"
 #include "sdkconfig.h"
 
-#define BOARD_NAME        "LOVELACE AS-002"
+#define BOARD_NAME        "LOVELACE AS-003"
 #define BOARD_DESCRIPTION "ESP32-WROVER-E-N8R8 + PCM5102A line out"
 
 #define BOARD_I2S_BCK_GPIO CONFIG_I2S_BCK_IO

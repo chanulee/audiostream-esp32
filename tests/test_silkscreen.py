@@ -9,10 +9,11 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / 'hardware/lovelace-as-002'))
 sys.path.insert(0, str(ROOT / 'tools'))
+from silkscreen_editor import current_board, revision, save_layout
+BOARD = current_board()[0]
+sys.path.insert(0, str(BOARD.parent))
 from silkscreen import apply_layout, apply_saved, read_layout, validate
-from silkscreen_editor import revision, save_layout
 
 
 def example(side='B.SilkS'):
@@ -46,8 +47,8 @@ class BoardTest(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.directory = Path(self.temp.name)
-        self.path = self.directory / 'lovelace-as-002.kicad_pcb'
-        shutil.copy2(ROOT / 'hardware/lovelace-as-002' / self.path.name, self.path)
+        self.path = self.directory / BOARD.name
+        shutil.copy2(BOARD, self.path)
 
     def fingerprint(self, board):
         # Copper, connectivity, footprints, holes, planes and footprint markings.
@@ -96,7 +97,7 @@ class BoardTest(unittest.TestCase):
     def test_external_edit_lock_and_invalid_save_do_not_touch_files(self):
         original = self.path.read_bytes()
         rev = revision(self.path, self.directory / 'silkscreen.json')
-        lock = self.directory / '~lovelace-as-002.kicad_pro.lck'
+        lock = self.directory / f'~{BOARD.stem}.kicad_pro.lck'
         lock.touch()
         with self.assertRaisesRegex(ValueError, 'KiCad'):
             save_layout(self.path, example(), rev, 37, 41)

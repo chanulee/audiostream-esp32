@@ -7,10 +7,10 @@ AUX 스피커(3.5mm 라인 입력)에 꽂는 무선 오디오 수신기입니다
 | MCU | ESP32-WROVER-E-N8R8 (Flash 8MB, PSRAM 8MB, Wi-Fi + Bluetooth Classic) |
 | DAC | PCM5102A, 3.5mm stereo line-out (2.1 Vrms) |
 | 전원 | USB-C 5V → eFuse(OVP 5.8V, 전류 제한) → 3.3V buck / 저잡음 아날로그 LDO. 전원 스위치 없이 꽂으면 켜짐 |
-| 보드 | LOVELACE / AS-002 rev C, 37 × 41mm 4층. USB-C와 AUX가 같은 변, 버튼 1개 |
+| 보드 | LOVELACE / AS-003 rev A, 37 × 41mm 4층. USB-C와 AUX가 같은 변, 버튼 1개 |
 | 수신 | AirPlay 2 (AAC/ALAC), Spotify Connect (cspot, Ogg Vorbis 320kbps), Bluetooth A2DP SBC + AVRCP |
 
-S3 기반 이전 시제품(AS-001)은 Bluetooth Classic이 없어 A2DP를 받을 수 없으므로 WROVER로 전환했습니다. 이전 설계는 [hardware/archive](hardware/archive/)에 있습니다.
+S3 기반 이전 시제품(AS-001)은 Bluetooth Classic이 없어 A2DP를 받을 수 없으므로 WROVER로 전환했습니다. 첫 시제품부터 현재까지의 기록은 [hardware/archive](hardware/archive/README.md)에 있습니다.
 
 ## 빌드와 플래시
 
@@ -20,19 +20,19 @@ S3 기반 이전 시제품(AS-001)은 Bluetooth Classic이 없어 A2DP를 받을
 python3.11 -m venv .venv
 .venv/bin/pip install platformio==6.2.0
 export PLATFORMIO_CORE_DIR="$PWD/work/platformio"
-.venv/bin/pio run -d firmware -e lovelace-as-002 -t upload
-.venv/bin/pio run -d firmware -e lovelace-as-002 -t uploadfs
+.venv/bin/pio run -d firmware -e lovelace-as-003 -t upload
+.venv/bin/pio run -d firmware -e lovelace-as-003 -t uploadfs
 .venv/bin/pio device monitor -b 115200
 ```
 
-AS-002의 CH340N에는 DTR이 없어 자동 다운로드 모드 진입을 지원하지 않습니다. 업로드 전에 **버튼을 누른 채 USB를 꽂으세요.** 이후 펌웨어 업데이트는 웹 UI의 OTA로도 가능합니다.
+AS-003의 CH340N에는 DTR이 없어 자동 다운로드 모드 진입을 지원하지 않습니다. 업로드 전에 **버튼을 누른 채 USB를 꽂으세요.** 이후 펌웨어 업데이트는 웹 UI의 OTA로도 가능합니다.
 
 버튼: 짧게 = 재생/일시정지, 두 번 = 다음 곡, 3초 = Bluetooth 페어링(연결된 폰을 끊고 새 폰 연결 대기).
 
 | 환경 | 용도 |
 |---|---|
-| `lovelace-as-002` | 기본 펌웨어. AirPlay + Spotify + Bluetooth |
-| `lovelace-as-002-capture` | 위 기능 + PCM 캡처 API (개발용, PSRAM 사용) |
+| `lovelace-as-003` | 기본 펌웨어. AirPlay + Spotify + Bluetooth |
+| `lovelace-as-003-capture` | 위 기능 + PCM 캡처 API (개발용, PSRAM 사용) |
 
 ## 첫 설정
 
@@ -57,11 +57,11 @@ sh tools/test_host.sh
 
 호스트 테스트는 출력 소유권 전환(AirPlay/Spotify/Bluetooth), PCM FIFO 경계, 캡처 및 44.1/48kHz 전환, Spotify 연결 폼 파싱, WAV 저장을 확인합니다.
 
-**검증 상태 (2026-10-14):** `lovelace-as-002` 펌웨어 빌드 성공(앱 2.30MB / OTA 슬롯 3MB, 73%), 호스트 테스트 전체 통과. **실기기 검증은 아직 없습니다.** 특히 Wi-Fi + Bluetooth + Spotify TLS를 동시에 켠 상태의 내부 RAM 여유, Wi-Fi/BT 공존 시의 끊김, 실제 계정의 Spotify 재생은 보드에서 측정해야 합니다.
+**검증 상태 (2026-10-15):** `lovelace-as-003` 펌웨어 0.3.0 빌드 성공, 호스트 테스트 전체 통과. **실기기 검증은 아직 없습니다.** 특히 Wi-Fi + Bluetooth + Spotify TLS를 동시에 켠 상태의 내부 RAM 여유, Wi-Fi/BT 공존 시의 끊김, 실제 계정의 Spotify 재생은 보드에서 측정해야 합니다.
 
 ### 캡처로 음질 확인
 
-`lovelace-as-002-capture` 펌웨어에서 DAC 없이도 출력 PCM을 WAV로 받을 수 있습니다.
+`lovelace-as-003-capture` 펌웨어에서 DAC 없이도 출력 PCM을 WAV로 받을 수 있습니다.
 
 ```sh
 python3 tools/capture.py http://192.168.1.42 --seconds 3 -o capture.wav
@@ -71,7 +71,17 @@ python3 tools/capture.py http://192.168.1.42 --seconds 3 -o capture.wav
 
 ## 하드웨어
 
-[LOVELACE / AS-002](hardware/lovelace-as-002/README.md)는 KiCad 10으로 스크립트 생성하며, [pcb-layout-skill](https://github.com/studio-edul/pcb-layout-skill)의 배치 검사기·계산기로 검증합니다. 제작 전 남은 항목은 [REVIEW.md](hardware/lovelace-as-002/REVIEW.md)에 있습니다.
+[LOVELACE / AS-003 rev A](hardware/lovelace-as-003/README.md)는 KiCad 10으로 스크립트 생성하며, [pcb-layout-skill](https://github.com/studio-edul/pcb-layout-skill)의 배치 검사기·계산기로 검증합니다. 제작 전 남은 항목은 [REVIEW.md](hardware/lovelace-as-003/REVIEW.md), 주문과 첫 보드 확인은 [BRINGUP.md](hardware/lovelace-as-003/BRINGUP.md)에 있습니다.
+
+## 버전
+
+| | 위치 | 버전 |
+|---|---|---|
+| 하드웨어 (현재) | `hardware/lovelace-as-003/` | AS-003 rev A (`plan_pcb.py`의 `BOARD_ID`, `BOARD_REV`) |
+| 하드웨어 (이전) | `hardware/archive/NN-*/` | S3 rev A → AS-001 → AS-002 rev B → AS-002 rev C ([기록](hardware/archive/README.md)) |
+| 펌웨어 | `firmware/version.txt` | 0.3.0 |
+
+펌웨어 0.3.x는 AS-003 전용입니다. DAC 뮤트(XSMT)를 GPIO22로 풀어야 소리가 나며, 0.2.x(ESP32-S3 / AS-001)는 AS-003에서 동작하지 않습니다. 하드웨어 버전 규칙은 [archive/README.md](hardware/archive/README.md)에 있습니다.
 
 ## 문서
 
