@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PCB → SVG · Interactive 3D</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f4ef;color:#26352c;font:14px system-ui}header{padding:22px 4%;border-bottom:1px solid #d1d6cd;background:white;display:flex;justify-content:space-between;align-items:center}h1{font-size:23px;margin:0}p{color:#647063;margin:8px 0}.tag{font:12px monospace;border:1px solid #bed1ba;border-radius:20px;padding:8px 12px}main{max-width:1600px;margin:24px auto;padding:0 24px}nav,.controls,.actions{display:flex;gap:18px;align-items:center;flex-wrap:wrap}nav{margin-bottom:20px}label{display:flex;gap:6px;align-items:center}input[type=range]{accent-color:#35573b}input[type=number]{width:68px;padding:7px;border:1px solid #c6cfc3;border-radius:5px}section{display:grid;grid-template-columns:0.85fr 1.3fr;gap:22px}article{background:white;border:1px solid #d1d6cd;border-radius:12px;padding:20px;min-width:0}h2{font-size:15px;margin:0 0 12px}.stage{height:510px;position:relative;border-radius:7px;overflow:hidden}.stage>svg,.stage>canvas{width:100%;height:100%;display:block}.stage>canvas{touch-action:none;cursor:grab;outline-offset:-3px}.stage>canvas:active{cursor:grabbing}.checker{background:repeating-conic-gradient(#eef0eb 0% 25%,white 0% 50%) 0/20px 20px}.hint{font-size:12px;position:absolute;bottom:8px;left:10px;color:#647063;pointer-events:none}.controls{margin:14px 0;gap:10px}.controls button{padding:7px 10px;background:#edf2e9;color:#304d36}button{border:0;background:#294b33;color:white;border-radius:6px;padding:10px 14px;font:inherit;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.actions{margin-top:14px}.actions span{font-size:12px;color:#647063}footer{margin:22px 0;color:#647063;font-size:12px}dialog{width:min(94vw,1000px);border:1px solid #d1d6cd;border-radius:12px;padding:22px}dialog::backdrop{background:#1d2a2270}#result{height:65vh}#result>svg,#result>img{width:100%;height:100%;object-fit:contain}.error{color:#a73327!important}@media(max-width:850px){section{grid-template-columns:1fr}.stage{height:420px}header .tag{display:none}}
+.expanded{grid-template-columns:1fr}.expanded>article:first-child{display:none}.expanded .stage{height:65vh}details{margin:10px 0}summary{cursor:pointer;color:#38553c}details input[type=range]{width:110px}
+</style>
+<header><div><h1>PCB → SVG <small style="font-size:14px;font-weight:400">/ Interactive 3D</small></h1><p>__BOARD_NAME__ · STEP 모델 __MODEL_COUNT__개 · 실제 3D에서 벡터로</p></div><span class="tag">LOCAL · OFFLINE</span></header>
+<main>
+<nav aria-label="선화 스타일">
+<label>선 굵기 <input id="weight" type="range" min="0.015" max="0.12" step="0.005" value="0.045"><output id="weight-value">0.045 mm</output></label>
+<label>선 색 <input id="ink" type="color" value="#464a46"></label>
+<label>배경 <input id="paper" type="color" value="#ffffff"></label>
+<label><input id="clear" type="checkbox">투명 배경</label>
+<label><input id="refs" type="checkbox" checked>정면 참조명</label>
+</nav>
+<section id="workspace">
+<article><h2 id="drawing-title">01 / ASSEMBLY — 정면 부품 배치도</h2><label>도면 면 <select id="drawing-side"><option value="front">앞면 · 부품 배치</option><option value="back">뒷면 · 실크스크린</option></select></label><div class="stage" id="top">__TOP_SVG____BOTTOM_SVG__</div><div class="actions"><button id="download-top">도면 SVG 다운로드</button></div></article>
+<article><h2>02 / RENDER ENGINE — 실시간 3D <button id="expand-view" style="float:right;padding:4px 8px;font-size:12px">3D 크게 보기</button></h2>
+<div class="stage" id="live-stage"><canvas id="viewport" tabindex="0" aria-label="3D 보드. 드래그 또는 방향키로 회전, 휠 또는 더하기 빼기 키로 확대 축소"></canvas><span class="hint">드래그 회전 · 휠 확대 · 방향키 회전 · 더블클릭 초기화</span></div>
+<div class="controls"><label>방위각 <input id="azimuth" type="number" value="-65" step="1">°</label><label>고도 <input id="elevation" type="number" min="-90" max="90" value="38" step="1">°</label><button data-preset="-65,38">입체</button><button data-preset="-90,90">위</button><button data-preset="-90,0">앞</button><button data-preset="90,-90">아래</button><button id="fit">화면 맞춤</button></div>
+<div class="controls"><label>카메라 <select id="projection"><option value="orthographic">평행 투영</option><option value="perspective">원근 투영</option></select></label><label>렌즈 <input id="lens" type="range" min="18" max="120" value="50" step="1"><output id="lens-value">50 mm</output></label><label>표면 <select id="shading"><option value="line">순수 선화 · 무채움</option><option value="detail">상세 선화 · 모든 접합선</option><option value="wire">전체 모서리 · 투시</option><option value="xray">X-ray · 반투명</option><option value="studio">조명 · 클레이</option><option value="original">STEP 원본 색상</option><option value="material">재질 · 금속 반사</option><option value="normal">법선 검사</option></select></label></div>
+<p id="style-description" style="font-size:12px"></p><div class="controls"><button id="preset-xray">예시 1 · X-ray</button><button id="preset-product">예시 2 · 제품 렌더</button></div>
+<details><summary>조명·재질 설정</summary><div class="controls">
+<label>PCB 색 <input id="board-color" type="color" value="#145f35"></label>
+<label>거칠기 <input id="roughness" type="range" min="0.06" max="0.95" step="0.01" value="0.28"></label><label>금속 반사 <input id="metalness" type="range" min="0" max="1" step="0.05" value="0.9"></label>
+<label>조명 방향 <input id="light-azimuth" type="range" min="-180" max="180" step="1" value="-35"></label><label>조명 높이 <input id="light-elevation" type="range" min="10" max="85" step="1" value="55"></label>
+<label>조명 세기 <input id="light-intensity" type="range" min="0" max="3" step="0.05" value="1"></label><label>환경 반사 <input id="environment" type="range" min="0" max="3" step="0.05" value="1"></label>
+<label>노출 <input id="exposure" type="range" min="0.2" max="3" step="0.05" value="1"></label><label>X-ray 면 농도 <input id="opacity" type="range" min="0.01" max="0.3" step="0.01" value="0.08"></label>
+<label><input id="shadows" type="checkbox" checked>그림자</label><label>그림자 부드러움 <input id="softness" type="range" min="0" max="4" step="0.5" value="2"></label><label><input id="overlay-edges" type="checkbox">재질 위 모서리</label>
+</div></details><p id="color-status" style="font-size:11px"></p>
+<p style="font-size:12px">렌즈는 36×24 mm 센서 기준입니다. 재질·조명은 PNG, SVG는 선택한 카메라의 벡터 선화로 출력됩니다.</p>
+<div class="actions"><button id="export" disabled>이 각도로 정밀 SVG 만들기</button><button id="download-png" disabled>PNG 만들기</button><select id="png-scale" aria-label="PNG 해상도"><option value="1">1× PNG</option><option value="2" selected>2× PNG</option><option value="4">4× PNG</option></select><span id="status" role="status">3D 모델 로딩 중…</span></div>
+</article>
+</section>
+<footer>실시간 화면은 STEP 메시와 PCB의 뒷면 실크를 표시합니다. SVG는 선택한 각도로 STEP 원본의 숨은선을 정밀 제거하고, 보이는 뒷면에 실크를 투영합니다. 확대 배율은 미리보기에만 적용됩니다.<p>뒷면 실크는 PCB의 도형·KiCad 벡터 글꼴로 표시합니다. U6는 STEP 모델이 없어 정면도에만 표시됩니다. 구리 배선과 앞면 실크는 입체도에서 생략됩니다.</p></footer>
+</main>
+<dialog id="result-dialog"><h2 id="result-title">정밀 SVG</h2><div id="result"></div><div class="actions"><button id="download-3d">결과 다운로드</button><button id="close-result">편집 계속</button></div></dialog>
+<script>const CONFIG=__CONFIG__;</script><script src="/engine.js" defer></script><script src="/viewer.js" defer></script>
+</html>
