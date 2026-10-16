@@ -102,5 +102,5 @@ cp bom.csv cpl.csv release/
 (cd release && zip -q -r ../"$NAME-rev$REV-release.zip" .)
 # Visual review: renders/latest (index.html), the previous run in renders/previous.
 if [ "${RENDER:-1}" = 1 ]; then
-    "$PY" render_board.py 2>&1 | quiet
+    "$PY" rendering/render_board.py 2>&1 | quiet
 fi

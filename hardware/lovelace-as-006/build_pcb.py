@@ -49,7 +49,7 @@ for old in LOCAL.glob('*.pretty'):
 # KiCad ships no STEP for these library footprints: use the LCSC/EasyEDA
 # model in lib/3d (offset in mm, model y up; rotation about z).
 STEP = {'USB_C_Receptacle_HRO_TYPE-C-31-M-12':
-        ('TYPE-C-31-M-12_C165948.step', (0, .471, -.85), 180)}
+        ('TYPE-C-31-M-12_C165948.step', (0, -1.05, 0), 180)}
 footprints = {}
 for d in data:
     lib, name = d['footprint'].split(':')

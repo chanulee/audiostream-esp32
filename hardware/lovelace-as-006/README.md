@@ -54,6 +54,18 @@ L1 부품 + 신호 + GND pour, **L2 GND 전면**, L3 +3V3_D 전면, L4 신호 + 
 
 ## 생성
 
+### 렌더링 도구
+
+모든 렌더링 코드·뷰어·의존성·테스트는 [`rendering/`](rendering/README.md)에 모았습니다.
+
+```sh
+rendering/.venv/bin/python rendering/svg_viewer.py   # http://127.0.0.1:8877
+rendering/.venv/bin/python rendering/render_svg.py   # renders/svg/에 SVG 생성
+```
+
+드래그 회전·확대와 선택 시점 SVG 출력, 뒷면 실크스크린 표시를 지원합니다.
+설치·옵션·검증·3D 모델 정렬 근거는 [렌더링 문서](rendering/README.md)를 참조하세요.
+
 ### 실크 인쇄 편집기
 
 repo 루트에서 `python3 tools/silkscreen_editor.py`를 실행하고 출력된 전체 로컬 URL을 엽니다.
@@ -86,10 +98,10 @@ ROUTER=freerouting REROUTE=1 ./make_board.sh   # 비교용: FreeRouting으로 �
 | `build_pcb.py` | 보드·회로도·BOM·CPL·DSN 생성, 직접 그린 배선(버크 SW, USB D+/D−, VBUS, 평면 via), 고정 UUID |
 | `jlc_check.py` | JLC/EasyEDA 부품 데이터와 패드·극성 대조, JLC 기준 회전·원점으로 `cpl.csv` 작성, 재고와 Basic/Extended 보고(`reports/jlc.json`) |
 | `finish_pcb.py` | (FreeRouting이면 .ses 가져오기) KiCad 연결성 기준으로 쓰지 않은 via 정리, 바닥 테스트 패드, 평면 채우기 |
-| `render_board.py` | 3D PCBA·맨 기판, 부품 배치도, 층별 구리, 넷 종류별 배선도, 이전 빌드와의 차이, `index.html` |
+| `rendering/render_board.py` | 3D PCBA·맨 기판, 부품 배치도, 층별 구리, 넷 종류별 배선도, 이전 빌드와의 차이, `index.html` |
 | `pinout_check.py` | 데이터시트에서 따로 적은 핀 표와 넷리스트 대조(138개 항목, [REVIEW_NETLIST.md](REVIEW_NETLIST.md)) |
 | `sim/power_path.py` | ngspice 전원 경로 동작 모델: eFuse 기동, ESP32 펄스 부하 때 5V 처짐, USB 분리 때 C25 홀드업([REVIEW_NETLIST.md](REVIEW_NETLIST.md) 4절) |
-| `render_extra.sh` | `renders/extra/`: 3D 뷰(6면 + 6각도), 층별 SVG, 전체 층 PDF, 보드 SVG, 회로도 PDF (`QUALITY=basic`이면 빠름). U1·J1·J2는 KiCad에 3D 모델이 없어 LCSC/EasyEDA STEP(`lib/3d/`)을 씁니다 |
+| `rendering/render_extra.sh` | `renders/extra/`: 3D 뷰(6면 + 6각도), 층별 SVG, 전체 층 PDF, 보드 SVG, 회로도 PDF (`QUALITY=basic`이면 빠름). U1·J1·J2는 KiCad에 3D 모델이 없어 LCSC/EasyEDA STEP(`lib/3d/`)을 씁니다 |
 | `audit_pcb.py` | 좌표·핀넷 readback, 디커플링 패드 거리, 라이브러리와 패드 형상 비교, AUX 잭 접점 순서 |
 
 필요한 것: KiCad 10(`/Volumes/KiCad` 마운트)과 `work/tools/` 아래 세 가지입니다. [pcb-layout-skill](https://github.com/studio-edul/pcb-layout-skill) 체크아웃(`pcb-layout-skill/`, 다른 위치면 `SKILL`로 지정), [KiCadRoutingTools](https://github.com/drandyhaas/KiCadRoutingTools) v0.23.0(`krt/`), 그리고 numpy·scipy·shapely를 설치한 venv(`krt-venv/`)입니다. 설치 후 `krt-venv/bin/python krt/build_router.py`로 라우터 바이너리를 받습니다. FreeRouting 비교에는 FreeRouting 2.5.0과 Java 25 런타임이 더 필요합니다.

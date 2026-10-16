@@ -1,0 +1,4 @@
+rendering/.venv/
+rendering/.models/
+rendering/.cache/
+__pycache__/
