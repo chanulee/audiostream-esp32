@@ -89,7 +89,7 @@ ROUTER=freerouting REROUTE=1 ./make_board.sh   # 비교용: FreeRouting으로 �
 | `render_board.py` | 3D PCBA·맨 기판, 부품 배치도, 층별 구리, 넷 종류별 배선도, 이전 빌드와의 차이, `index.html` |
 | `pinout_check.py` | 데이터시트에서 따로 적은 핀 표와 넷리스트 대조(138개 항목, [REVIEW_NETLIST.md](REVIEW_NETLIST.md)) |
 | `sim/power_path.py` | ngspice 전원 경로 동작 모델: eFuse 기동, ESP32 펄스 부하 때 5V 처짐, USB 분리 때 C25 홀드업([REVIEW_NETLIST.md](REVIEW_NETLIST.md) 4절) |
-| `render_extra.sh` | `renders/extra/`: 3D 뷰(6면 + 6각도), 층별 SVG, 전체 층 PDF, 보드 SVG, 회로도 PDF (`QUALITY=basic`이면 빠름). U1·J1·J2는 3D 모델이 없어 빠집니다 |
+| `render_extra.sh` | `renders/extra/`: 3D 뷰(6면 + 6각도), 층별 SVG, 전체 층 PDF, 보드 SVG, 회로도 PDF (`QUALITY=basic`이면 빠름). U1·J1·J2는 KiCad에 3D 모델이 없어 LCSC/EasyEDA STEP(`lib/3d/`)을 씁니다 |
 | `audit_pcb.py` | 좌표·핀넷 readback, 디커플링 패드 거리, 라이브러리와 패드 형상 비교, AUX 잭 접점 순서 |
 
 필요한 것: KiCad 10(`/Volumes/KiCad` 마운트)과 `work/tools/` 아래 세 가지입니다. [pcb-layout-skill](https://github.com/studio-edul/pcb-layout-skill) 체크아웃(`pcb-layout-skill/`, 다른 위치면 `SKILL`로 지정), [KiCadRoutingTools](https://github.com/drandyhaas/KiCadRoutingTools) v0.23.0(`krt/`), 그리고 numpy·scipy·shapely를 설치한 venv(`krt-venv/`)입니다. 설치 후 `krt-venv/bin/python krt/build_router.py`로 라우터 바이너리를 받습니다. FreeRouting 비교에는 FreeRouting 2.5.0과 Java 25 런타임이 더 필요합니다.

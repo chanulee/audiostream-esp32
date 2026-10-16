@@ -46,6 +46,10 @@ for n in nets.values():
 for old in LOCAL.glob('*.pretty'):
     if old.name != 'LOVELACE.pretty':
         shutil.rmtree(old)
+# KiCad ships no STEP for these library footprints: use the LCSC/EasyEDA
+# model in lib/3d (offset in mm, model y up; rotation about z).
+STEP = {'USB_C_Receptacle_HRO_TYPE-C-31-M-12':
+        ('TYPE-C-31-M-12_C165948.step', (0, .471, -.85), 180)}
 footprints = {}
 for d in data:
     lib, name = d['footprint'].split(':')
@@ -57,6 +61,14 @@ for d in data:
         target.mkdir(exist_ok=True)
         shutil.copyfile(src_dir / (lib + '.pretty') / (name + '.kicad_mod'),
                         target / (name + '.kicad_mod'))
+    if name in STEP:
+        file, (ox, oy, oz), rz = STEP[name]
+        f.Models().clear()
+        m = p.FP_3DMODEL()
+        m.m_Filename = '${KIPRJMOD}/lib/3d/' + file
+        m.m_Offset = p.VECTOR3D(ox, oy, oz)
+        m.m_Rotation = p.VECTOR3D(0, 0, rz)
+        f.Models().push_back(m)
     f.SetFPID(p.LIB_ID(lib, name))
     f.SetReference(d['ref'])
     f.SetValue(d['value'])

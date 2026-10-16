@@ -58,4 +58,15 @@
 (pad "39" thru_hole circle (at -2.2 0.24) (size .6 .6) (drill .3) (layers "*.Cu" "*.Mask"))
 (pad "39" thru_hole circle (at -0.8 0.24) (size .6 .6) (drill .3) (layers "*.Cu" "*.Mask"))
 (fp_circle (center -10 -8.26) (end -9.8 -8.26) (stroke (width .12) (type default)) (fill none) (layer "F.SilkS"))
+	(model "${KIPRJMOD}/lib/3d/ESP32-WROVER-E_C2973667.step"
+		(offset
+			(xyz 0 0.012 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
 )
