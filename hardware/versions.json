@@ -1,5 +1,5 @@
 {
-  "scheme": "AS-<n> is a new design (netlist or outline changed before it was ordered); rev A, B, ... are changes after it was ordered. The current design lives in hardware/lovelace-as-<n>/, earlier ones in hardware/archive/<NN>-<name>/. render_board.py builds the history pages from this file.",
+  "scheme": "AS-<n> is a new design: before it is ordered, any change to the copper (netlist, outline or routing) raises the number; rev A, B, ... are changes after it was ordered. The current design lives in hardware/lovelace-as-<n>/, earlier ones in hardware/archive/<NN>-<name>/. render_board.py builds the history pages from this file.",
   "versions": [
     {
       "name": "AudioStream S3 rev A",
@@ -9,8 +9,17 @@
       "status_text": "보관 · 주문 안 함",
       "summary": "첫 일체형 설계. Wi-Fi AirPlay / Spotify만(S3라 Bluetooth Classic 없음). 배선·DRC 완료, 실물 미검증.",
       "dir": "archive/01-audiostream-s3-revA",
-      "images": ["renders/pcba-iso.png", "renders/pcba-top.png", "renders/routing.png", "renders/assembly-top.png"],
-      "files": ["README.md", "schematic.pdf", "audiostream-s3-rev-a-prototype.zip"]
+      "images": [
+        "renders/pcba-iso.png",
+        "renders/pcba-top.png",
+        "renders/routing.png",
+        "renders/assembly-top.png"
+      ],
+      "files": [
+        "README.md",
+        "schematic.pdf",
+        "audiostream-s3-rev-a-prototype.zip"
+      ]
     },
     {
       "name": "LOVELACE AS-001",
@@ -20,8 +29,18 @@
       "status_text": "보관 · 주문 안 함",
       "summary": "LOVELACE 이름으로 축소(면적 −37%), eFuse 전원 보호, 전원 스위치, LED. S3라 Bluetooth 없음 → WROVER로 전환.",
       "dir": "archive/02-lovelace-as-001",
-      "images": ["renders/pcba-iso.png", "renders/pcba-top.png", "renders/routing.png", "renders/assembly-top.png"],
-      "files": ["README.md", "REVIEW.md", "schematic.pdf", "lovelace-as-001-prototype.zip"]
+      "images": [
+        "renders/pcba-iso.png",
+        "renders/pcba-top.png",
+        "renders/routing.png",
+        "renders/assembly-top.png"
+      ],
+      "files": [
+        "README.md",
+        "REVIEW.md",
+        "schematic.pdf",
+        "lovelace-as-001-prototype.zip"
+      ]
     },
     {
       "name": "LOVELACE AS-002 rev B",
@@ -31,8 +50,13 @@
       "status_text": "보관 · 원본 없음",
       "summary": "WROVER로 바꿔 Bluetooth A2DP 추가. 고정 홀 2개, BOOT + RESET + 전원 스위치, THT AUX 잭. 같은 폴더에서 rev C로 덮어써서 구리층 이미지만 남음.",
       "dir": "archive/03-lovelace-as-002-revB",
-      "images": ["copper-F_Cu.png", "copper-B_Cu.png"],
-      "files": ["README.md"]
+      "images": [
+        "copper-F_Cu.png",
+        "copper-B_Cu.png"
+      ],
+      "files": [
+        "README.md"
+      ]
     },
     {
       "name": "LOVELACE AS-002 rev C",
@@ -42,19 +66,63 @@
       "status_text": "보관 · 주문 안 함",
       "summary": "면적 −13%, 스위치·RESET 삭제(꽂으면 켜짐), SMD AUX 잭, FreeRouting 배선. AUX 잭 Tip/Ring 배정 오류, XSMT 고정, CPL 회전 미보정 → AS-003에서 수정.",
       "dir": "archive/04-lovelace-as-002-revC",
-      "images": ["renders/pcba-iso.png", "renders/pcba-top.png", "renders/routing.png", "renders/assembly-top.png"],
-      "files": ["README.md", "lovelace-as-002.kicad_pcb"]
+      "images": [
+        "renders/pcba-iso.png",
+        "renders/pcba-top.png",
+        "renders/routing.png",
+        "renders/assembly-top.png"
+      ],
+      "files": [
+        "README.md",
+        "lovelace-as-002.kicad_pcb"
+      ]
     },
     {
       "name": "LOVELACE AS-003 rev A",
       "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
       "date": "2026-10-15",
+      "status": "archived",
+      "status_text": "보관 · 주문 안 함",
+      "summary": "AUX 잭 배정 수정, XSMT를 GPIO22로(기본 뮤트) + DAC 전원 홀드업(언플러그 팝), JLC 기준 CPL, KiCadRoutingTools 3단계 배선, M2 고정 홀, 바닥 테스트 패드. 검토에서 상단 SMD 패드에 닿는 via 10개를 찾아 AS-004에서 배선만 고침(넷리스트 동일).",
+      "dir": "archive/05-lovelace-as-003-revA",
+      "images": [
+        "renders/pcba-iso.png",
+        "renders/pcba-top.png",
+        "renders/routing.png",
+        "renders/assembly-top.png"
+      ],
+      "files": [
+        "README.md",
+        "REVIEW.md",
+        "REVIEW_NETLIST.md",
+        "REVIEW_LAYOUT.md",
+        "BRINGUP.md",
+        "lovelace-as-003.kicad_pcb",
+        "lovelace-as-003-revA-release.zip"
+      ]
+    },
+    {
+      "name": "LOVELACE AS-004 rev A",
+      "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
+      "date": "2026-10-16",
       "status": "current",
       "status_text": "현재 · 주문 전",
-      "summary": "AUX 잭 배정 수정, XSMT를 GPIO22로(기본 뮤트) + DAC 전원 홀드업(언플러그 팝), JLC 기준 CPL, KiCadRoutingTools 3단계 배선, M2 고정 홀, 바닥 테스트 패드.",
-      "dir": "lovelace-as-003",
-      "images": ["renders/latest/pcba-iso.png", "renders/latest/pcba-top.png", "renders/latest/routing.png", "renders/latest/assembly-top.png"],
-      "files": ["README.md", "REVIEW.md", "BRINGUP.md", "lovelace-as-003-revA-release.zip"]
+      "summary": "AS-003과 넷리스트·배치 동일. 상단 SMD 패드에 닿는 via 0(라우터 패드 간격, OVLO·ILIM 손 배선, 오디오 배선 잠금), 데이터시트 핀 대조·전원 경로 시뮬레이션·배선 검토 추가.",
+      "dir": "lovelace-as-004",
+      "images": [
+        "renders/latest/pcba-iso.png",
+        "renders/latest/pcba-top.png",
+        "renders/latest/routing.png",
+        "renders/latest/assembly-top.png"
+      ],
+      "files": [
+        "README.md",
+        "REVIEW.md",
+        "REVIEW_NETLIST.md",
+        "REVIEW_LAYOUT.md",
+        "BRINGUP.md",
+        "lovelace-as-004-revA-release.zip"
+      ]
     }
   ]
 }

@@ -7,8 +7,9 @@ small,.hint {color:var(--muted);font-size:12px}
 main {display:grid;grid-template-columns:290px 1fr;gap:28px;padding:24px 28px}
 aside {display:flex;flex-direction:column;gap:20px}
 label {display:flex;flex-direction:column;gap:6px;font-size:13px}
-input,select,button,.file-button {font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;min-height:40px;padding:8px 10px;max-width:100%}
-input,select {width:100%;min-width:0}
+input,textarea,select,button,.file-button {font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;min-height:40px;padding:8px 10px;max-width:100%}
+input,textarea,select {width:100%;min-width:0}
+textarea {resize:vertical}
 button,.file-button {cursor:pointer;text-align:center}
 button:hover,.file-button:hover {border-color:var(--accent)}
 button:disabled {opacity:.5;cursor:default}
@@ -27,6 +28,9 @@ fieldset {border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:16p
 #board .art {cursor:grab}
 #board .art:active {cursor:grabbing}
 #board .selection {fill:none;stroke:#f3c96a;stroke-width:.16;stroke-dasharray:.55 .35;pointer-events:none}
+#board .drc-box {fill:#ff453a22;stroke:#ff6257;stroke-width:.18;pointer-events:none}
+#check-results {font-size:13px;overflow-wrap:anywhere}
+#check-results ol {padding-left:24px;color:light-dark(#a32d38,#ffb7bd)}
 .hint {margin:12px 0}
 footer {padding:16px 28px 24px;border-top:1px solid var(--line)}
 #status {margin-bottom:6px;overflow-wrap:anywhere}
