@@ -4,6 +4,7 @@
 Run: .venv/bin/python svg_viewer.py
 """
 import argparse
+import gzip
 import html
 import json
 import math
@@ -127,7 +128,7 @@ def main():
     print('Preparing interactive mesh…', flush=True)
     contours = silk.back_contours(board)
     from step_colors import scene_mesh
-    import gzip,hashlib,inspect
+    import hashlib,inspect
     digest=hashlib.sha256(board_path.read_bytes()+inspect.getsource(mesh_data).encode())
     sources=[render.TOOL_DIR/n for n in ('step_colors.py','silk_geometry.py','newstroke_ascii.json','render_svg.py')]
     sources += sorted({render.model_path(m,board_path,render.TOOL_DIR/'.models'/render.MODEL_REV,False)
@@ -167,6 +168,14 @@ def main():
               '/viewer.js': ((render.TOOL_DIR / 'svg_viewer.js').read_bytes(), 'text/javascript; charset=utf-8'),
               '/engine.js': ((render.TOOL_DIR / 'render_engine.js').read_bytes(),'text/javascript; charset=utf-8')}
     lock = threading.Lock()
+    xray_mesh = {}
+
+    def xray_geometry():
+        # The X-ray SVG fills the same triangles the viewer draws.
+        if not xray_mesh:
+            mesh = json.loads(gzip.decompress(geometry))
+            xray_mesh.update(triangles=mesh['triangles'], normals=mesh['normals'])
+        return xray_mesh
 
     class Handler(BaseHTTPRequestHandler):
         def send(self, status, data, content_type='text/plain; charset=utf-8'):
@@ -213,14 +222,25 @@ def main():
                 perspective = projection == 'perspective'
                 camera_center = center if perspective else (0,0,0)
                 focus = radius*1.12*max(1,1/aspect)*lens/12 if perspective else None
+                opacity = data.get('opacity', .08)
+                if type(opacity) not in (int, float) or not .01 <= opacity <= .3:
+                    raise ValueError('Invalid X-ray face opacity')
                 with lock:
                     paths = render.project(shape, az, el,camera_center,focus,
                                            detail=style in ('detail','wire','xray'),hidden=style in ('wire','xray'))
+                    if style == 'xray':
+                        mesh = xray_geometry()
+                        faces = render.xray_faces(mesh['triangles'], mesh['normals'], az, el,
+                                                  camera_center, focus, opacity)
                 root = render.ET.fromstring(render.svg(paths, f'{board_name} / {az:g}°, {el:g}°', stroke, background))
                 root.find(f'{{{render.NS}}}g').set('stroke', ink)
-                root.find(f'{{{render.NS}}}desc').text += f' Edge style: {style}. Material and lighting are exported as PNG, not vector fills.'
+                if style == 'xray':
+                    render.append_xray_faces(root, faces)
+                    root.find(f'{{{render.NS}}}desc').text += f' X-ray faces: viewer mesh, alpha {opacity:g} x (0.2 + 0.8 (1 - |n.v|)^2) in 24 steps; edges at {render.XRAY_EDGE_ALPHA:g} opacity; no silkscreen, as in the live view.'
+                root.find(f'{{{render.NS}}}desc').text += f' Edge style: {style}.' + ('' if style == 'xray' else ' Material and lighting are exported as PNG, not vector fills.')
                 root.find(f'{{{render.NS}}}desc').text += f' Projection: {projection}; lens: {lens:g} mm (36x24 mm sensor); camera distance: {focus if focus is not None else "infinite"} mm.'
-                silk.append_svg(root, contours, az, el, ink,camera_center,focus)
+                if style != 'xray':
+                    silk.append_svg(root, contours, az, el, ink,camera_center,focus)
                 self.send(200, render.ET.tostring(root, encoding='utf-8'), 'image/svg+xml')
             except (ValueError, TypeError) as exc:
                 self.send(400, str(exc).encode())

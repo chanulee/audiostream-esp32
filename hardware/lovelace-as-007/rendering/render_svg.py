@@ -291,6 +291,118 @@ def project(shape, azimuth, elevation, camera_center=(0,0,0), focus=None, detail
     return paths
 
 
+XRAY_FACE = '#a6b8d1'  # render_engine.js mode 6: vec3(.65,.72,.82)
+XRAY_EDGE_ALPHA = .38  # render_engine.js edge alpha in X-ray
+
+
+def xray_faces(triangles, normals, azimuth, elevation, camera_center=(0,0,0), focus=None,
+               opacity=.08, levels=24):
+    """Translucent faces of the live X-ray view as vector regions.
+
+    The viewer draws every triangle, front and back, additively with alpha
+    opacity * (0.2 + 0.8 * (1 - |n.v|)^2). Triangles are quantised to
+    `levels` alpha steps; connected same-step triangles that face the same
+    way merge into one region (outline plus holes), so a flat face is one
+    path. Regions stay separate so overlapping parts stack as on screen.
+    Returns [(alpha, [region, ...]), ...]; a region is a list of loops in the
+    coordinates of project()."""
+    from OCP.gp import gp_Pnt, gp_Pnt2d
+    proj = projector(azimuth, elevation, camera_center, focus)
+    az, el = map(math.radians, (azimuth, elevation))
+    eye = (math.cos(el) * math.cos(az), math.cos(el) * math.sin(az), math.sin(el))
+    camera = tuple(c + e * focus for c, e in zip(camera_center, eye)) if focus else None
+    cache, out = {}, gp_Pnt2d()
+
+    def to2d(key):
+        if key not in cache:
+            proj.Project(gp_Pnt(*key), out)
+            cache[key] = (out.X(), -out.Y())
+        return cache[key]
+
+    groups = {}
+    for t in range(0, len(triangles), 9):
+        keys = [tuple(triangles[t + i:t + i + 3]) for i in (0, 3, 6)]
+        n = [sum(normals[t + i + axis] for i in (0, 3, 6)) for axis in range(3)]
+        length = math.hypot(*n)
+        if length < 1e-12:
+            continue
+        n = [v / length for v in n]
+        if camera:
+            mid = [sum(k[axis] for k in keys) / 3 for axis in range(3)]
+            v = [c - m for c, m in zip(camera, mid)]
+            vl = math.hypot(*v)
+            v = [c / vl for c in v]
+        else:
+            v = eye
+        facing = sum(a * b for a, b in zip(n, v))
+        alpha = .2 + .8 * (1 - abs(facing)) ** 2
+        level = min(levels, max(1, round(alpha * levels)))
+        a, b, c = (to2d(k) for k in keys)
+        area = (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+        if abs(area) < 1e-9:
+            continue
+        if area < 0:  # orient every triangle the same way on paper
+            keys = [keys[0], keys[2], keys[1]]
+        edges, parent = groups.setdefault((level, facing > 0), ({}, {}))
+        for p, q in zip(keys, keys[1:] + keys[:1]):
+            if (q, p) in edges:
+                del edges[(q, p)]  # interior edge shared with a neighbour
+            else:
+                edges[(p, q)] = True
+        roots = [find(parent, k) for k in keys]
+        for r in roots[1:]:
+            parent[r] = roots[0]
+    result = {}
+    for (level, _), (edges, parent) in sorted(groups.items()):
+        nexts = {}
+        for p, q in edges:
+            nexts.setdefault(p, []).append(q)
+        regions = {}
+        while nexts:
+            start = next(iter(nexts))
+            loop, p = [start], start
+            while True:
+                q = nexts[p].pop()
+                if not nexts[p]:
+                    del nexts[p]
+                if q == start or q not in nexts:
+                    break
+                loop.append(q)
+                p = q
+            if len(loop) > 2:
+                regions.setdefault(find(parent, start), []).append([to2d(k) for k in loop])
+        result.setdefault(level, []).extend(regions.values())
+    return [(opacity * level / levels, regions) for level, regions in sorted(result.items()) if regions]
+
+
+def find(parent, key):
+    parent.setdefault(key, key)
+    while parent[key] != key:
+        parent[key] = parent[parent[key]]
+        key = parent[key]
+    return key
+
+
+def append_xray_faces(root, faces):
+    """Insert the X-ray face layer under the edges.
+
+    The viewer adds light (WebGL blend SRC_ALPHA, ONE). The SVG uses ordinary
+    alpha instead: mix-blend-mode plus-lighter blanked the whole image when
+    Chrome rasterised it, and editors ignore blend modes. With faint layers
+    the two agree closely; where many layers overlap the SVG comes out a
+    little darker."""
+    layer = ET.Element(f'{{{NS}}}g', {'id': 'xray-faces', 'fill': XRAY_FACE, 'stroke': 'none',
+                                      'fill-rule': 'nonzero'})
+    for alpha, regions in faces:
+        group = ET.SubElement(layer, 'g', {'fill-opacity': f'{alpha:.4f}'})
+        for loops in regions:
+            ET.SubElement(group, 'path', {'d': ' '.join(
+                'M' + ' L'.join(f'{x:.4f},{y:.4f}' for x, y in loop) + ' Z' for loop in loops)})
+    edges = root.find(f'{{{NS}}}g')
+    root.insert(list(root).index(edges), layer)
+    edges.set('stroke-opacity', str(XRAY_EDGE_ALPHA))
+
+
 def svg(paths, title, stroke, background):
     xs = [x for p in paths for x, y in p]
     ys = [y for p in paths for x, y in p]

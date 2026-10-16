@@ -36,7 +36,7 @@ class SvgTests(unittest.TestCase):
 
     def test_current_board_geometry(self):
         r.load_occ()
-        board = r.parse_board((r.ROOT / 'lovelace-as-006.kicad_pcb').read_text())
+        board = r.parse_board(r.resolve_board().read_text())
         body, thickness = r.board_body(board)
         from OCP.BRepCheck import BRepCheck_Analyzer
         self.assertTrue(BRepCheck_Analyzer(body).IsValid())
@@ -46,6 +46,31 @@ class SvgTests(unittest.TestCase):
         self.assertIn('U6', refs)
         self.assertIn('J1', refs)
         self.assertNotIn('VBUS', refs)  # Bottom-side test pads stay on the bottom.
+
+    def test_xray_faces_match_viewer_alpha(self):
+        r.load_occ()
+        mesh = viewer.mesh_data(r.Box(10, 10, 10).Shape())
+        faces = r.xray_faces(mesh['triangles'], mesh['normals'], -65, 38, opacity=.1)
+        regions = [region for _, group in faces for region in group]
+        loops = [loop for region in regions for loop in region]
+        # Six flat faces: one region and one outline each (front three, back three).
+        self.assertEqual(len(regions), 6)
+        self.assertEqual(len(loops), 6)
+        self.assertTrue(all(len(loop) == 4 for loop in loops))
+        self.assertTrue(all(.02 <= a <= .1 for a, _ in faces))
+        paths = r.project(r.Box(10, 10, 10).Shape(), -65, 38, detail=True, hidden=True)
+        root = ET.fromstring(r.svg(paths, 'x', .04, '#101114'))
+        r.append_xray_faces(root, faces)
+        root = ET.fromstring(ET.tostring(root))
+        layers = [n.get('id') for n in root if n.tag == f'{{{r.NS}}}g']
+        self.assertEqual(len(root.findall(f'.//{{{r.NS}}}g[@id="xray-faces"]//{{{r.NS}}}path')), 6)
+        self.assertEqual(layers, ['xray-faces', 'visible-edges'])
+        self.assertEqual(root.find(f'{{{r.NS}}}g[@id="visible-edges"]').get('stroke-opacity'), '0.38')
+        # Face outlines land on the projected cube edges.
+        xs = [x for p in paths for x, _ in p]
+        fx = [x for loop in loops for x, _ in loop]
+        self.assertAlmostEqual(min(xs), min(fx), places=3)
+        self.assertAlmostEqual(max(xs), max(fx), places=3)
 
     def test_interactive_mesh_has_faces_and_edges(self):
         r.load_occ()
@@ -88,7 +113,7 @@ class SvgTests(unittest.TestCase):
 
     def test_usb_mounting_features_match_the_pcb(self):
         r.load_occ()
-        board = r.parse_board((r.ROOT / 'lovelace-as-006.kicad_pcb').read_text())
+        board = r.parse_board(r.resolve_board().read_text())
         fp = next(f for f in r.children(board,'footprint') if r.reference(f)=='J1')
         model = r.children(fp,'model')[0]
         # These are measured STEP feature coordinates, independent of its placement offsets.
@@ -112,7 +137,7 @@ class SvgTests(unittest.TestCase):
         self.assertAlmostEqual(box.Get()[5],4.851,places=3)
 
     def test_back_silk_matches_native_kicad_coordinates(self):
-        board=r.parse_board((r.ROOT/'lovelace-as-006.kicad_pcb').read_text())
+        board=r.parse_board(r.resolve_board().read_text())
         text=next(n for n in r.children(board,'gr_text') if n[1].startswith('4.75'))
         points,fill,width=silk.text_paths(text)[0]
         # Checked against KiCad's native layer-B_Silkscreen.svg, not a browser font.
@@ -129,7 +154,7 @@ class SvgTests(unittest.TestCase):
 
     def test_footprint_silk_keep_upright(self):
         from copy import deepcopy
-        board=r.parse_board((r.ROOT/'lovelace-as-006.kicad_pcb').read_text())
+        board=r.parse_board(r.resolve_board().read_text())
         fp=next(f for f in r.children(board,'footprint') if r.reference(f)=='VBUS')
         ref=r.children(fp,'property')[0]
         self.assertEqual(r.field(ref,'at')[-1],'180')

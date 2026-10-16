@@ -102,7 +102,7 @@ canvas.addEventListener('keydown', event => {
 
 $('export').onclick = async () => {
   const button = $('export');
-  const chosen = {...state, style:$('shading').value, aspect:canvas.clientWidth/canvas.clientHeight,stroke: Number($('weight').value), ink: $('ink').value,
+  const chosen = {...state, style:$('shading').value, aspect:canvas.clientWidth/canvas.clientHeight,stroke: Number($('weight').value), ink: $('ink').value, opacity: Number($('opacity').value),
     background: $('clear').checked ? 'transparent' : $('paper').value};
   button.disabled = true;
   $('status').classList.remove('error');
