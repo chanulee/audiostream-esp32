@@ -30,7 +30,7 @@
 6. **[Major] RF와 Wi-Fi/BT 공존 미측정.** 안테나 돌출(Espressif 배치 1안), 모듈 아래·안테나 띠의 via/배선 금지는 유지됩니다. H1은 안테나 끝에서 약 11mm라 나일론 나사를 권장합니다. 수정: 케이스 장착 상태에서 RSSI, A2DP 끊김, AirPlay 언더런 측정.
 7. **[Minor] 윗면 GND 붓기 분할.** F.Cu GND가 큰 조각 두 개(568·196mm²)와 작은 조각들로 나뉩니다. 각 조각은 via로 L2 GND 평면에 붙어 있고, 기준면은 L2입니다. FreeRouting 배선은 한 덩어리(846mm²)였습니다.
 8. **[Minor] 자동 다운로드 모드 없음.** 버튼(IO0)을 누른 채 USB를 꽂아야 합니다. 바닥 EN 패드를 GND에 대면 리셋됩니다.
-9. **[Minor, AS-006에서 해결] 3D 모델 없음.** HRO TYPE-C-31-M-12, PJ-320D, WROVER-E의 STEP 모델이 KiCad 기본 라이브러리에 없었습니다. AS-006부터 LCSC/EasyEDA STEP(C165948, C431535, C2973667)을 `lib/3d/`에 두고 연결했습니다. 렌더에서 단자·다리가 패드와 맞는 것을 확인했습니다. WROVER-E 모델은 EasyEDA의 WROVER-IE 모델이라 IPEX 커넥터가 함께 그려지며, 외형 치수는 같습니다.
+9. **[Minor, AS-006에서 해결] 3D 모델 없음.** HRO TYPE-C-31-M-12, PJ-320D, WROVER-E의 STEP 모델이 KiCad 기본 라이브러리에 없었습니다. AS-006부터 LCSC/EasyEDA STEP(C165948, C431535, C2973667)을 `lib/3d/`에 두고 연결했습니다. J2 모델은 바닥면 렌더에서 위치 결정 핀 2개가 NPTH 홀 중심에 오도록 놓았습니다(CPL과 같은 기준). J1은 고정 다리 4개가 슬롯에 들어가는 것을 확인했습니다. WROVER-E 모델은 EasyEDA의 WROVER-IE 모델이라 IPEX 커넥터가 함께 그려지며, 외형 치수는 같습니다.
 
 ## 이번에 확인한 것
 

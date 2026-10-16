@@ -368,7 +368,7 @@
 	(embedded_fonts no)
 	(model "${KIPRJMOD}/lib/3d/PJ-320D_C431535.step"
 		(offset
-			(xyz -6.025 0 -0.55)
+			(xyz -6.965 0 -0.55)
 		)
 		(scale
 			(xyz 1 1 1)
