@@ -105,10 +105,35 @@
       "name": "LOVELACE AS-004 rev A",
       "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
       "date": "2026-10-16",
+      "status": "archived",
+      "status_text": "보관 · 주문 안 함",
+      "summary": "AS-003과 넷리스트·배치 동일. 상단 SMD 패드에 닿는 via 0(라우터 패드 간격, OVLO·ILIM 손 배선, 오디오 배선 잠금), 데이터시트 핀 대조·전원 경로 시뮬레이션·배선 검토 추가. 독립 재검수에서 AUX 잭(J2) 랜드가 Shou Han PJ-320D 도면과 달라 AS-005에서 랜드만 고침.",
+      "dir": "archive/06-lovelace-as-004-revA",
+      "images": [
+        "renders/pcba-iso.png",
+        "renders/pcba-top.png",
+        "renders/routing.png",
+        "renders/assembly-top.png"
+      ],
+      "files": [
+        "README.md",
+        "REVIEW.md",
+        "REVIEW_NETLIST.md",
+        "REVIEW_LAYOUT.md",
+        "REVIEW_INDEPENDENT_2026-10-16.md",
+        "BRINGUP.md",
+        "lovelace-as-004.kicad_pcb",
+        "lovelace-as-004-revA-release.zip"
+      ]
+    },
+    {
+      "name": "LOVELACE AS-005 rev A",
+      "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
+      "date": "2026-10-16",
       "status": "current",
       "status_text": "현재 · 주문 전",
-      "summary": "AS-003과 넷리스트·배치 동일. 상단 SMD 패드에 닿는 via 0(라우터 패드 간격, OVLO·ILIM 손 배선, 오디오 배선 잠금), 데이터시트 핀 대조·전원 경로 시뮬레이션·배선 검토 추가.",
-      "dir": "lovelace-as-004",
+      "summary": "AS-004와 넷리스트·배치·배선 동일. AUX 잭(J2) 랜드를 Shou Han PJ-320D 도면대로: 위치 결정 NPTH Ø1.5 → Ø1.0mm, 패드 폭 1.2 → 1.5mm(LOVELACE 라이브러리 풋프린트).",
+      "dir": "lovelace-as-005",
       "images": [
         "renders/latest/pcba-iso.png",
         "renders/latest/pcba-top.png",
@@ -121,7 +146,7 @@
         "REVIEW_NETLIST.md",
         "REVIEW_LAYOUT.md",
         "BRINGUP.md",
-        "lovelace-as-004-revA-release.zip"
+        "lovelace-as-005-revA-release.zip"
       ]
     }
   ]

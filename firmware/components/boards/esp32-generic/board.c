@@ -1,6 +1,6 @@
 /**
  * @file board.c
- * @brief LOVELACE AS-003 / AS-004 board implementation (same netlist)
+ * @brief LOVELACE AS-003 / AS-004 / AS-005 board implementation (same netlist)
  *
  * PCM5102A is configured by strap pins (I2S, internal PLL); its XSMT soft
  * mute is the mute GPIO. It starts muted: audio_output.c unmutes once the I2S

@@ -7,7 +7,7 @@ AUX 스피커(3.5mm 라인 입력)에 꽂는 무선 오디오 수신기입니다
 | MCU | ESP32-WROVER-E-N8R8 (Flash 8MB, PSRAM 8MB, Wi-Fi + Bluetooth Classic) |
 | DAC | PCM5102A, 3.5mm stereo line-out (2.1 Vrms) |
 | 전원 | USB-C 5V → eFuse(OVP 5.8V, 전류 제한) → 3.3V buck / 저잡음 아날로그 LDO. 전원 스위치 없이 꽂으면 켜짐 |
-| 보드 | LOVELACE / AS-004 rev A, 37 × 41mm 4층. USB-C와 AUX가 같은 변, 버튼 1개 |
+| 보드 | LOVELACE / AS-005 rev A, 37 × 41mm 4층. USB-C와 AUX가 같은 변, 버튼 1개 |
 | 수신 | AirPlay 2 (AAC/ALAC), Spotify Connect (cspot, Ogg Vorbis 320kbps), Bluetooth A2DP SBC + AVRCP |
 
 S3 기반 이전 시제품(AS-001)은 Bluetooth Classic이 없어 A2DP를 받을 수 없으므로 WROVER로 전환했습니다. 첫 시제품부터 현재까지의 기록은 [hardware/archive](hardware/archive/README.md)에 있습니다.
@@ -25,7 +25,7 @@ export PLATFORMIO_CORE_DIR="$PWD/work/platformio"
 .venv/bin/pio device monitor -b 115200
 ```
 
-AS-004의 CH340N에는 DTR이 없어 자동 다운로드 모드 진입을 지원하지 않습니다. 업로드 전에 **버튼을 누른 채 USB를 꽂으세요.** 이후 펌웨어 업데이트는 웹 UI의 OTA로도 가능합니다.
+AS-003 이후 보드의 CH340N에는 DTR이 없어 자동 다운로드 모드 진입을 지원하지 않습니다. 업로드 전에 **버튼을 누른 채 USB를 꽂으세요.** 이후 펌웨어 업데이트는 웹 UI의 OTA로도 가능합니다.
 
 버튼: 짧게 = 재생/일시정지, 두 번 = 다음 곡, 3초 = Bluetooth 페어링(연결된 폰을 끊고 새 폰 연결 대기).
 
@@ -77,11 +77,11 @@ python3 tools/capture.py http://192.168.1.42 --seconds 3 -o capture.wav
 
 | | 위치 | 버전 |
 |---|---|---|
-| 하드웨어 (현재) | `hardware/lovelace-as-004/` | AS-004 rev A (`plan_pcb.py`의 `BOARD_ID`, `BOARD_REV`) |
+| 하드웨어 (현재) | `hardware/lovelace-as-005/` | AS-005 rev A (`plan_pcb.py`의 `BOARD_ID`, `BOARD_REV`) |
 | 하드웨어 (이전) | `hardware/archive/NN-*/` | S3 rev A → AS-001 → AS-002 rev B → AS-002 rev C ([기록](hardware/archive/README.md)) |
 | 펌웨어 | `firmware/version.txt` | 0.3.0 |
 
-펌웨어 0.3.x는 AS-003·AS-004 전용입니다(두 보드는 넷리스트가 같고 배선만 다릅니다). DAC 뮤트(XSMT)를 GPIO22로 풀어야 소리가 나며, 0.2.x(ESP32-S3 / AS-001)는 이 보드들에서 동작하지 않습니다. 하드웨어 버전 규칙은 [archive/README.md](hardware/archive/README.md)에 있습니다.
+펌웨어 0.3.x는 AS-003·AS-004·AS-005 전용입니다(세 보드는 넷리스트가 같습니다. AS-004는 배선, AS-005는 AUX 잭 랜드만 다릅니다). 빌드 환경 이름은 `lovelace-as-004` 그대로 씁니다. DAC 뮤트(XSMT)를 GPIO22로 풀어야 소리가 나며, 0.2.x(ESP32-S3 / AS-001)는 이 보드들에서 동작하지 않습니다. 하드웨어 버전 규칙은 [archive/README.md](hardware/archive/README.md)에 있습니다.
 
 ## 문서
 

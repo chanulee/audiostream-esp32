@@ -55,6 +55,11 @@
 #define DAC_MUTE_RAMP_MS 5
 #define DAC_LOCK_MS      20
 
+// pdMS_TO_TICKS() truncates (5 ms is 0 ticks at CONFIG_FREERTOS_HZ=100) and a
+// tick delay can end up to one tick early, so round up and add a tick.
+#define TICKS_AT_LEAST_MS(ms) \
+  ((TickType_t)(((ms) * configTICK_RATE_HZ + 999) / 1000) + 1)
+
 /* Max output frames after resampling one input frame */
 #define MAX_RESAMPLE_FRAMES \
   ((size_t)((FRAME_SAMPLES + 2) * ((double)OUTPUT_RATE / 44100) + 16))
@@ -150,14 +155,15 @@ static void dac_mute(bool mute) {
 // first and back up once the new clock has settled.
 static void i2s_restart_muted(const i2s_std_clk_config_t *clk_cfg) {
   dac_mute(true);
-  vTaskDelay(pdMS_TO_TICKS(DAC_MUTE_RAMP_MS));
+  // Busy-wait: the ramp needs the clocks running for the full 5 ms.
+  esp_rom_delay_us(DAC_MUTE_RAMP_MS * 1000);
   i2s_channel_disable(tx_handle);
   if (clk_cfg) {
     ESP_ERROR_CHECK(i2s_channel_reconfig_std_clock(tx_handle, clk_cfg));
   }
   output_cursor_reset();
   i2s_channel_enable(tx_handle);
-  vTaskDelay(pdMS_TO_TICKS(DAC_LOCK_MS));
+  vTaskDelay(TICKS_AT_LEAST_MS(DAC_LOCK_MS));
   dac_mute(false);
 }
 
@@ -434,7 +440,7 @@ esp_err_t audio_output_init(void) {
   ESP_LOGI(TAG, "I2S initialized: Rate=%u, DMA_Desc=%d, DMA_Frame=%d",
            (unsigned int)OUTPUT_RATE, I2S_DMA_DESC_NUM, I2S_DMA_FRAME_NUM);
   // The DAC has been muted since reset (board pull-down, iot_board_init).
-  vTaskDelay(pdMS_TO_TICKS(DAC_LOCK_MS));
+  vTaskDelay(TICKS_AT_LEAST_MS(DAC_LOCK_MS));
   dac_mute(false);
   esp_register_shutdown_handler(dac_mute_on_shutdown);
 

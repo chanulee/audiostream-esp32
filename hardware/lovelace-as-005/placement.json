@@ -1,0 +1,910 @@
+{
+  "board": {
+    "w": 37.0,
+    "h": 41.0,
+    "edge_clearance": 0.5,
+    "grid": 0.25,
+    "origin": [
+      0,
+      -41.0
+    ],
+    "id": "AS-005",
+    "rev": "A",
+    "name": "lovelace-as-005"
+  },
+  "spacing": {
+    "passive-module": 0.5,
+    "passive-ic": 0.35
+  },
+  "zones": {},
+  "parts": [
+    {
+      "ref": "U1",
+      "x": 13.01,
+      "y": -12.745,
+      "w": 19.62,
+      "h": 25.49,
+      "rot": 0,
+      "class": "module",
+      "grid": 0.005,
+      "locked": true,
+      "allow_overhang": true
+    },
+    {
+      "ref": "C2",
+      "x": 2.2,
+      "y": -2.1,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C1",
+      "x": 2.2,
+      "y": -4.27,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C3",
+      "x": 2.0,
+      "y": -7.25,
+      "w": 3.01,
+      "h": 1.51,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R5",
+      "x": 2.2,
+      "y": -10.25,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "U2",
+      "x": 28.66,
+      "y": -10.0,
+      "w": 7.75,
+      "h": 7.05,
+      "rot": 180,
+      "class": "ic",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C18",
+      "x": 23.82,
+      "y": -12.2,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 270,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C15",
+      "x": 35.3,
+      "y": -9.5,
+      "w": 3.01,
+      "h": 1.51,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C14",
+      "x": 33.4,
+      "y": -8.0,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C13",
+      "x": 33.4,
+      "y": -10.2,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C12",
+      "x": 33.4,
+      "y": -12.4,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C10",
+      "x": 31.5,
+      "y": -14.4,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C16",
+      "x": 26.2,
+      "y": -14.4,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R10",
+      "x": 28.4,
+      "y": -14.4,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C17",
+      "x": 24.35,
+      "y": -17.0,
+      "w": 3.01,
+      "h": 1.51,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "U4",
+      "x": 29.8,
+      "y": -18.0,
+      "w": 4.15,
+      "h": 3.45,
+      "rot": 0,
+      "class": "power",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C8",
+      "x": 26.6,
+      "y": -18.0,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "D5",
+      "x": 34.5,
+      "y": -22.0,
+      "w": 3.25,
+      "h": 1.95,
+      "rot": 270,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C25",
+      "x": 29.75,
+      "y": -3.3,
+      "w": 4.97,
+      "h": 3.35,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C9",
+      "x": 33.49,
+      "y": -17.6,
+      "w": 3.01,
+      "h": 1.51,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R11",
+      "x": 31.0,
+      "y": -22.95,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 180,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C19",
+      "x": 29.95,
+      "y": -27.45,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R12",
+      "x": 31.5,
+      "y": -21.2,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 270,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C20",
+      "x": 31.85,
+      "y": -25.35,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "D2",
+      "x": 24.5,
+      "y": -30.0,
+      "w": 3.25,
+      "h": 1.95,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "D3",
+      "x": 35.5,
+      "y": -26.6,
+      "w": 3.25,
+      "h": 1.95,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "D4",
+      "x": 24.95,
+      "y": -3.55,
+      "w": 3.01,
+      "h": 1.51,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R18",
+      "x": 27.25,
+      "y": -3.05,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 270,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "SW1",
+      "x": 26.25,
+      "y": -22.6,
+      "w": 4.85,
+      "h": 3.35,
+      "rot": 0,
+      "class": "connector",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R6",
+      "x": 29.7,
+      "y": -21.2,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "J1",
+      "x": 5.35,
+      "y": -36.79,
+      "w": 10.69,
+      "h": 9.47,
+      "rot": 0,
+      "class": "connector",
+      "grid": 0.005,
+      "locked": true,
+      "allow_overhang": true
+    },
+    {
+      "ref": "J2",
+      "x": 32.0,
+      "y": -36.11,
+      "w": 14.85,
+      "h": 10.05,
+      "rot": 90,
+      "class": "connector",
+      "grid": 0.005,
+      "locked": true,
+      "allow_overhang": true
+    },
+    {
+      "ref": "U5",
+      "x": 5.35,
+      "y": -28.3,
+      "w": 4.15,
+      "h": 3.45,
+      "rot": 0,
+      "class": "ic",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C23",
+      "x": 8.75,
+      "y": -28.75,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R1",
+      "x": 1.8,
+      "y": -30.6,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R2",
+      "x": 9.9,
+      "y": -31.05,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "U7",
+      "x": 15.45,
+      "y": -29.25,
+      "w": 7.45,
+      "h": 5.45,
+      "rot": 0,
+      "class": "ic",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C24",
+      "x": 20.05,
+      "y": -30.65,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C7",
+      "x": 22.0,
+      "y": -27.75,
+      "w": 3.45,
+      "h": 2.01,
+      "rot": 270,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R19",
+      "x": 21.9,
+      "y": -30.9,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "L1",
+      "x": 18.2,
+      "y": -37.4,
+      "w": 2.55,
+      "h": 2.15,
+      "rot": 180,
+      "class": "power",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "U3",
+      "x": 22.0,
+      "y": -37.4,
+      "w": 3.05,
+      "h": 2.55,
+      "rot": 180,
+      "class": "power",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C4",
+      "x": 25.05,
+      "y": -38.6,
+      "w": 3.45,
+      "h": 2.01,
+      "rot": 270,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C6",
+      "x": 20.4,
+      "y": -34.6,
+      "w": 3.45,
+      "h": 2.01,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C5",
+      "x": 27.75,
+      "y": -25.6,
+      "w": 3.01,
+      "h": 1.51,
+      "rot": 180,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "U6",
+      "x": 14.0,
+      "y": -36.6,
+      "w": 3.05,
+      "h": 3.05,
+      "rot": 0,
+      "class": "power",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C21",
+      "x": 13.75,
+      "y": -33.6,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R13",
+      "x": 12.5,
+      "y": -39.15,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R14",
+      "x": 14.75,
+      "y": -39.15,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R15",
+      "x": 15.5,
+      "y": -33.1,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 0,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "C22",
+      "x": 17.85,
+      "y": -34.85,
+      "w": 1.87,
+      "h": 0.97,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R16",
+      "x": 16.55,
+      "y": -34.85,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 270,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "R17",
+      "x": 12.45,
+      "y": -33.6,
+      "w": 1.91,
+      "h": 0.99,
+      "rot": 90,
+      "class": "passive",
+      "grid": 0.01,
+      "locked": false,
+      "allow_overhang": false
+    },
+    {
+      "ref": "H1",
+      "x": 34.25,
+      "y": -2.75,
+      "w": 4.95,
+      "h": 4.95,
+      "rot": 0,
+      "class": "mech",
+      "grid": 0.005,
+      "locked": false,
+      "allow_overhang": false
+    }
+  ],
+  "near": [
+    {
+      "a": "C2",
+      "b": "U1",
+      "max": 1.0,
+      "why": "B1 100 nF within 1 mm of module 3V3 pin"
+    },
+    {
+      "a": "C3",
+      "b": "U1",
+      "max": 5.0,
+      "why": "B1 10 uF within 5 mm"
+    },
+    {
+      "a": "C1",
+      "b": "U1",
+      "max": 3.0,
+      "why": "EN RC at the EN pin"
+    },
+    {
+      "a": "C14",
+      "b": "U2",
+      "max": 1.0,
+      "why": "B1 AVDD 100 nF"
+    },
+    {
+      "a": "C10",
+      "b": "U2",
+      "max": 1.0,
+      "why": "B1 CPVDD 100 nF"
+    },
+    {
+      "a": "C16",
+      "b": "U2",
+      "max": 1.0,
+      "why": "B1 DVDD 100 nF"
+    },
+    {
+      "a": "C18",
+      "b": "U2",
+      "max": 1.0,
+      "why": "B1 LDOO 100 nF"
+    },
+    {
+      "a": "C12",
+      "b": "U2",
+      "max": 1.0,
+      "why": "charge-pump flying cap at pins 2/4"
+    },
+    {
+      "a": "C13",
+      "b": "U2",
+      "max": 1.0,
+      "why": "VNEG cap at pin 5"
+    },
+    {
+      "a": "C9",
+      "b": "U2",
+      "max": 5.0,
+      "why": "B1 CPVDD / AVDD 10 uF"
+    },
+    {
+      "a": "C15",
+      "b": "U2",
+      "max": 5.0,
+      "why": "B1 10 uF"
+    },
+    {
+      "a": "C17",
+      "b": "U2",
+      "max": 5.0,
+      "why": "B1 10 uF"
+    },
+    {
+      "a": "C8",
+      "b": "U4",
+      "max": 3.0,
+      "why": "B1 LDO input"
+    },
+    {
+      "a": "C9",
+      "b": "U4",
+      "max": 3.0,
+      "why": "B1 LDO output"
+    },
+    {
+      "a": "D5",
+      "b": "U4",
+      "max": 6.0,
+      "why": "hold-up diode beside the LDO"
+    },
+    {
+      "a": "C4",
+      "b": "U3",
+      "max": 2.0,
+      "why": "B2 buck input cap"
+    },
+    {
+      "a": "L1",
+      "b": "U3",
+      "max": 3.0,
+      "why": "B2 inductor"
+    },
+    {
+      "a": "C6",
+      "b": "L1",
+      "max": 3.0,
+      "why": "B2 output cap at inductor"
+    },
+    {
+      "a": "U5",
+      "b": "J1",
+      "max": 5.0,
+      "why": "B9 USB ESD within 5 mm"
+    },
+    {
+      "a": "R1",
+      "b": "J1",
+      "max": 5.0,
+      "why": "B14 CC termination"
+    },
+    {
+      "a": "R2",
+      "b": "J1",
+      "max": 5.0,
+      "why": "B14 CC"
+    },
+    {
+      "a": "D2",
+      "b": "J2",
+      "max": 5.0,
+      "why": "B9 line-out ESD"
+    },
+    {
+      "a": "D3",
+      "b": "J2",
+      "max": 5.0,
+      "why": "B9 line-out ESD"
+    },
+    {
+      "a": "C21",
+      "b": "U6",
+      "max": 1.0,
+      "why": "B5 eFuse input cap"
+    },
+    {
+      "a": "R13",
+      "b": "U6",
+      "max": 2.0,
+      "why": "B5 OVLO divider"
+    },
+    {
+      "a": "R14",
+      "b": "U6",
+      "max": 2.0,
+      "why": "B5 OVLO"
+    },
+    {
+      "a": "R15",
+      "b": "U6",
+      "max": 2.0,
+      "why": "B5 ILIM"
+    },
+    {
+      "a": "C22",
+      "b": "U6",
+      "max": 3.0,
+      "why": "B5 dVdt"
+    },
+    {
+      "a": "C24",
+      "b": "U7",
+      "max": 1.0,
+      "why": "B1 CH340 VCC"
+    },
+    {
+      "a": "C23",
+      "b": "U5",
+      "max": 1.5,
+      "why": "USBLC6 VBUS reference (no load current); D+/D- own both sides"
+    }
+  ],
+  "apart": [
+    {
+      "a": "L1",
+      "b": "U2",
+      "min": 15,
+      "why": "B15 buck inductor >= 15 mm from DAC"
+    },
+    {
+      "a": "U3",
+      "b": "U2",
+      "min": 10,
+      "why": "B15 buck switch node vs DAC analog"
+    },
+    {
+      "a": "L1",
+      "b": "J2",
+      "min": 5,
+      "why": "keep SW field off the line-out jack"
+    }
+  ],
+  "keepouts": [
+    {
+      "name": "M2 screw head 1",
+      "circle": [
+        34.25,
+        -2.75,
+        2.75
+      ],
+      "allow": [
+        "H1"
+      ]
+    },
+    {
+      "name": "USB D+ run U5 -> U7",
+      "rect": [
+        7.2,
+        -27.95,
+        12.0,
+        -26.75
+      ],
+      "allow": [
+        "U5",
+        "U7"
+      ]
+    },
+    {
+      "name": "USB-C escape and VBUS vias",
+      "rect": [
+        2.3,
+        -32.58,
+        8.9,
+        -30.88
+      ],
+      "allow": [
+        "J1"
+      ]
+    }
+  ]
+}
