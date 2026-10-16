@@ -113,5 +113,5 @@ KiCadRoutingTools는 3단계로 배선합니다. ① 오디오 넷(DAC_L/R, LINE
 - 배치 검사 ERROR 0 / WARN 0, 점유율 76%. 데이터시트 핀 대조 142/142(J2 포함).
 - KiCad DRC 0, 미연결 0, 회로도 parity 0, ERC 0(위반이 있으면 `make_board.sh`가 릴리스 전에 멈춤). 디커플링 패드 거리 19/19, 라이브러리 패드 일치 54/54, JLC 부품 데이터 대조 53/53.
 - 릴리스 감사 0/0(BOM·CPL 포함), Gerber netcheck shorts 0 / opens 0. `lovelace-as-007-revA-release.zip`에 Gerber, drill, IPC-D-356, JLC 형식 BOM / CPL.
-- AS-006 대비: J2 넷 배정(D = LINE_R, B = GND), ESD 다이오드 D2 위치(24.5, 30.0 → 25.0, 33.9mm), 그에 따른 재배선(세그먼트 328, via 96, 길이 496 → 501mm, LINE_R 24.4 → 29.2mm, 오디오 넷 B.Cu 0·via 0). J2 랜드와 BOM은 같고, CPL은 D2 한 줄만 바뀌었습니다.
+- AS-006 대비: J2 넷 배정(D = LINE_R, B = GND), ESD 다이오드 D2 위치(24.5, 30.0 → 25.0, 33.9mm), 그에 따른 재배선(세그먼트 328, via 96, 길이 496 → 501mm, LINE_R 24.4 → 29.2mm, 오디오 넷 B.Cu 0·via 0). 같은 층에서 LINE_R과 버크 SW 넷의 최소 간격은 4.18mm입니다(AS-006은 5.6mm 이상). LINE_R은 R12 470Ω 뒤 저임피던스 선이고 바로 아래가 L2 GND 평면이라 문제로 보지 않지만, 첫 보드에서 오른쪽 채널 잡음을 왼쪽과 비교해 확인합니다. J2 랜드와 BOM은 같고, CPL은 D2 한 줄만 바뀌었습니다.
 - 제작 전 확인할 항목은 [REVIEW.md](REVIEW.md), 주문과 첫 보드 확인 절차는 [BRINGUP.md](BRINGUP.md)에 있습니다.
