@@ -104,6 +104,13 @@ def free_on(layer, pos, radius, net, skip=()):
     return True
 
 
+def on_top_pad(pos):
+    """A new via would touch a top SMD pad (any net): paste wicks into it."""
+    return any(a.GetAttribute() == p.PAD_ATTRIB_SMD and a.IsOnLayer(p.F_Cu) and
+               a.GetEffectivePolygon(p.F_Cu).Collide(pos, p.FromMM(.3 + .1))
+               for f in board.GetFootprints() for a in f.Pads())
+
+
 placed_tp, labels = [], []
 for i, (label, net, near) in enumerate(TP_NETS, 1):
     anchor = fps[near].GetPosition()
@@ -119,8 +126,8 @@ for i, (label, net, near) in enumerate(TP_NETS, 1):
         for a in sorted((a for f in board.GetFootprints() for a in f.Pads()
                          if a.GetNetname() == net and a.IsOnLayer(p.F_Cu)),
                         key=lambda a: (a.GetPosition() - anchor).EuclideanNorm()):
-            for k in range(16):
-                d = p.FromMM(1.1)
+            for d, k in ((p.FromMM(d), k) for d in (1.1, 1.4, 1.7)
+                         for k in range(16)):
                 c = a.GetPosition() + p.VECTOR2I(int(d * math.cos(k * math.pi / 8)),
                                                   int(d * math.sin(k * math.pi / 8)))
                 stub = p.PCB_TRACK(board)
@@ -134,7 +141,8 @@ for i, (label, net, near) in enumerate(TP_NETS, 1):
                         a.GetPosition().x + (c.x - a.GetPosition().x) * s // 10,
                         a.GetPosition().y + (c.y - a.GetPosition().y) * s // 10),
                         p.FromMM(.1), net) for s in range(3, 11)) \
-                    and all((c - q).EuclideanNorm() > p.FromMM(2.5) for q in placed_tp)
+                    and all((c - q).EuclideanNorm() > p.FromMM(2.5) for q in placed_tp) \
+                    and not on_top_pad(c)
                 if ok:
                     board.Add(stub)
                     v = p.PCB_VIA(board)

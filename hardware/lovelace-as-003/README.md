@@ -14,7 +14,7 @@ ESP32-WROVER-E-N8R8 + PCM5102A 일체형 수신 보드. **37 × 41 mm, 4층**, �
 | AUX 잭 | CUI SJ1-3523N (THT) | 동일 | **PJ-320D (SMD, C431535)** |
 | 버크 인덕터 / 출력 C | 4 × 4 mm / 47µF 1206 | 동일 | **2.0 × 1.6 mm / 22µF 0805** |
 | 고정 홀 | M3 × 4 | M2 × 2 | **M2 × 1 (오른쪽 위, NPTH, 나일론 나사 권장)** |
-| 배선 | — | 미완료 | **완료 (KiCadRoutingTools 3단계 + 손 배선 1개), DRC 0** |
+| 배선 | — | 미완료 | **완료 (KiCadRoutingTools 3단계 + 손 배선 3개), DRC 0, 패드 안 via 0** |
 | 테스트 패드 | — | — | **바닥면 11개 (전원 레일, UART, EN, IO0)** |
 
 ## 회로
@@ -64,6 +64,8 @@ KiCad를 다른 위치에 설치했다면 `KICAD`를 해당 앱의 `Contents` �
 - 좌표는 선택한 면의 왼쪽 위 기준입니다. 뒷면을 밖에서 읽는 방향으로 편집하며, PCB 좌표와 미러 처리는 자동입니다.
 - SVG의 불투명 영역은 단색 실크로 변환합니다. 흰 배경이 있으면 `흰 배경 제외`를 선택합니다. SVG 내 외부 이미지·실행 코드·애니메이션은 지원하지 않습니다.
 - SVG는 0.025 mm 간격으로 샘플링한 뒤 채워진 KiCad 도형으로 저장합니다. 복잡한 곡선은 근사되며 원본 SVG도 편집 파일에 보관됩니다. 텍스트 미리보기 글꼴은 실제 KiCad 글꼴과 다릅니다.
+- 구리 배선·패드 표시를 켜면 현재 면의 배선과 보드 경계선을 함께 봅니다(구리 평면은 생략). 마스크로 덮인 배선 위 실크는 허용됩니다.
+- `실제 인쇄·간섭 검사`는 저장 전 배치를 임시 PCB에 적용해 KiCad 실제 글꼴로 렌더하고, 현재 면의 실크 간섭을 빨간 상자·번호로 표시합니다. 원본 PCB는 바꾸지 않습니다. `편집 계속`으로 돌아가 수정한 뒤 다시 검사하세요. 전체 제작 검사는 `make_board.sh`로 수행합니다.
 - `PCB에 저장`은 현재 보드 파일(`lovelace-as-003.kicad_pcb`)과 `silkscreen.json`을 업데이트합니다. 편집기는 `hardware/versions.json`에서 현재 보드를 찾고, 화면에 보드 ID와 rev를 표시합니다. 기존 board-level 실크를 편집기가 관리하며, footprint의 실크·구리 배선·부품 배치는 유지합니다.
 - 저장 전 PCB는 `.silk-backup.kicad_pcb`, 이전 배치는 `silkscreen.json.bak`으로 1회분 백업합니다. 다른 프로그램이 파일을 수정했으면 저장을 거부합니다. 저장할 때 KiCad 프로젝트를 닫으세요.
 - `make_board.sh`로 재생성해도 `silkscreen.json`이 적용됩니다. 편집기 저장만으로 Gerber·release ZIP이 갱신되지는 않습니다. 제작 전 아래 생성 명령과 DRC로 패드·가장자리 간섭을 확인하세요.
@@ -85,6 +87,8 @@ ROUTER=freerouting REROUTE=1 ./make_board.sh   # 비교용: FreeRouting으로 �
 | `jlc_check.py` | JLC/EasyEDA 부품 데이터와 패드·극성 대조, JLC 기준 회전·원점으로 `cpl.csv` 작성, 재고와 Basic/Extended 보고(`reports/jlc.json`) |
 | `finish_pcb.py` | (FreeRouting이면 .ses 가져오기) KiCad 연결성 기준으로 쓰지 않은 via 정리, 바닥 테스트 패드, 평면 채우기 |
 | `render_board.py` | 3D PCBA·맨 기판, 부품 배치도, 층별 구리, 넷 종류별 배선도, 이전 빌드와의 차이, `index.html` |
+| `pinout_check.py` | 데이터시트에서 따로 적은 핀 표와 넷리스트 대조(138개 항목, [REVIEW_NETLIST.md](REVIEW_NETLIST.md)) |
+| `sim/power_path.py` | ngspice 전원 경로 동작 모델: eFuse 기동, ESP32 펄스 부하 때 5V 처짐, USB 분리 때 C25 홀드업([REVIEW_NETLIST.md](REVIEW_NETLIST.md) 4절) |
 | `audit_pcb.py` | 좌표·핀넷 readback, 디커플링 패드 거리, 라이브러리와 패드 형상 비교, AUX 잭 접점 순서 |
 
 필요한 것: KiCad 10(`/Volumes/KiCad` 마운트)과 `work/tools/` 아래 세 가지입니다. [pcb-layout-skill](https://github.com/studio-edul/pcb-layout-skill) 체크아웃(`pcb-layout-skill/`, 다른 위치면 `SKILL`로 지정), [KiCadRoutingTools](https://github.com/drandyhaas/KiCadRoutingTools) v0.23.0(`krt/`), 그리고 numpy·scipy·shapely를 설치한 venv(`krt-venv/`)입니다. 설치 후 `krt-venv/bin/python krt/build_router.py`로 라우터 바이너리를 받습니다. FreeRouting 비교에는 FreeRouting 2.5.0과 Java 25 런타임이 더 필요합니다.
@@ -101,7 +105,7 @@ ROUTER=freerouting REROUTE=1 ./make_board.sh   # 비교용: FreeRouting으로 �
 | 신호 via | 35 | 32 |
 | 재현성 | 실행마다 다름 | 항상 같음 |
 
-KiCadRoutingTools는 3단계로 배선합니다. ① 오디오 넷(DAC_L/R, LINE_L/R, VNEG, CAPP/CAPM, LDOO)을 F.Cu에만, ② 전원(VBUS, +5V, +5V_DAC, +3V3_A, SW)을 0.3mm 고정으로(축소 금지), ③ 나머지를 0.2mm로(자리가 없으면 보드 최소값 0.15mm까지) 배선합니다. +5V_DAC의 C25 → D5 구간은 `build_pcb.py`가 오른쪽 가장자리로 직접 그립니다. 라우터에 맡기면 I2S 세 선을 가로질러 I2S가 바닥층으로 넘어갔기 때문입니다. 보드 항목 UUID를 고정해 같은 설계는 항상 같은 배선이 나옵니다.
+KiCadRoutingTools는 3단계로 배선합니다. ① 오디오 넷(DAC_L/R, LINE_L/R, VNEG, CAPP/CAPM, LDOO)을 F.Cu에만, ② 전원(VBUS, +5V, +5V_DAC, +3V3_A, SW)을 0.3mm 고정으로(축소 금지), ③ 나머지를 0.2mm로(자리가 없으면 보드 최소값 0.15mm까지) 배선합니다. +5V_DAC의 C25 → D5 구간은 `build_pcb.py`가 오른쪽 가장자리로 직접 그립니다. 라우터에 맡기면 I2S 세 선을 가로질러 I2S가 바닥층으로 넘어갔기 때문입니다. eFuse의 OVLO·ILIM(2 × 2mm QFN 가운데 핀)도 `build_pcb.py`가 그립니다. via를 패드에서 띄우면 라우터가 빠져나갈 길을 찾지 못하기 때문입니다. via를 놓는 ②③단계는 `--same-net-pad-clearance 0.1`로 via를 같은 넷 SMD 패드에서 0.1mm 이상 띄웁니다. 메우지 않은 via가 패드 안에 있으면 리플로 때 땜납이 빠져나가기 때문입니다. ①이 끝나면 오디오 배선을 잠가서, ②③이 막혔을 때 이를 뜯어 B.Cu로 옮기지 못하게 합니다. `audit_pcb.py`는 상단 SMD 패드에 닿는 via가 있으면 실패합니다. 보드 항목 UUID를 고정해 같은 설계는 항상 같은 배선이 나옵니다.
 
 ## 상태 (2026-10-15)
 

@@ -25,6 +25,8 @@ if [ "${1:-}" = anneal ]; then
 fi
 "$PY" plan_pcb.py 2>&1 | quiet
 python3 "$SKILL/scripts/placement_check.py" placement.json | tail -2
+# Netlist against a pin table written from the datasheets, not from plan_pcb.py.
+python3 pinout_check.py
 # Board name and revision, set once in plan_pcb.py.
 NAME=$(python3 -c "import json; print(json.load(open('placement.json'))['board']['name'])")
 REV=$(python3 -c "import json; print(json.load(open('placement.json'))['board']['rev'])")
@@ -43,19 +45,31 @@ if [ "$ROUTER" = krt ]; then
     rm -rf reports/krt && mkdir -p reports/krt
     KRT="$TOOLS/krt-venv/bin/python $TOOLS/krt/py_router/route.py"
     COMMON=(--clearance 0.16 --via-size 0.6 --via-drill 0.3)
+    # Passes that may place vias keep them off same-net SMD pads (paste wicks
+    # into an unfilled via; audit_pcb.py checks the result). The audio pass
+    # is F.Cu only, places no vias and routes worse with the option.
+    NOVIP=(--same-net-pad-clearance 0.1)
     AUDIO=(DAC_L DAC_R LINE_L LINE_R VNEG CAPP CAPM LDOO)
     POWER=(VBUS +5V +5V_DAC +3V3_A SW)
     $KRT "$NAME".kicad_pcb reports/krt/audio.kicad_pcb --nets "${AUDIO[@]}" \
         --layers F.Cu "${COMMON[@]}" --track-width 0.2 --escalation board \
         > reports/krt/audio.log 2>&1
+    # Lock the audio copper: the later passes rip earlier routes when they
+    # get stuck, and would move DAC_L/R onto B.Cu (over the L3 digital supply).
+    # pcbnew's save drops the net-class patterns from the sibling project the
+    # next pass reads its clearances from: keep the router's copy.
+    cp reports/krt/audio.kicad_pro reports/krt/audio.kicad_pro.keep
+    "$PY" -c "import pcbnew as p, sys; b = p.LoadBoard(sys.argv[1]); [t.SetLocked(True) for t in b.GetTracks() if t.GetNetname() in sys.argv[2:]]; b.Save(sys.argv[1])" \
+        reports/krt/audio.kicad_pcb "${AUDIO[@]}" 2>&1 | quiet
+    mv reports/krt/audio.kicad_pro.keep reports/krt/audio.kicad_pro
     $KRT reports/krt/audio.kicad_pcb reports/krt/power.kicad_pcb --nets "${POWER[@]}" \
-        --layers F.Cu B.Cu "${COMMON[@]}" --track-width 0.3 --power-nets "${POWER[@]}" \
+        --layers F.Cu B.Cu "${COMMON[@]}" "${NOVIP[@]}" --track-width 0.3 --power-nets "${POWER[@]}" \
         --power-nets-widths 0.3 0.3 0.3 0.3 0.3 --no-power-tap-neckdown \
         --escalation off > reports/krt/power.log 2>&1
     REST=('*' '!GND' '!+3V3_D')
     for n in "${AUDIO[@]}" "${POWER[@]}"; do REST+=("!$n"); done
     $KRT reports/krt/power.kicad_pcb reports/krt/routed.kicad_pcb --nets "${REST[@]}" \
-        --layers F.Cu B.Cu "${COMMON[@]}" --track-width 0.2 --escalation board \
+        --layers F.Cu B.Cu "${COMMON[@]}" "${NOVIP[@]}" --track-width 0.2 --escalation board \
         > reports/krt/signal.log 2>&1
     grep -h -E '^  (Single-ended|Multi-point):' reports/krt/{audio,power,signal}.log
     cp reports/krt/routed.kicad_pcb "$NAME".kicad_pcb

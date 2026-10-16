@@ -15,14 +15,14 @@
       ]
     },
     {
-      "net": "POWER_EN",
+      "net": "DVDT",
       "start": [
-        13.275,
-        35.725
+        18.3,
+        36.2
       ],
       "end": [
-        13.2,
-        35.6
+        18.515,
+        35.995
       ]
     },
     {
@@ -37,20 +37,20 @@
       ]
     },
     {
-      "net": "DVDT",
+      "net": "ILIM",
       "start": [
-        18.3,
-        36.2
+        17.18,
+        34.02
       ],
       "end": [
-        18.515,
-        35.995
+        16.85,
+        33.7
       ]
     }
   ],
   "nets": {
     "+3V3_A": {
-      "length_mm": 37.555,
+      "length_mm": 37.635,
       "minimum_width_mm": 0.3,
       "vias": 3
     },
@@ -60,12 +60,12 @@
       "vias": 11
     },
     "+5V": {
-      "length_mm": 53.04,
+      "length_mm": 56.038,
       "minimum_width_mm": 0.25,
       "vias": 5
     },
     "+5V_DAC": {
-      "length_mm": 34.158,
+      "length_mm": 38.286,
       "minimum_width_mm": 0.3,
       "vias": 4
     },
@@ -75,7 +75,7 @@
       "vias": 0
     },
     "BOOT": {
-      "length_mm": 10.502,
+      "length_mm": 11.043,
       "minimum_width_mm": 0.2,
       "vias": 2
     },
@@ -130,7 +130,7 @@
       "vias": 51
     },
     "ILIM": {
-      "length_mm": 6.546,
+      "length_mm": 6.758,
       "minimum_width_mm": 0.2,
       "vias": 0
     },
@@ -155,12 +155,12 @@
       "vias": 0
     },
     "OVLO": {
-      "length_mm": 4.057,
-      "minimum_width_mm": 0.15,
+      "length_mm": 4.852,
+      "minimum_width_mm": 0.2,
       "vias": 2
     },
     "POWER_EN": {
-      "length_mm": 5.264,
+      "length_mm": 13.334,
       "minimum_width_mm": 0.2,
       "vias": 3
     },
@@ -180,12 +180,12 @@
       "vias": 0
     },
     "UART_RX": {
-      "length_mm": 27.518,
+      "length_mm": 26.512,
       "minimum_width_mm": 0.2,
       "vias": 2
     },
     "UART_TX": {
-      "length_mm": 26.112,
+      "length_mm": 26.01,
       "minimum_width_mm": 0.2,
       "vias": 2
     },
@@ -200,9 +200,9 @@
       "vias": 0
     },
     "VBUS": {
-      "length_mm": 26.204,
+      "length_mm": 28.549,
       "minimum_width_mm": 0.3,
-      "vias": 2
+      "vias": 4
     },
     "VNEG": {
       "length_mm": 1.324,
@@ -210,8 +210,8 @@
       "vias": 0
     },
     "XSMT": {
-      "length_mm": 16.581,
-      "minimum_width_mm": 0.2,
+      "length_mm": 17.357,
+      "minimum_width_mm": 0.15,
       "vias": 2
     }
   },

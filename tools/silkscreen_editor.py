@@ -29,6 +29,56 @@ def revision(board_path, layout_path):
     return hashlib.sha256(board_path.read_bytes() + b'\0' + (layout_path.read_bytes() if layout_path.exists() else b'')).hexdigest()
 
 
+def check_layout(board_path, layout, width, height, side):
+    """Check an unsaved layout on a temporary PCB; return native silk and markers."""
+    import pcbnew as p
+    from silkscreen import apply_layout
+    if side not in ('F', 'B'):
+        raise ValueError('잘못된 면입니다.')
+    board = p.LoadBoard(str(board_path))
+    apply_layout(board, layout, width, height)
+    objects = list(board.GetDrawings())
+    for fp in board.GetFootprints():
+        objects.extend([fp.Reference(), fp.Value(), *fp.Pads(), *fp.GraphicalItems()])
+    objects = {obj.m_Uuid.AsString(): obj for obj in objects}
+    with tempfile.TemporaryDirectory(prefix='silk-check-') as temp:
+        temp = Path(temp)
+        pcb = temp / board_path.name
+        project = board_path.with_suffix('.kicad_pro')
+        if project.exists():
+            shutil.copy2(project, pcb.with_suffix('.kicad_pro'))
+        p.SaveBoard(str(pcb), board)
+        report, svg = temp / 'drc.json', temp / 'silk.svg'
+        cli = str(KICAD / 'MacOS/kicad-cli')
+        subprocess.run([cli, 'pcb', 'drc', '--format', 'json', '-o', str(report), str(pcb)],
+                       check=True, capture_output=True, timeout=60)
+        issues = []
+        labels = {'silk_edge_clearance': '보드 가장자리 간섭', 'silk_overlap': '실크끼리 겹침',
+                  'silk_over_copper': '패드·솔더마스크 개구부 간섭',
+                  'text_height': '글자 높이 규칙 위반', 'text_thickness': '글자 선 두께 규칙 위반'}
+        layer = p.F_SilkS if side == 'F' else p.B_SilkS
+        for violation in json.loads(report.read_text())['violations']:
+            if violation['type'] not in labels:
+                continue
+            boxes = []
+            for item in violation['items']:
+                obj = objects.get(item['uuid'])
+                if obj is not None and obj.GetLayer() == layer:
+                    box = obj.GetBoundingBox()
+                    boxes.append([p.ToMM(box.GetLeft()), p.ToMM(box.GetTop()),
+                                  p.ToMM(box.GetWidth()), p.ToMM(box.GetHeight())])
+            if boxes:
+                issues.append(dict(label=labels[violation['type']], boxes=boxes))
+        subprocess.run([cli, 'pcb', 'export', 'svg', '--layers', f'{side}.Mask,Edge.Cuts,{side}.SilkS',
+                        '--mode-single', '--page-size-mode', '1', '--exclude-drawing-sheet',
+                        '-o', str(svg), str(pcb)], check=True, capture_output=True, timeout=30)
+        root = ET.fromstring(svg.read_text())
+        root.set('viewBox', f'0 0 {width} {height}')
+        root.set('width', f'{width}mm')
+        root.set('height', f'{height}mm')
+        return dict(side=side, svg=ET.tostring(root, encoding='unicode'), issues=issues)
+
+
 def save_layout(board_path, layout, expected_revision, width, height):
     import pcbnew as p
     from silkscreen import LAYOUT_FILE, apply_layout
@@ -123,18 +173,24 @@ def main():
                                    id=board_id, rev=board_rev,
                                    revision=revision(board_path, board_path.parent / LAYOUT_FILE),
                                    layout=read_layout(board, board_path.parent, width, height)))
-                elif self.path in ('/api/background/F', '/api/background/B'):
-                    side = self.path[-1]
-                    key = (side, hashlib.sha256(board_path.read_bytes()).hexdigest())
+                elif self.path in ('/api/background/F', '/api/background/B', '/api/background/F/copper', '/api/background/B/copper'):
+                    side = self.path.split('/')[3]
+                    copper = self.path.endswith('/copper')
+                    key = (side, copper, hashlib.sha256(board_path.read_bytes()).hexdigest())
                     if key not in cache:
                         with tempfile.TemporaryDirectory() as temp:
                             board = p.LoadBoard(str(board_path))
                             for drawing in list(board.GetDrawings()):
                                 if drawing.GetLayer() in (p.F_SilkS, p.B_SilkS):
                                     board.Delete(drawing)
+                            if copper:
+                                for zone in list(board.Zones()):
+                                    board.Delete(zone)
                             source, out = Path(temp) / 'base.kicad_pcb', Path(temp) / 'base.svg'
                             p.SaveBoard(str(source), board)
-                            layers = f'{side}.Mask,Edge.Cuts' + (',F.SilkS' if side == 'F' else '')
+                            layers = f'{side}.Mask,Edge.Cuts,{side}.SilkS'
+                            if copper:
+                                layers += f',{side}.Cu'
                             subprocess.run([str(KICAD / 'MacOS/kicad-cli'), 'pcb', 'export', 'svg', '--layers', layers,
                                             '--mode-single', '--page-size-mode', '1', '--exclude-drawing-sheet',
                                             '-o', str(out), str(source)], check=True, capture_output=True, timeout=30)
@@ -151,7 +207,7 @@ def main():
                 self.send({'error': str(exc)}, status=400)
 
         def do_POST(self):
-            if self.path != '/api/save' or not self.authorized():
+            if self.path not in ('/api/save', '/api/check') or not self.authorized():
                 self.send({'error': '저장 권한이 없습니다.'}, status=403)
                 return
             try:
@@ -161,10 +217,15 @@ def main():
                 request = json.loads(self.rfile.read(length))
                 if not isinstance(request, dict):
                     raise ValueError('잘못된 저장 요청입니다.')
+                if self.path == '/api/check':
+                    if revision(board_path, board_path.parent / LAYOUT_FILE) != request.get('revision'):
+                        raise ValueError('PCB 파일이 변경됐습니다. 편집 내용을 저장·백업한 뒤 새로고침하세요.')
+                    self.send(check_layout(board_path, request.get('layout'), width, height, request.get('side')))
+                    return
                 rev = save_layout(board_path, request.get('layout'), request.get('revision'), width, height)
                 cache.clear()
                 self.send(dict(revision=rev, message='PCB와 silkscreen.json 저장 완료. 제작 전 DRC와 release 재생성이 필요합니다.'))
-            except (ValueError, OSError, TypeError) as exc:
+            except (ValueError, OSError, TypeError, subprocess.SubprocessError) as exc:
                 self.send({'error': str(exc)}, status=400)
 
         def log_message(self, *_):

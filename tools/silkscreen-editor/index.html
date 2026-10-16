@@ -15,10 +15,13 @@
   <main>
     <aside aria-label="실크 편집">
       <label>보는 면<select id="side"><option value="B.SilkS">뒷면 · 바깥에서 보는 방향</option><option value="F.SilkS">앞면 · 부품이 있는 면</option></select></label>
+      <label class="check"><input id="show-copper" type="checkbox" checked>구리 배선·패드 표시 (평면 생략)</label>
+      <div class="actions"><button id="check">실제 인쇄·간섭 검사</button><button id="resume" hidden>편집 계속</button></div>
+      <small>배선 위 실크는 마스크로 덮여 있으면 허용됩니다. 실제 간섭은 검사로 확인하세요.</small>
       <div class="actions"><button id="add-text">텍스트 추가</button><label class="file-button">SVG 불러오기<input id="upload" type="file" accept=".svg,image/svg+xml"></label></div>
       <label>편집할 항목<select id="items" aria-label="편집할 항목"></select></label>
       <fieldset id="properties" disabled>
-        <label id="text-label">텍스트<input id="text" maxlength="120"></label>
+        <label id="text-label">텍스트<textarea id="text" rows="4" maxlength="120" placeholder="Enter로 줄바꿈"></textarea></label>
         <div class="pair">
           <label>X · mm<input id="x" type="number" step="0.1" min="0"></label>
           <label>Y · mm<input id="y" type="number" step="0.1" min="0"></label>
@@ -41,6 +44,7 @@
       <div class="stage-heading"><span id="dimensions">보드 읽는 중…</span><span id="dirty">저장됨</span></div>
       <div class="stage"><svg id="board" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="드래그로 실크 위치를 조절하는 PCB 미리보기"></svg></div>
       <p class="hint">항목을 드래그하거나 X·Y를 입력하세요. SVG 형상은 저장 결과와 같으며, 텍스트 글꼴은 미리보기용입니다.</p>
+      <div id="check-results" role="status" aria-live="polite"></div>
     </section>
   </main>
   <footer><div id="status" role="status" aria-live="polite">연결 중…</div><small>저장은 PCB·편집 배치를 업데이트합니다. 제작용 Gerber·ZIP은 보드 생성 명령으로 다시 만드세요.</small></footer>

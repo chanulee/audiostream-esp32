@@ -4,6 +4,7 @@ const $ = id => document.getElementById(id);
 const token = location.hash.slice(1);
 const NS = 'http://www.w3.org/2000/svg';
 let state, selected = null, background = null, drag = null, dirty = false, busy = false;
+let inspection=null, inspectionURL=null;
 
 async function api(path, data) {
   const response = await fetch(path, {method: data ? 'POST' : 'GET', headers: {'X-Silk-Token': token, ...(data ? {'Content-Type':'application/json'} : {})}, ...(data ? {body:JSON.stringify(data)} : {})});
@@ -11,8 +12,14 @@ async function api(path, data) {
   return response;
 }
 function status(message, error=false) { $('status').textContent=message; $('status').classList.toggle('error',error); }
-function markDirty() {dirty=true; $('dirty').textContent='저장하지 않은 변경';}
+function clearInspection() {
+  inspection=null;
+  if(inspectionURL)URL.revokeObjectURL(inspectionURL);inspectionURL=null;
+  $('resume').hidden=true;$('check-results').textContent='';
+}
+function markDirty() {clearInspection();dirty=true; $('dirty').textContent='저장하지 않은 변경';}
 function current() {return state.layout.items.find(i=>i.id===selected);}
+function itemLabel(item) {return item.kind==='text' ? item.text.trim().replace(/\n/g,' / ')||'(빈 텍스트)' : item.name||'SVG';}
 function svgNode(tag, attrs, text) {
   const element=document.createElementNS(NS,tag);
   for(const [key,value] of Object.entries(attrs)) element.setAttribute(key,value);
@@ -25,15 +32,35 @@ function draw() {
   board.setAttribute('viewBox',`0 0 ${state.width} ${state.height}`);
   board.setAttribute('width',state.width); board.setAttribute('height',state.height);
   board.replaceChildren(svgNode('rect',{width:state.width,height:state.height,fill:'#195039'}));
+  const checked=inspection?.side===side[0];
   if(background) {
-    const image=svgNode('image',{href:background,width:state.width,height:state.height});
+    const image=svgNode('image',{href:background,width:state.width,height:state.height,opacity:checked ? .45 : 1});
     if(side==='B.SilkS') image.setAttribute('transform',`translate(${state.width},0) scale(-1,1)`);
     board.append(image);
   }
-  for(const item of state.layout.items.filter(i=>i.side===side)) {
+  if(checked) {
+    const image=svgNode('image',{href:inspectionURL,width:state.width,height:state.height});
+    if(side==='B.SilkS')image.setAttribute('transform',`translate(${state.width},0) scale(-1,1)`);
+    board.append(image);
+    const boxes=new Map();
+    inspection.issues.forEach((issue,index)=>issue.boxes.forEach(box=>{
+      const key=box.join(',');
+      if(!boxes.has(key))boxes.set(key,{box,numbers:new Set()});
+      boxes.get(key).numbers.add(index+1);
+    }));
+    for(const {box:[x,y,w,h],numbers} of boxes.values()) {
+      const left=side==='B.SilkS'?state.width-x-w:x;
+      board.append(svgNode('rect',{x:left,y,width:w,height:h,class:'drc-box'}));
+      board.append(svgNode('text',{x:left,y:y-.3,fill:'#ff6257','font-size':.8},[...numbers].join(',')));
+    }
+  }
+  for(const item of state.layout.items.filter(i=>!checked&&i.side===side)) {
     const g=svgNode('g',{'data-id':item.id,class:'art',transform:`translate(${item.x} ${item.y}) rotate(${item.rotation})`});
     if(item.kind==='text') {
-      g.append(svgNode('text',{'text-anchor':'middle','dominant-baseline':'central','font-family':'sans-serif','font-size':item.size,fill:'#fff',stroke:'#fff','stroke-width':Math.max(0,item.thickness-.12)},item.text));
+      const text=svgNode('text',{'text-anchor':'middle','dominant-baseline':'central','font-family':'sans-serif','font-size':item.size,fill:'#fff',stroke:'#fff','stroke-width':Math.max(0,item.thickness-.12)});
+      const lines=item.text.split('\n');
+      lines.forEach((line,i)=>text.append(svgNode('tspan',{x:0,y:(i-(lines.length-1)/2)*item.size*1.5,'xml:space':'preserve'},line)));
+      g.append(text);
     } else {
       const d=item.rectangles.map(([x,y,w,h])=>`M${(x-.5)*item.width},${(y-.5)*item.height}h${w*item.width}v${h*item.height}h${-w*item.width}z`).join('');
       g.append(svgNode('path',{d,fill:'#fff'}));
@@ -45,13 +72,14 @@ function draw() {
       g.append(svgNode('rect',{class:'selection',x:bounds.x-.3,y:bounds.y-.3,width:bounds.width+.6,height:bounds.height+.6}));
     }
   }
+  board.append(svgNode('rect',{x:0,y:0,width:state.width,height:state.height,fill:'none',stroke:'#f3c96a','stroke-width':.1,'stroke-dasharray':'.5 .3','pointer-events':'none'}));
 }
 function refresh() {
   if(!state)return;
   const items=$('items'); items.replaceChildren();
   for(const item of state.layout.items.filter(i=>i.side===$('side').value)) {
     const option=document.createElement('option'); option.value=item.id;
-    option.textContent=item.kind==='text'?item.text:item.name||'SVG'; items.append(option);
+    option.textContent=itemLabel(item); items.append(option);
   }
   if(![...items.options].some(o=>o.value===selected)) selected=items.options[0]?.value||null;
   items.value=selected||'';
@@ -65,9 +93,10 @@ function refresh() {
 }
 async function loadBackground() {
   const side=$('side').value;
-  const response=await api(`/api/background/${side[0]}`);
+  const copper=$('show-copper').checked;
+  const response=await api(`/api/background/${side[0]}${copper?'/copper':''}`);
   const url=URL.createObjectURL(await response.blob());
-  if(side!==$('side').value){URL.revokeObjectURL(url);return;}
+  if(side!==$('side').value||copper!==$('show-copper').checked){URL.revokeObjectURL(url);return;}
   if(background)URL.revokeObjectURL(background); background=url; draw();
 }
 // Merge runs vertically: preserves cutouts without requiring polygon hole support.
@@ -122,10 +151,24 @@ async function rasterize(item) {
 }
 function error(exc) {status(exc.message||String(exc),true);}
 async function withBusy(action) {
-  if(busy||!state)return;busy=true;$('save').disabled=true;$('upload').disabled=true;$('properties').disabled=true;
-  try{await action();}catch(exc){error(exc);}finally{busy=false;$('save').disabled=!state;$('upload').disabled=false;refresh();}
+  if(busy||!state)return;busy=true;$('save').disabled=true;$('check').disabled=true;$('side').disabled=true;$('upload').disabled=true;$('properties').disabled=true;
+  try{await action();}catch(exc){error(exc);}finally{busy=false;$('save').disabled=!state;$('check').disabled=false;$('side').disabled=false;$('upload').disabled=false;refresh();}
 }
-$('side').addEventListener('change',()=>{background=null;refresh();loadBackground().catch(error);});
+$('side').addEventListener('change',()=>{clearInspection();background=null;refresh();loadBackground().catch(error);});
+$('show-copper').addEventListener('change',()=>{background=null;draw();loadBackground().catch(error);});
+$('resume').addEventListener('click',()=>{clearInspection();draw();status('편집 모드입니다. 변경 후 다시 검사하세요.');});
+$('check').addEventListener('click',()=>withBusy(async()=>{
+  status('KiCad 실제 글꼴로 검사 중… 원본 PCB는 변경하지 않습니다.');
+  const response=await api('/api/check',{revision:state.revision,layout:state.layout,side:$('side').value[0]});
+  clearInspection();inspection=await response.json();
+  inspectionURL=URL.createObjectURL(new Blob([inspection.svg],{type:'image/svg+xml'}));
+  $('resume').hidden=false;
+  const result=$('check-results');
+  result.textContent=`실제 KiCad 인쇄 형상 · 현재 면 실크 검사 ${inspection.issues.length}건. 빨간 상자와 번호로 표시합니다.`;
+  const list=document.createElement('ol');
+  for(const issue of inspection.issues){const li=document.createElement('li');li.textContent=issue.label;list.append(li);}
+  result.append(list);status('검사 완료. 위치·문구를 수정하거나 “편집 계속”으로 돌아가세요.');
+}));
 $('items').addEventListener('change',()=>{selected=$('items').value;refresh();});
 $('add-text').addEventListener('click',()=>{
   if(!state||busy)return;
@@ -138,7 +181,7 @@ for(const field of ['text','x','y','rotation','size','thickness']) $(field).addE
   const value=field==='text'?$(field).value:Number($(field).value);
   if(!$(field).checkValidity()||(field!=='text'&&(!$(field).value||!Number.isFinite(value)))) {status('입력 범위를 확인하세요.',true);return;}
   item[field]=value;markDirty();draw();
-  if(field==='text')$('items').selectedOptions[0].textContent=value;
+  if(field==='text')$('items').selectedOptions[0].textContent=itemLabel(item);
 });
 $('width').addEventListener('change',()=>withBusy(async()=>{
   const item=current(),width=Number($('width').value);if(!item||item.kind!=='svg')return;

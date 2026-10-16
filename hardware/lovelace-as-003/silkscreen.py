@@ -32,9 +32,9 @@ def validate(layout, width, height):
         if abs(item['rotation']) > 360:
             raise ValueError('회전은 -360~360도 범위입니다.')
         if item.get('kind') == 'text':
-            if not isinstance(item.get('text'), str) or not 1 <= len(item['text']) <= 120:
-                raise ValueError('텍스트는 1~120자로 입력하세요.')
-            if any(ord(c) < 32 for c in item['text']):
+            if not isinstance(item.get('text'), str) or len(item['text']) > 120:
+                raise ValueError('텍스트는 최대 120자로 입력하세요.')
+            if any(ord(c) < 32 and c != '\n' for c in item['text']):
                 raise ValueError('텍스트에 제어 문자를 사용할 수 없습니다.')
             if not .3 <= number(item.get('size')) <= 10:
                 raise ValueError('글자 높이는 0.3~10 mm입니다.')
@@ -111,9 +111,11 @@ def apply_layout(board, layout, width, height):
         back = item['side'] == 'B.SilkS'
         layer = p.B_SilkS if back else p.F_SilkS
         if item['kind'] == 'text':
+            if not item['text'].strip():
+                continue
             text = p.PCB_TEXT(board)
             text.SetText(item['text'])
-            text.SetPosition(p.VECTOR2I(p.FromMM(width - item['x'] if back else item['x']), p.FromMM(item['y'])))
+            text.SetPosition(p.VECTOR2I(round(p.FromMM(1) * (width - item['x'] if back else item['x'])), round(p.FromMM(1) * item['y'])))
             text.SetTextSize(p.VECTOR2I(p.FromMM(item['size']), p.FromMM(item['size'])))
             text.SetTextThickness(p.FromMM(item['thickness']))
             text.SetTextAngle(p.EDA_ANGLE(item['rotation'] * (1 if back else -1), p.DEGREES_T))

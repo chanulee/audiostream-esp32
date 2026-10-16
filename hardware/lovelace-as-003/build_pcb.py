@@ -291,6 +291,27 @@ ex, top = W - .7, cy_ + 1.2        # edge lane; row just below the M2 keep-out
 path([(cx_, cy_), (cx_, top), (ex - .4, top), (ex, top + .4), (ex, ky - .4),
       (ex - .4, ky), (kx, ky)], '+5V_DAC', .3)
 
+# --- eFuse sense pins: OVLO (U6.2) and ILIM (U6.9) sit mid-row in the
+# 2 x 2 mm QFN. With vias kept off same-net pads the router finds no escape,
+# so both are drawn here. ILIM stays on top copper round R16 to R15; OVLO
+# drops through a 0.45 mm via 0.1 mm clear of U6.2 and runs under U6 to a
+# second via 0.1 mm clear of R13.
+ox, oy = xy(pad('U6', 2))
+r13, r14 = xy(pad('R13', 2)), xy(pad('R14', 1))
+lvx = ox - .3 - .1 - .225                    # U6.2 half-length 0.3
+bvy = r13[1] - .32 - .1 - .225               # R13 half-height 0.32
+via(lvx, oy, 'OVLO', .45, .2)
+via(r13[0], bvy, 'OVLO', .45, .2)
+path([(ox, oy), (lvx, oy)], 'OVLO', .2)
+path([(lvx, oy), (lvx, bvy - (r13[0] - lvx)), (r13[0], bvy)], 'OVLO', .2,
+     p.B_Cu)
+path([(r13[0], bvy), r13, r14], 'OVLO', .2)
+ix, iy = xy(pad('U6', 9))
+r15 = xy(pad('R15', 1))
+path([(ix, iy), (ix + .4, iy), (ix + .58, iy - .18), (ix + 1.7, iy - .18),
+      (ix + 2.28, iy - .76), (ix + 2.28, r15[1] + .92),
+      (ix + 1.95, r15[1] + .6), (r15[0] + .6, r15[1] + .6), r15], 'ILIM', .2)
+
 # --- Plane fan-out: every SMD pad on GND / 3.3 V gets its own via (B8) -----
 PLANES = ('GND', '+3V3_D')
 u1x0, u1y0 = xy(footprints['U1'])

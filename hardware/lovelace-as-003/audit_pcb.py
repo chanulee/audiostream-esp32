@@ -58,3 +58,17 @@ H=json.loads((root/'placement.json').read_text())['board']['h']
 order=[a.GetNetname() for a in sorted((a for a in fp['J2'].Pads() if a.GetNumber()),key=lambda a:H-p.ToMM(a.GetPosition().y))]
 print('AUX jack contacts, face to rear:',order)
 assert order==['GND','GND','LINE_R','LINE_L'],order
+# Vias in top-side SMD pads: an unfilled via inside a mask opening wicks the
+# paste away (weak joint, 0402 tombstone). KiCad DRC allows same-net via in
+# pad; the router is told not to (make_board.sh), this catches regressions.
+# Bottom test pads are not assembled and carry their via on purpose; exposed
+# pads use footprint thermal-via pads, not board vias.
+inpad=[]
+for v in (t for t in b.GetTracks() if isinstance(t,p.PCB_VIA)):
+ r=v.GetWidth(p.F_Cu)//2
+ for f in b.GetFootprints():
+  for a in f.Pads():
+   if a.GetAttribute()==p.PAD_ATTRIB_SMD and a.IsOnLayer(p.F_Cu) and a.HitTest(v.GetPosition(),r):
+    inpad.append(f'{f.GetReference()}.{a.GetNumber()} ({v.GetNetname()})')
+print('Vias in top SMD pads:',len(inpad),inpad)
+assert not inpad,inpad
