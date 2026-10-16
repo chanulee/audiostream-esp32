@@ -130,10 +130,34 @@
       "name": "LOVELACE AS-005 rev A",
       "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
       "date": "2026-10-16",
+      "status": "archived",
+      "status_text": "보관 · 주문 안 함",
+      "summary": "AS-004와 넷리스트·배치·배선 동일. AUX 잭(J2) 랜드를 Shou Han PJ-320D 도면대로: 위치 결정 NPTH Ø1.5 → Ø1.0mm, 패드 폭 1.2 → 1.5mm(LOVELACE 라이브러리 풋프린트). 축에서 패드까지 거리는 KiCad 그대로(2.0–4.5mm)여서 도면(3.05–4.65mm, 몸체 바깥)과 달라 AS-006에서 고침.",
+      "dir": "archive/07-lovelace-as-005-revA",
+      "images": [
+        "renders/pcba-iso.png",
+        "renders/pcba-top.png",
+        "renders/routing.png",
+        "renders/assembly-top.png"
+      ],
+      "files": [
+        "README.md",
+        "REVIEW.md",
+        "REVIEW_NETLIST.md",
+        "REVIEW_LAYOUT.md",
+        "BRINGUP.md",
+        "lovelace-as-005.kicad_pcb",
+        "lovelace-as-005-revA-release.zip"
+      ]
+    },
+    {
+      "name": "LOVELACE AS-006 rev A",
+      "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
+      "date": "2026-10-16",
       "status": "current",
       "status_text": "현재 · 주문 전",
-      "summary": "AS-004와 넷리스트·배치·배선 동일. AUX 잭(J2) 랜드를 Shou Han PJ-320D 도면대로: 위치 결정 NPTH Ø1.5 → Ø1.0mm, 패드 폭 1.2 → 1.5mm(LOVELACE 라이브러리 풋프린트).",
-      "dir": "lovelace-as-005",
+      "summary": "AS-005와 넷리스트 동일. AUX 잭(J2) 패드를 Shou Han 도면 위치로: 잭 축에서 3.85mm(도면 랜드 3.05–4.65mm를 양 끝 0.2mm씩 늘린 2.85–4.85mm), J2를 0.3mm 왼쪽으로 옮겨 다시 배선, J2 CPL은 위치 결정 핀 기준.",
+      "dir": "lovelace-as-006",
       "images": [
         "renders/latest/pcba-iso.png",
         "renders/latest/pcba-top.png",
@@ -146,7 +170,7 @@
         "REVIEW_NETLIST.md",
         "REVIEW_LAYOUT.md",
         "BRINGUP.md",
-        "lovelace-as-005-revA-release.zip"
+        "lovelace-as-006-revA-release.zip"
       ]
     }
   ]

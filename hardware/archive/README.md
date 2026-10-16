@@ -8,7 +8,8 @@
 | 04 | LOVELACE AS-002 rev C (WROVER) | 37 × 41 mm | 2026-10-15 | 보관 | [04-lovelace-as-002-revC](04-lovelace-as-002-revC/README.md) |
 | 05 | LOVELACE AS-003 rev A (WROVER) | 37 × 41 mm | 2026-10-15 | 보관 | [05-lovelace-as-003-revA](05-lovelace-as-003-revA/README.md) |
 | 06 | LOVELACE AS-004 rev A (WROVER) | 37 × 41 mm | 2026-10-16 | 보관 | [06-lovelace-as-004-revA](06-lovelace-as-004-revA/README.md) |
-| — | **LOVELACE AS-005 rev A** (WROVER) | 37 × 41 mm | 2026-10-16 | **현재**, 주문 전 | [../lovelace-as-005](../lovelace-as-005/README.md) |
+| 07 | LOVELACE AS-005 rev A (WROVER) | 37 × 41 mm | 2026-10-16 | 보관 | [07-lovelace-as-005-revA](07-lovelace-as-005-revA/README.md) |
+| — | **LOVELACE AS-006 rev A** (WROVER) | 37 × 41 mm | 2026-10-16 | **현재**, 주문 전 | [../lovelace-as-006](../lovelace-as-006/README.md) |
 
 렌더를 나란히 보려면 [index.html](index.html)을 엽니다(현재 보드의 `renders/latest/index.html` 아래쪽에도 같은 기록이 있습니다). 둘 다 `hardware/versions.json`에서 만들어집니다.
 
