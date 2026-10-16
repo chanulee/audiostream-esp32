@@ -19,8 +19,8 @@ firmware/                 ESP-IDF 5.5 project (PlatformIO espressif32 6.13.0)
   components/boards/esp32-generic   LOVELACE board hooks (name kept for Kconfig)
   components/spotify      cspot + bell (vendored, GPLv3)
   data/www                web UI, flashed to SPIFFS
-hardware/lovelace-as-006  make_board.sh: plan_pcb.py -> [autoplace.py] -> build_pcb.py -> jlc_check.py -> KiCadRoutingTools -> finish_pcb.py -> DRC/ERC -> audit_pcb.py -> release/ -> render_board.py
-hardware/archive          earlier versions, one folder each: 01 S3 rev A, 02 AS-001, 03 AS-002 rev B, 04 AS-002 rev C, 05 AS-003 rev A, 06 AS-004 rev A, 07 AS-005 rev A
+hardware/lovelace-as-007  make_board.sh: plan_pcb.py -> [autoplace.py] -> build_pcb.py -> jlc_check.py -> KiCadRoutingTools -> finish_pcb.py -> DRC/ERC -> audit_pcb.py -> release/ -> render_board.py
+hardware/archive          earlier versions, one folder each: 01 S3 rev A, 02 AS-001, 03 AS-002 rev B, 04 AS-002 rev C, 05 AS-003 rev A, 06 AS-004 rev A, 07 AS-005 rev A, 08 AS-006 rev A
 hardware/versions.json    version list behind the render / archive history pages
 tests/, tools/            host tests (C, C++, Python) and the WAV capture CLI
 ```
@@ -36,7 +36,7 @@ sh tools/test_host.sh                                       # all host tests
 ```
 
 KiCad scripts run with KiCad's Python, e.g.
-`/Volumes/KiCad/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3 hardware/lovelace-as-006/plan_pcb.py`.
+`/Volumes/KiCad/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3 hardware/lovelace-as-007/plan_pcb.py`.
 Placement must pass the pcb-layout-skill checker (`placement_check.py placement.json`) with ERROR 0 before coordinates change in the board.
 
 ## Rules that are easy to break
@@ -50,5 +50,5 @@ Placement must pass the pcb-layout-skill checker (`placement_check.py placement.
 - `cpl.csv` comes from `jlc_check.py` (JLC rotation/origin), not from KiCad: never hand-edit rotations.
 - Task stacks stay in internal RAM (`spiram_task.h`): NVS/flash writes disable the cache.
 - Style: LLVM, 2-space, 80 columns (`.clang-format`). Project-added C files keep the same style.
-- Versions: board ID and rev live only in `plan_pcb.py` (`BOARD_ID`, `BOARD_REV`); before ordering, any copper change (netlist, outline or routing) gets a new AS-number; after ordering, a new rev. The silkscreen version text lives in `silkscreen.json` (audit_pcb.py checks it matches). Starting a new version: copy the current folder to `hardware/archive/NN-<name>/`, rename the folder, bump the ID, add a `hardware/versions.json` entry. Firmware version is `firmware/version.txt` (0.3.x = AS-003 to AS-006, same netlist; the PlatformIO env keeps the name `lovelace-as-004`).
+- Versions: board ID and rev live only in `plan_pcb.py` (`BOARD_ID`, `BOARD_REV`); before ordering, any copper change (netlist, outline or routing) gets a new AS-number; after ordering, a new rev. The silkscreen version text lives in `silkscreen.json` (audit_pcb.py checks it matches). Starting a new version: copy the current folder to `hardware/archive/NN-<name>/`, rename the folder, bump the ID, add a `hardware/versions.json` entry. Firmware version is `firmware/version.txt` (0.3.x = AS-003 to AS-007; AS-007 differs only in the AUX jack wiring; the PlatformIO env keeps the name `lovelace-as-004`).
 - No hardware has been tested yet. Do not describe a feature as working on the board unless it was measured.

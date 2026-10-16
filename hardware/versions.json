@@ -154,10 +154,34 @@
       "name": "LOVELACE AS-006 rev A",
       "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
       "date": "2026-10-16",
+      "status": "archived",
+      "status_text": "보관 · 주문 안 함",
+      "summary": "AS-005와 넷리스트 동일. AUX 잭(J2) 패드를 Shou Han 도면 위치로: 잭 축에서 3.85mm(도면 랜드 3.05–4.65mm를 양 끝 0.2mm씩 늘린 2.85–4.85mm), J2를 0.3mm 왼쪽으로 옮겨 다시 배선, J2 CPL은 위치 결정 핀 기준. LCSC 회신으로 J2 단자 배정이 틀린 것(D·B의 R/GND가 바뀜)이 확인돼 AS-007에서 고침.",
+      "dir": "archive/08-lovelace-as-006-revA",
+      "images": [
+        "renders/pcba-iso.png",
+        "renders/pcba-top.png",
+        "renders/routing.png",
+        "renders/assembly-top.png"
+      ],
+      "files": [
+        "README.md",
+        "REVIEW.md",
+        "REVIEW_NETLIST.md",
+        "REVIEW_LAYOUT.md",
+        "BRINGUP.md",
+        "lovelace-as-006.kicad_pcb",
+        "lovelace-as-006-revA-release.zip"
+      ]
+    },
+    {
+      "name": "LOVELACE AS-007 rev A",
+      "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
+      "date": "2026-10-16",
       "status": "current",
       "status_text": "현재 · 주문 전",
-      "summary": "AS-005와 넷리스트 동일. AUX 잭(J2) 패드를 Shou Han 도면 위치로: 잭 축에서 3.85mm(도면 랜드 3.05–4.65mm를 양 끝 0.2mm씩 늘린 2.85–4.85mm), J2를 0.3mm 왼쪽으로 옮겨 다시 배선, J2 CPL은 위치 결정 핀 기준.",
-      "dir": "lovelace-as-006",
+      "summary": "AS-006과 J2 랜드·부품 위치 동일, AUX 잭 단자 배정만 LCSC 엔지니어 회신대로: A = Tip(LINE_L), D = Ring 1(LINE_R), B·C = GND. ESD 다이오드 D2를 새 LINE_R 패드 옆으로 옮기고 다시 배선.",
+      "dir": "lovelace-as-007",
       "images": [
         "renders/latest/pcba-iso.png",
         "renders/latest/pcba-top.png",
@@ -170,7 +194,7 @@
         "REVIEW_NETLIST.md",
         "REVIEW_LAYOUT.md",
         "BRINGUP.md",
-        "lovelace-as-006-revA-release.zip"
+        "lovelace-as-007-revA-release.zip"
       ]
     }
   ]
