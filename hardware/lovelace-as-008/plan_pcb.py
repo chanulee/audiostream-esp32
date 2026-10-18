@@ -260,9 +260,13 @@ C('C22', '10nF', 18.75, 42.2, 'DVDT', mpn='10nF X7R 50V 0402')
 # EN/UVLO divider: 1.2 V * (1 + 255k/100k) = 4.26 V turn-on.
 R('R16', '255k', 20.6, 44.25, 'VBUS', 'POWER_EN')
 R('R17', '100k', 18.2, 44.25, 'POWER_EN', 'GND')
-# ITIMER open = fastest overcurrent response (datasheet table 5-1). C26 is not
-# fitted: if Wi-Fi current peaks trip the 0.56 A worst-case limit on the first
-# boards, 1-10 nF here sets an overcurrent blanking interval without a respin.
+# ITIMER open = fastest overcurrent response (datasheet table 5-1). TPS259470A
+# is the active-current-limit variant: above ILIM it regulates the output to
+# ILIM rather than switching off (thermal shutdown, then 110 ms auto-retry,
+# only if that lasts). C26 is not fitted: if Wi-Fi peaks run into the 0.56 A
+# worst-case limit on the first boards, 1-10 nF here lets transients between
+# ILIM and 2 x ILIM through for about 0.8 ms/nF (SLVSFC9C eq. 8) without a
+# respin.
 # C26 takes R16's old land beside pin 10; R16 moved next to EN/UVLO (pin 1).
 C('C26', 'DNP', 16.55, 34.85, 'ITIMER', rot=90,
   mpn='1-10nF X7R 16V 0402, not fitted', dnp=True)

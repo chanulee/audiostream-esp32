@@ -1,4 +1,4 @@
-# 넷리스트 독립 검토 (1단계) — 2026-10-16, AS-003 rev A에서 수행, AS-004·AS-005·AS-006 rev A에 해당, AS-007은 J2 배정만 다름(REVIEW.md 2번)
+# 넷리스트 독립 검토 (1단계) — 2026-10-16, AS-003 rev A에서 수행, AS-004·AS-005·AS-006 rev A에 해당, AS-007은 J2 배정만 다름(REVIEW.md 2번), AS-008은 U6 ITIMER에 미실장 C26 랜드(ITIMER 넷)만 더함
 
 DRC·ERC·parity·Gerber netcheck는 모두 `plan_pcb.py`를 정답으로 삼습니다. 그래서 넷리스트 자체가 틀리면 전부 0으로 통과합니다. 이 검토는 **데이터시트만 보고 핀별 기대값을 먼저 적은 뒤** 넷리스트와 비교했습니다. 기대값 표는 [`pinout_check.py`](pinout_check.py)에 있고, `make_board.sh`가 배치 검사 직후 실행합니다. 하나라도 다르면 빌드가 멈춥니다.
 

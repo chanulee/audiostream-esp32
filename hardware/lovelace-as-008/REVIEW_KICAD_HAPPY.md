@@ -54,7 +54,7 @@ RF in the enclosure, and eFuse margin under Wi-Fi current peaks.
 2. **(No copper change)** On the order, ask for left/right rails with mouse-bites, not V-cut. C15 (0603 MLCC) is 0.97 mm and D3 0.55 mm from the right edge; snapping a V-cut that close can crack MLCCs.
 3. **(No copper change)** Add `MPN`/`Manufacturer` fields in `plan_pcb.py` so lifecycle, thermal and datasheet checks can run.
 4. **(Copper → AS-008, only if bundled with another change)** The 4 USB_DM vias at 0.4 / 0.2 mm sit on JLC's multilayer "limitation" (standard minimum diameter 0.45 mm). Make them 0.45 / 0.2.
-5. **(Copper, optional)** DNP 0402 pad from U6 ITIMER to GND. If Wi-Fi peaks trip the 0.56 A worst-case limit on the first board, fit 1–10 nF without a respin.
+5. **(Copper, optional)** DNP 0402 pad from U6 ITIMER to GND. If Wi-Fi peaks run into the 0.56 A worst-case current limit on the first board, fit 1–10 nF without a respin. (TPS259470A limits current at ILIM; it does not trip off. The capacitor lets peaks between ILIM and 2 × ILIM pass for about 0.8 ms/nF.)
 6. **Size:** at 76 % occupancy with the module, J1 and J2 setting the outline, no shrink is free. Dropping CH340N + USBLC6 (flash over the TX/RX pads, then OTA) is the only real saving, but it changes the bring-up path. Not recommended before the first board works.
 
 ## Still open from earlier reviews

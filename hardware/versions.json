@@ -205,7 +205,7 @@
       "date": "2026-10-19",
       "status": "current",
       "status_text": "현재 · 주문 전",
-      "summary": "AS-007과 회로·BOM 동일. USB D− via 4개를 0.4/0.2 → 0.45/0.2mm(JLC 다층 표준 최소), eFuse ITIMER(U6 10번)에 미실장 0402 랜드 C26 추가(Wi-Fi 피크로 과전류 차단이 걸리면 1–10nF 실장). C26 자리를 내려고 R16을 U6 EN/UVLO 쪽으로 옮김.",
+      "summary": "AS-007과 회로·BOM 동일. USB D− via 4개를 0.4/0.2 → 0.45/0.2mm(JLC 다층 표준 최소), eFuse ITIMER(U6 10번)에 미실장 0402 랜드 C26 추가(Wi-Fi 피크가 전류 제한에 걸리면 1–10nF를 달아 짧은 피크를 통과시킴). C26 자리를 내려고 R16을 U6 EN/UVLO 쪽으로 옮김.",
       "dir": "lovelace-as-008",
       "images": [
         "renders/latest/pcba-iso.png",
