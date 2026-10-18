@@ -1,0 +1,70 @@
+{
+  "TYPE-C-31-M-12_C165948.step": {
+    "faces": 819,
+    "colored_faces": 819
+  },
+  "R_0402_1005Metric.step": {
+    "faces": 26,
+    "colored_faces": 26
+  },
+  "D_SOD-323.step": {
+    "faces": 59,
+    "colored_faces": 59
+  },
+  "C_0603_1608Metric.step": {
+    "faces": 28,
+    "colored_faces": 28
+  },
+  "SOT-23-5.step": {
+    "faces": 102,
+    "colored_faces": 102
+  },
+  "L_Murata_DFE201610P.step": {
+    "faces": 28,
+    "colored_faces": 28
+  },
+  "C_0402_1005Metric.step": {
+    "faces": 28,
+    "colored_faces": 28
+  },
+  "LED_0603_1608Metric.step": {
+    "faces": 50,
+    "colored_faces": 50
+  },
+  "CP_EIA-3528-21_Kemet-B.step": {
+    "faces": 49,
+    "colored_faces": 49
+  },
+  "TSSOP-20_4.4x6.5mm_P0.65mm.step": {
+    "faces": 327,
+    "colored_faces": 327
+  },
+  "WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm.step": {
+    "faces": 62,
+    "colored_faces": 62
+  },
+  "C_0805_2012Metric.step": {
+    "faces": 28,
+    "colored_faces": 28
+  },
+  "PJ-320D_C431535.step": {
+    "faces": 543,
+    "colored_faces": 543
+  },
+  "ESP32-WROVER-E_C2973667.step": {
+    "faces": 967,
+    "colored_faces": 967
+  },
+  "SW_SPST_B3U-1000P.step": {
+    "faces": 81,
+    "colored_faces": 81
+  },
+  "SOT-23-6.step": {
+    "faces": 117,
+    "colored_faces": 117
+  },
+  "SOIC-8_3.9x4.9mm_P1.27mm.step": {
+    "faces": 147,
+    "colored_faces": 147
+  }
+}

@@ -7,7 +7,7 @@ AUX 스피커(3.5mm 라인 입력)에 꽂는 무선 오디오 수신기입니다
 | MCU | ESP32-WROVER-E-N8R8 (Flash 8MB, PSRAM 8MB, Wi-Fi + Bluetooth Classic) |
 | DAC | PCM5102A, 3.5mm stereo line-out (2.1 Vrms) |
 | 전원 | USB-C 5V → eFuse(OVP 5.8V, 전류 제한) → 3.3V buck / 저잡음 아날로그 LDO. 전원 스위치 없이 꽂으면 켜짐 |
-| 보드 | LOVELACE / AS-007 rev A, 37 × 41mm 4층. USB-C와 AUX가 같은 변, 버튼 1개 |
+| 보드 | LOVELACE / AS-008 rev A, 37 × 41mm 4층. USB-C와 AUX가 같은 변, 버튼 1개 |
 | 수신 | AirPlay 2 (AAC/ALAC), Spotify Connect (cspot, Ogg Vorbis 320kbps), Bluetooth A2DP SBC + AVRCP |
 
 S3 기반 이전 시제품(AS-001)은 Bluetooth Classic이 없어 A2DP를 받을 수 없으므로 WROVER로 전환했습니다. 첫 시제품부터 현재까지의 기록은 [hardware/archive](hardware/archive/README.md)에 있습니다.
@@ -77,11 +77,11 @@ python3 tools/capture.py http://192.168.1.42 --seconds 3 -o capture.wav
 
 | | 위치 | 버전 |
 |---|---|---|
-| 하드웨어 (현재) | `hardware/lovelace-as-007/` | AS-007 rev A (`plan_pcb.py`의 `BOARD_ID`, `BOARD_REV`) |
+| 하드웨어 (현재) | `hardware/lovelace-as-008/` | AS-008 rev A (`plan_pcb.py`의 `BOARD_ID`, `BOARD_REV`) |
 | 하드웨어 (이전) | `hardware/archive/NN-*/` | S3 rev A → AS-001 → AS-002 rev B → AS-002 rev C ([기록](hardware/archive/README.md)) |
 | 펌웨어 | `firmware/version.txt` | 0.3.0 |
 
-펌웨어 0.3.x는 AS-003부터 AS-007까지 전용입니다(AS-003–AS-006은 넷리스트가 같고, AS-007은 AUX 잭 단자 배정만 다릅니다. 펌웨어와 무관합니다). 빌드 환경 이름은 `lovelace-as-004` 그대로 씁니다. DAC 뮤트(XSMT)를 GPIO22로 풀어야 소리가 나며, 0.2.x(ESP32-S3 / AS-001)는 이 보드들에서 동작하지 않습니다. 하드웨어 버전 규칙은 [archive/README.md](hardware/archive/README.md)에 있습니다.
+펌웨어 0.3.x는 AS-003부터 AS-008까지 전용입니다(AS-003–AS-006은 넷리스트가 같고, AS-007은 AUX 잭 단자 배정, AS-008은 USB via 크기와 eFuse ITIMER 미실장 패드만 다릅니다. 펌웨어와 무관합니다). 빌드 환경 이름은 `lovelace-as-004` 그대로 씁니다. DAC 뮤트(XSMT)를 GPIO22로 풀어야 소리가 나며, 0.2.x(ESP32-S3 / AS-001)는 이 보드들에서 동작하지 않습니다. 하드웨어 버전 규칙은 [archive/README.md](hardware/archive/README.md)에 있습니다.
 
 ## 문서
 

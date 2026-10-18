@@ -178,10 +178,35 @@
       "name": "LOVELACE AS-007 rev A",
       "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
       "date": "2026-10-16",
+      "status": "archived",
+      "status_text": "보관 · 주문 안 함",
+      "summary": "AS-006과 J2 랜드·부품 위치 동일, AUX 잭 단자 배정만 LCSC 엔지니어 회신대로: A = Tip(LINE_L), D = Ring 1(LINE_R), B·C = GND. ESD 다이오드 D2를 새 LINE_R 패드 옆으로 옮기고 다시 배선. kicad-happy 검토에서 USB D− via 4개가 JLC 다층 최소 지름(0.45mm) 아래(0.4mm)였고, eFuse ITIMER에 나중에 커패시터를 달 자리가 없어 AS-008에서 고침.",
+      "dir": "archive/09-lovelace-as-007-revA",
+      "images": [
+        "renders/pcba-iso.png",
+        "renders/pcba-top.png",
+        "renders/routing.png",
+        "renders/assembly-top.png"
+      ],
+      "files": [
+        "README.md",
+        "REVIEW.md",
+        "REVIEW_NETLIST.md",
+        "REVIEW_LAYOUT.md",
+        "REVIEW_KICAD_HAPPY.md",
+        "BRINGUP.md",
+        "lovelace-as-007.kicad_pcb",
+        "lovelace-as-007-revA-release.zip"
+      ]
+    },
+    {
+      "name": "LOVELACE AS-008 rev A",
+      "board": "ESP32-WROVER-E N8R8 + PCM5102A, 37 × 41 mm, 4층",
+      "date": "2026-10-19",
       "status": "current",
       "status_text": "현재 · 주문 전",
-      "summary": "AS-006과 J2 랜드·부품 위치 동일, AUX 잭 단자 배정만 LCSC 엔지니어 회신대로: A = Tip(LINE_L), D = Ring 1(LINE_R), B·C = GND. ESD 다이오드 D2를 새 LINE_R 패드 옆으로 옮기고 다시 배선.",
-      "dir": "lovelace-as-007",
+      "summary": "AS-007과 회로·BOM 동일. USB D− via 4개를 0.4/0.2 → 0.45/0.2mm(JLC 다층 표준 최소), eFuse ITIMER(U6 10번)에 미실장 0402 랜드 C26 추가(Wi-Fi 피크로 과전류 차단이 걸리면 1–10nF 실장). C26 자리를 내려고 R16을 U6 EN/UVLO 쪽으로 옮김.",
+      "dir": "lovelace-as-008",
       "images": [
         "renders/latest/pcba-iso.png",
         "renders/latest/pcba-top.png",
@@ -193,8 +218,9 @@
         "REVIEW.md",
         "REVIEW_NETLIST.md",
         "REVIEW_LAYOUT.md",
+        "REVIEW_KICAD_HAPPY.md",
         "BRINGUP.md",
-        "lovelace-as-007-revA-release.zip"
+        "lovelace-as-008-revA-release.zip"
       ]
     }
   ]

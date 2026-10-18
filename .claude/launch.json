@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "as-007-render-viewer",
+      "name": "as-008-render-viewer",
       "runtimeExecutable": "bash",
-      "runtimeArgs": ["hardware/lovelace-as-007/rendering/run.sh"],
+      "runtimeArgs": ["hardware/lovelace-as-008/rendering/run.sh"],
       "port": 8877
     }
   ]
