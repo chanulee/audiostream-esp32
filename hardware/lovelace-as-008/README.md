@@ -42,7 +42,7 @@ I2S 핀은 DAC의 핀 순서(BCK, DIN, LRCK)와 같은 순서로 모듈에서 �
 
 **버튼:** 짧게 = 재생/일시정지, 두 번 = 다음 곡, 3초 = Bluetooth 페어링(연결된 폰을 끊고 새 폰을 받음). 버튼을 누른 채 USB를 꽂으면 ROM 다운로드 모드로 들어갑니다(CH340N에는 DTR이 없음).
 
-**팝 대책.** XSMT는 10k 풀다운이라 리셋·부팅 동안 DAC가 뮤트돼 있습니다. 펌웨어는 I2S 클럭이 20ms 돈 뒤 GPIO22로 뮤트를 풀고, 샘플레이트 변경·flush·`esp_restart` 전에는 다시 뮤트한 뒤 소프트 뮤트 램프(5ms)를 기다립니다. USB를 갑자기 뽑으면 D5가 막아 220µF가 DAC 쪽만 계산상 9.6ms(4.4V 입력에서 5.3ms) 버팁니다. 그동안 ESP32가 먼저 꺼지면서 I2S 클럭이 멈추고, DAC는 데이터시트 11.2절의 클럭 정지 소프트 뮤트(150 샘플 + 0.2ms = 3.6ms)를 마칩니다. 실측 전입니다.
+**팝 대책.** XSMT는 10k 풀다운이라 리셋·부팅 동안 DAC가 뮤트돼 있습니다. 펌웨어는 I2S 클럭이 20ms 돈 뒤 GPIO22로 뮤트를 풀고, 샘플레이트 변경·flush·`esp_restart` 전에는 다시 뮤트한 뒤 소프트 뮤트 램프(5ms)를 기다립니다. USB를 갑자기 뽑으면 D5/C25가 DAC 전원을 홀드업합니다. 16개 동작 모델 조건에서 ESP32 브라운아웃(클럭 정지 가정) 후 공통 DAC 전원 3.1V까지 최소 3.441ms로, clock-stop 기준 3ms를 넘었습니다. 이는 저항성 부하·이상적인 버크·고정 LDO 강하를 쓴 모델 결과이며 실측 전입니다. XSMT 경로는 별도의 150 샘플 + 0.2ms 기준으로 다룹니다([새 검증 결과](VALIDATION_RESULTS.md)).
 
 PJ-320D는 4극(TRRS) 잭입니다. 풋프린트(`LOVELACE:Jack_3.5mm_PJ320D_Horizontal_ShouHan`)는 Shou Han 도면을 따릅니다. 위치 결정 홀 Ø1.0mm(핀 Ø0.75mm), 플러그 축 방향 패드 폭 1.5mm, 축 방향 패드 위치는 KiCad `Connector_Audio:Jack_3.5mm_PJ320D_Horizontal`과 같습니다(도면과 0.1mm 이내). 축에서 패드까지는 도면대로 몸체(폭 6.1mm) 바깥 3.05–4.65mm에 랜드를 두되, 양 끝을 0.2mm씩 늘려 2.85–4.85mm(길이 2.0mm)로 했습니다. KiCad 풋프린트는 2.0–4.5mm라 1mm가 몸체 아래로 들어가고 단자 끝을 덮지 못했습니다. `cpl.csv`의 J2 좌표는 패드 평균이 아니라 위치 결정 핀 기준입니다(JLC 핀과 우리 홀 차이 0.000mm). 도면은 단자를 개구부 쪽부터 D, C, B, A로 표시하고(KiCad `R2`, `R1`, `T`, `S`), 기능은 적지 않았습니다. LCSC 엔지니어 회신(2026-10-16)과 도면 회로도 기준으로 A = Tip, D = Ring 1, C = Ring 2, B = Sleeve입니다. 단자 위치는 접점이 플러그에 닿는 위치와 다릅니다. 배정은 A(`S`) = LINE_L, D(`R2`, 개구부 쪽) = LINE_R, B(`T`)와 C(`R1`) = GND입니다. 일반 3극 플러그의 긴 슬리브가 B와 C를 함께 잇습니다. `audit_pcb.py`와 `pinout_check.py`가 이름 대신 개구부에서의 거리 순서로 이 배정을 검사합니다.
 
@@ -96,10 +96,12 @@ ROUTER=freerouting REROUTE=1 ./make_board.sh   # 비교용: FreeRouting으로 �
 | `jlc_check.py` | JLC/EasyEDA 부품 데이터와 패드·극성 대조, JLC 기준 회전·원점으로 `cpl.csv` 작성, 재고와 Basic/Extended 보고(`reports/jlc.json`) |
 | `finish_pcb.py` | (FreeRouting이면 .ses 가져오기) KiCad 연결성 기준으로 쓰지 않은 via 정리, 바닥 테스트 패드, 평면 채우기 |
 | `rendering/render_board.py` | 3D PCBA·맨 기판, 부품 배치도, 층별 구리, 넷 종류별 배선도, 이전 빌드와의 차이, `index.html` |
-| `pinout_check.py` | 데이터시트에서 따로 적은 핀 표와 넷리스트 대조(138개 항목, [REVIEW_NETLIST.md](REVIEW_NETLIST.md)) |
-| `sim/power_path.py` | ngspice 전원 경로 동작 모델: eFuse 기동, ESP32 펄스 부하 때 5V 처짐, USB 분리 때 C25 홀드업([REVIEW_NETLIST.md](REVIEW_NETLIST.md) 4절) |
+| `pinout_check.py` | 데이터시트 핀·수동부품의 값/넷/실장 상태 계약 305개 대조( [REVIEW_NETLIST.md](REVIEW_NETLIST.md)) |
+| `sim/power_path.py` | ngspice 전원 경로 동작 모델: 완주/측정값 확인, eFuse 기동, ESP32 펄스 부하, 16조건 C25 홀드업(3.1V/clock-stop 기준)([REVIEW_NETLIST.md](REVIEW_NETLIST.md) 4절) |
 | `rendering/render_extra.sh` | `renders/extra/`: 3D 뷰(6면 + 6각도), 층별 SVG, 전체 층 PDF, 보드 SVG, 회로도 PDF (`QUALITY=basic`이면 빠름). U1·J1·J2는 KiCad에 3D 모델이 없어 LCSC/EasyEDA STEP(`lib/3d/`)을 씁니다 |
 | `audit_pcb.py` | 좌표·핀넷 readback, 디커플링 패드 거리, 라이브러리와 패드 형상 비교, AUX 잭 접점 순서 |
+
+전원 검사에는 PATH에 `ngspice`가 필요합니다.
 
 필요한 것: KiCad 10(`/Volumes/KiCad` 마운트)과 `work/tools/` 아래 세 가지입니다. [pcb-layout-skill](https://github.com/studio-edul/pcb-layout-skill) 체크아웃(`pcb-layout-skill/`, 다른 위치면 `SKILL`로 지정), [KiCadRoutingTools](https://github.com/drandyhaas/KiCadRoutingTools) v0.23.0(`krt/`), 그리고 numpy·scipy·shapely를 설치한 venv(`krt-venv/`)입니다. 설치 후 `krt-venv/bin/python krt/build_router.py`로 라우터 바이너리를 받습니다. FreeRouting 비교에는 FreeRouting 2.5.0과 Java 25 런타임이 더 필요합니다.
 

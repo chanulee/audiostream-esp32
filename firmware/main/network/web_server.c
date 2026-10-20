@@ -547,6 +547,11 @@ static esp_err_t ota_update_handler(httpd_req_t *req) {
   esp_err_t err = ota_start_from_http(req);
 
   if (err != ESP_OK) {
+    esp_err_t restart_err = rtsp_server_start();
+    if (restart_err != ESP_OK) {
+      ESP_LOGE(TAG, "Failed to restart AirPlay after OTA failure: %s",
+               esp_err_to_name(restart_err));
+    }
     httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR,
                         esp_err_to_name(err));
     return ESP_FAIL;

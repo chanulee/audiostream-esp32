@@ -11,6 +11,9 @@ fp={f.GetReference():f for f in b.GetFootprints() if f.GetReference() in {x['ref
 assert len(fp)==len(d)
 for part in d:
  f=fp[part['ref']];assert abs(p.ToMM(f.GetPosition().x)-part['x'])<1e-6;assert abs(p.ToMM(f.GetPosition().y)-part['y'])<1e-6
+ # Tie value/population contracts to the saved PCB as well as design.json.
+ assert f.GetValue()==part['value'],f'{part["ref"]}: PCB value {f.GetValue()} != design {part["value"]}'
+ assert f.IsDNP()==part['dnp'],f'{part["ref"]}: PCB DNP {f.IsDNP()} != design {part["dnp"]}'
  for pad in f.Pads():
   if pad.GetNumber() in part['nets']:assert pad.GetNetname()==part['nets'][pad.GetNumber()]
 jx=p.ToMM(fp['J1'].GetPosition().x);row=p.ToMM(next(a for a in fp['J1'].Pads() if a.GetNumber()=='A6').GetBoundingBox().GetBottom())

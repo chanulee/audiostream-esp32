@@ -27,6 +27,8 @@ fi
 python3 "$SKILL/scripts/placement_check.py" placement.json | tail -2
 # Netlist against a pin table written from the datasheets, not from plan_pcb.py.
 python3 pinout_check.py
+# Behavioral model only; incomplete simulations also stop release generation.
+python3 sim/power_path.py
 # Board name and revision, set once in plan_pcb.py.
 NAME=$(python3 -c "import json; print(json.load(open('placement.json'))['board']['name'])")
 REV=$(python3 -c "import json; print(json.load(open('placement.json'))['board']['rev'])")

@@ -86,6 +86,17 @@ PAIRS = {
     'C13': {'VNEG', 'GND'}, 'C18': {'LDOO', 'GND'}, 'L1': {'SW', '+3V3_D'},
     'R11': {'DAC_L', 'LINE_L'}, 'R12': {'DAC_R', 'LINE_R'},
     'R18': {'STATUS_GPIO', 'STATUS_A'},
+    'C2': {'+3V3_D', 'GND'}, 'C3': {'+3V3_D', 'GND'},
+    'C4': {'+5V', 'GND'}, 'C5': {'+3V3_D', 'GND'},
+    'C6': {'+3V3_D', 'GND'}, 'C7': {'+5V', 'GND'},
+    'C8': {'+5V_DAC', 'GND'}, 'C9': {'+3V3_A', 'GND'},
+    'C10': {'+3V3_A', 'GND'}, 'C14': {'+3V3_A', 'GND'},
+    'C15': {'+3V3_A', 'GND'}, 'C16': {'+3V3_A', 'GND'},
+    'C17': {'+3V3_A', 'GND'}, 'C19': {'LINE_L', 'GND'},
+    'C20': {'LINE_R', 'GND'}, 'C21': {'VBUS', 'GND'},
+    'C23': {'+5V', 'GND'}, 'C24': {'+3V3_D', 'GND'},
+    'C25': {'+5V_DAC', 'GND'},
+    'C26': {'ITIMER', 'GND'},
 }
 # Values the datasheet equations depend on.
 VALUES = {'R13': '383k', 'R14': '100k', 'R16': '255k', 'R17': '100k',
@@ -93,30 +104,81 @@ VALUES = {'R13': '383k', 'R14': '100k', 'R16': '255k', 'R17': '100k',
           'R10': '10k', 'C22': '10nF', 'L1': '2.2uH', 'C6': '22uF',
           'C18': '100nF', 'C12': '2.2uF', 'C13': '2.2uF', 'R11': '470',
           'R12': '470', 'C19': '2.2nF', 'C20': '2.2nF'}
+VALUES.update({
+    'C2': '100nF', 'C3': '10uF', 'C4': '10uF', 'C5': '10uF',
+    'C7': '10uF', 'C8': '1uF', 'C9': '10uF', 'C10': '100nF',
+    'C14': '100nF', 'C15': '10uF', 'C16': '100nF', 'C17': '10uF',
+    'C21': '100nF', 'C23': '100nF', 'C24': '100nF',
+    'C25': '220uF', 'C26': 'DNP',
+})
 
-parts = {p['ref']: p for p in json.loads((ROOT / 'design.json').read_text())}
-errors = []
-for ref, pins in EXPECTED.items():
-    nets = parts[ref]['nets']
-    for pin, want in pins.items():
-        got = nets.get(pin)
-        if got != want:
-            errors.append(f'{ref} pin {pin}: expected {want}, netlist {got}')
-for ref, want in PAIRS.items():
-    got = set(parts[ref]['nets'].values())
-    if got != want:
-        errors.append(f'{ref}: expected {sorted(want)}, netlist {sorted(got)}')
-for ref, want in VALUES.items():
-    if parts[ref]['value'] != want:
-        errors.append(f'{ref}: expected {want}, netlist {parts[ref]["value"]}')
-# Every GND-referenced decoupling cap really goes to GND.
-for ref, p in parts.items():
-    if ref.startswith('C') and ref not in ('C12',):
-        if 'GND' not in p['nets'].values():
-            errors.append(f'{ref}: no GND terminal')
 
-n = sum(len(v) for v in EXPECTED.values()) + len(PAIRS) + len(VALUES)
-print(f'Datasheet pin table: {n - len(errors)} / {n} checks match')
-for e in errors:
-    print('  MISMATCH', e)
-sys.exit(1 if errors else 0)
+def check(design):
+    if not isinstance(design, list):
+        raise ValueError('design must be a list of parts')
+    parts = {}
+    for part in design:
+        if not isinstance(part, dict) or not isinstance(part.get('ref'), str):
+            raise ValueError('each part must have a reference')
+        ref = part['ref']
+        if ref in parts:
+            raise ValueError(f'{ref}: duplicate reference')
+        if (not isinstance(part.get('nets'), dict)
+                or not all(isinstance(k, str) and isinstance(v, str)
+                           for k, v in part['nets'].items())
+                or not isinstance(part.get('value'), str)
+                or not isinstance(part.get('dnp'), bool)):
+            raise ValueError(f'{ref}: invalid or missing nets/value/dnp')
+        parts[ref] = part
+
+    errors = []
+    count = 0
+
+    def expect(ok, message):
+        nonlocal count
+        count += 1
+        if not ok:
+            errors.append(message)
+
+    required = EXPECTED.keys() | PAIRS.keys() | VALUES.keys()
+    for ref in sorted(required):
+        expect(ref in parts, f'{ref}: required part missing')
+        if ref in parts:
+            want_dnp = ref == 'C26'
+            expect(parts[ref]['dnp'] == want_dnp,
+                   f'{ref}: expected dnp={want_dnp}, netlist {parts[ref]["dnp"]}')
+    for ref, pins in EXPECTED.items():
+        if ref in parts:
+            for pin, want in pins.items():
+                got = parts[ref]['nets'].get(pin)
+                expect(got == want,
+                       f'{ref} pin {pin}: expected {want}, netlist {got}')
+    for ref, want in PAIRS.items():
+        if ref in parts:
+            got = set(parts[ref]['nets'].values())
+            expect(got == want and len(parts[ref]['nets']) == 2,
+                   f'{ref}: expected two terminals {sorted(want)}, netlist {sorted(got)}')
+    for ref, want in VALUES.items():
+        if ref in parts:
+            expect(parts[ref]['value'] == want,
+                   f'{ref}: expected {want}, netlist {parts[ref]["value"]}')
+    for ref, part in parts.items():
+        if ref.startswith('C') and ref != 'C12':
+            expect('GND' in part['nets'].values(), f'{ref}: no GND terminal')
+    return errors, count
+
+
+def main():
+    try:
+        errors, count = check(json.loads((ROOT / 'design.json').read_text()))
+    except (OSError, ValueError) as exc:
+        print(f'MISMATCH {exc}')
+        return 1
+    print(f'Datasheet pin/passive contracts: {count - len(errors)} / {count} checks match')
+    for error in errors:
+        print('  MISMATCH', error)
+    return 1 if errors else 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

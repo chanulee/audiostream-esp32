@@ -2,16 +2,16 @@
 """Check the BOM / CPL against JLCPCB's own part data and rewrite cpl.csv.
 
 Run with KiCad's Python after build_pcb.py. For every assembled part this
-fetches (once, cached in ../../work/easyeda-cache) the EasyEDA symbol and
+fetches (cached in ../../work/easyeda-cache) the EasyEDA symbol and
 footprint JLC places from, then:
   * finds the rotation and origin that put JLC's footprint pads on ours, so
     cpl.csv carries JLC's convention instead of KiCad's (SOT-23, SOIC, TSSOP
     and polarised parts differ by 90/180 degrees);
   * fails when a pad lands more than TOL away (wrong package or size);
   * checks pin 1 / polarity by pad number (D5 cathode, C25 +, D4 cathode);
-  * reports stock and Basic / Extended type (each Extended part adds a
-    loading fee at JLC).
-Writes cpl.csv and reports/jlc.json. Exit 1 on a mismatch.
+  * freshly queries stock (fails below 100 or the per-board quantity) and
+    reports Basic / Extended type (each Extended part adds a loading fee).
+Writes cpl.csv and reports/jlc.json. Exit 1 on a mismatch, unavailable stock, or a failed query.
 """
 import csv, json, math, subprocess, sys, time
 from pathlib import Path
@@ -43,19 +43,23 @@ PADMAP = {'J2': {'R2': '2', 'R1': '3', 'T': '4', 'S': '1'}}
 def fetch(code, kind):
     CACHE.mkdir(parents=True, exist_ok=True)
     f = CACHE / f'{code}.{kind}.json'
-    if not f.exists():
+    if kind == 'stock' or not f.exists():
         url = (f'https://easyeda.com/api/products/{code}/components?version=6.4.19.5'
                if kind == 'easyeda' else
                'https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/'
                'smtGood/selectSmtComponentList')
         # curl, not urllib: it uses the system certificate store.
-        cmd = ['curl', '-sSfL', '--max-time', '30', '-A', UA, '-o', str(f), url]
+        cmd = ['curl', '-sSfL', '--max-time', '30', '-A', UA, url]
         if kind != 'easyeda':
             cmd[1:1] = ['-H', 'Content-Type: application/json', '-d',
                         json.dumps({'keyword': code, 'currentPage': 1, 'pageSize': 5})]
         # The API rate-limits bursts (HTTP 403): back off and retry.
         for wait in (5, 20, 60, 0):
-            if subprocess.run(cmd, stderr=subprocess.DEVNULL).returncode == 0:
+            response = subprocess.run(cmd, stderr=subprocess.DEVNULL,
+                                      stdout=subprocess.PIPE, text=True)
+            if response.returncode == 0:
+                data = json.loads(response.stdout)
+                f.write_text(json.dumps(data))
                 break
             time.sleep(wait)
         else:
@@ -159,7 +163,10 @@ stock = {}
 for code, qty in sorted(need.items()):
     lst = (fetch(code, 'stock').get('data') or {}).get('componentPageInfo', {}).get('list') or []
     hit = next((c for c in lst if c.get('componentCode') == code), None)
-    stock[code] = dict(per_board=qty, stock=hit and hit.get('stockCount'),
+    count = hit and hit.get('stockCount')
+    if not isinstance(count, int) or count < max(100, qty):
+        bad.append(f'{code}: stock {count}, need at least {max(100, qty)}')
+    stock[code] = dict(per_board=qty, stock=count,
                        type=hit and ('Basic' if hit.get('componentLibraryType') == 'base'
                                      else 'Extended'))
 with (ROOT / 'cpl.csv').open('w') as out:
@@ -169,11 +176,12 @@ with (ROOT / 'cpl.csv').open('w') as out:
 (ROOT / 'reports' / 'jlc.json').write_text(json.dumps(
     {'parts': results, 'stock': stock, 'problems': bad}, indent=1) + '\n')
 ext = sorted(c for c, s in stock.items() if s['type'] == 'Extended')
-low = sorted(c for c, s in stock.items() if not s['stock'] or s['stock'] < 100)
+low = sorted(c for c, s in stock.items()
+             if not isinstance(s['stock'], int) or s['stock'] < max(100, s['per_board']))
 turned = sum(1 for v in results.values() if v['jlc_rotation'] != v['kicad_rotation'] % 360)
 print(f'JLC footprints matched: {len(results) - len([b for b in bad if b in results])}'
       f' / {len(results)}; CPL rotations changed from KiCad: {turned}; '
-      f'Extended parts: {len(ext)}; stock < 100: {low or "none"}')
+      f'Extended parts: {len(ext)}; insufficient / unknown stock: {low or "none"}')
 if bad:
     print('PROBLEMS:', bad)
     sys.exit(1)

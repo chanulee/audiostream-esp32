@@ -71,7 +71,7 @@ python3 tools/capture.py http://192.168.1.42 --seconds 3 -o capture.wav
 
 ## 하드웨어
 
-[LOVELACE / AS-004 rev A](hardware/lovelace-as-004/README.md)는 KiCad 10으로 스크립트 생성하며, [pcb-layout-skill](https://github.com/studio-edul/pcb-layout-skill)의 배치 검사기·계산기로 검증합니다. 제작 전 남은 항목은 [REVIEW.md](hardware/lovelace-as-004/REVIEW.md), 주문과 첫 보드 확인은 [BRINGUP.md](hardware/lovelace-as-004/BRINGUP.md)에 있습니다.
+[LOVELACE / AS-008 rev A](hardware/lovelace-as-008/README.md)는 KiCad 10으로 스크립트 생성하며, [pcb-layout-skill](https://github.com/studio-edul/pcb-layout-skill)의 배치 검사기·계산기로 검증합니다. 제작 전 남은 항목은 [REVIEW.md](hardware/lovelace-as-008/REVIEW.md), 주문과 첫 보드 확인은 [BRINGUP.md](hardware/lovelace-as-008/BRINGUP.md)에 있습니다.
 
 ## 버전
 

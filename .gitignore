@@ -11,6 +11,8 @@ fp-info-cache
 silkscreen.json.bak
 # Per-build scratch of make_board.sh: router intermediates, last render set
 hardware/lovelace-as-*/reports/krt/
+# Reproducible ngspice inputs/logs; the summary stays in reports/sim.json.
+hardware/lovelace-as-*/reports/sim-cases/
 hardware/lovelace-as-*/renders/previous/
 hardware/lovelace-as-*/.render-bare/
 # KiCad per-user view state
