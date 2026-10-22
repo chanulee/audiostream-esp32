@@ -22,6 +22,7 @@ firmware/                 ESP-IDF 5.5 project (PlatformIO espressif32 6.13.0)
 hardware/lovelace-as-008  make_board.sh: plan_pcb.py -> [autoplace.py] -> build_pcb.py -> jlc_check.py -> KiCadRoutingTools -> finish_pcb.py -> DRC/ERC -> audit_pcb.py -> release/ -> render_board.py
 hardware/archive          earlier versions, one folder each: 01 S3 rev A, 02 AS-001, 03 AS-002 rev B, 04 AS-002 rev C, 05 AS-003 rev A, 06 AS-004 rev A, 07 AS-005 rev A, 08 AS-006 rev A, 09 AS-007 rev A
 hardware/versions.json    version list behind the render / archive history pages
+tools/figma-pcb           Figma plugin for board silkscreen; figma_bridge.py is its local KiCad side (standalone copy: github.com/chanulee/figma-pcb-extension)
 tests/, tools/            host tests (C, C++, Python) and the WAV capture CLI
 ```
 
@@ -47,6 +48,7 @@ Placement must pass the pcb-layout-skill checker (`placement_check.py placement.
 - PCM5102A has no hardware volume: every gain, including AirPlay local mute, is applied in software in `source_gain_q15()`.
 - I2S pins are fixed by the PCB (rev C): BCK GPIO21, DIN GPIO19, LRCK GPIO18, DAC soft mute (XSMT, low = muted, pulled down) GPIO22, status LED GPIO23, single button GPIO0 (also the download strap). GPIO16/17 belong to the WROVER PSRAM.
 - The DAC stays muted until `audio_output.c` releases GPIO22; anything that stops or changes the I2S clock mutes first (`i2s_restart_muted`).
+- Silkscreen edits (web editor or Figma) write only `silkscreen.json` + board-level silk; release them with `make_board.sh release` (no re-route).
 - `cpl.csv` comes from `jlc_check.py` (JLC rotation/origin), not from KiCad: never hand-edit rotations.
 - Task stacks stay in internal RAM (`spiram_task.h`): NVS/flash writes disable the cache.
 - Style: LLVM, 2-space, 80 columns (`.clang-format`). Project-added C files keep the same style.

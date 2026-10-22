@@ -20,4 +20,7 @@ clang++ -std=c++20 -Wall -Wextra -Werror -fsanitize=address,undefined \
   -I firmware/components/spotify tests/test_spotify_form.cpp \
   firmware/components/spotify/form_codec.cpp -o "$build_dir/form"
 "$build_dir/form"
+if command -v node > /dev/null; then
+  node tests/test_figma_pcb.js
+fi
 python3 -m unittest discover -s tests -v

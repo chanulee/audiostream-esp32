@@ -4,8 +4,24 @@
     {
       "name": "as-008-render-viewer",
       "runtimeExecutable": "bash",
-      "runtimeArgs": ["hardware/lovelace-as-008/rendering/run.sh"],
+      "runtimeArgs": [
+        "hardware/lovelace-as-008/rendering/run.sh"
+      ],
       "port": 8877
+    },
+    {
+      "name": "work-static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8878",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "work"
+      ],
+      "port": 8878
     }
   ]
 }

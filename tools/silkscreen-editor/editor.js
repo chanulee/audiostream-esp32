@@ -5,9 +5,20 @@ const token = location.hash.slice(1);
 const NS = 'http://www.w3.org/2000/svg';
 let state, selected = null, background = null, drag = null, dirty = false, busy = false;
 let inspection=null, inspectionURL=null;
+let edits=null,savedLayout='',activeVariant=new URLSearchParams(location.search).get('variant')||'',zoom=100;
+const sessions=new Map();
+const holeSizes={'M2':2.2,'M2.5':2.7,'M3':3.2,'M4':4.3,'M5':5.3};
+function visibleItems() {
+  const side=$('side').value;
+  return [...(state.editableComponents ? state.layout.components.filter(c=>c.both||c.side===side).map(c=>({...c,kind:'native',x:side==='B.SilkS'?state.width-c.x:c.x,rotation:side==='B.SilkS'?-c.rotation:c.rotation})) : []), ...state.layout.items.filter(i=>i.side===side), ...(state.editableHoles ? state.layout.holes.map(h=>({...h,kind:'hole',x:side==='B.SilkS'?state.width-h.x:h.x})) : [])];
+}
+function holePosition(item,x,y) {
+  item.x=(state.editableComponents&&state.layout.components.some(c=>c.id===item.id)||state.editableHoles&&holeSizes[item.id])&&$('side').value==='B.SilkS'?state.width-x:x;item.y=y;
+}
 
 async function api(path, data) {
-  const response = await fetch(path, {method: data ? 'POST' : 'GET', headers: {'X-Silk-Token': token, ...(data ? {'Content-Type':'application/json'} : {})}, ...(data ? {body:JSON.stringify(data)} : {})});
+  const endpoint=path+(activeVariant?`${path.includes('?')?'&':'?'}variant=${encodeURIComponent(activeVariant)}`:'');
+  const response = await fetch(endpoint, {method: data ? 'POST' : 'GET', headers: {'X-Silk-Token': token, ...(data ? {'Content-Type':'application/json'} : {})}, ...(data ? {body:JSON.stringify(data)} : {})});
   if (!response.ok) throw new Error((await response.json()).error);
   return response;
 }
@@ -17,9 +28,18 @@ function clearInspection() {
   if(inspectionURL)URL.revokeObjectURL(inspectionURL);inspectionURL=null;
   $('resume').hidden=true;$('check-results').textContent='';
 }
-function markDirty() {clearInspection();dirty=true; $('dirty').textContent='저장하지 않은 변경';}
-function current() {return state.layout.items.find(i=>i.id===selected);}
-function itemLabel(item) {return item.kind==='text' ? item.text.trim().replace(/\n/g,' / ')||'(빈 텍스트)' : item.name||'SVG';}
+function updateDirty(){dirty=JSON.stringify(state.layout)!==savedLayout;$('dirty').textContent=dirty?'저장하지 않은 변경':'저장됨';$('undo').disabled=busy||!edits?.canUndo;$('redo').disabled=busy||!edits?.canRedo;}
+function markDirty(key=null){clearInspection();edits?.record(state.layout,key);updateDirty();}
+function restoreEdit(direction){if(busy||!edits)return;const layout=edits[direction]();if(!layout)return;state.layout=layout;clearInspection();updateDirty();refresh();status(direction==='undo'?'실행을 취소했습니다.':'다시 실행했습니다.');}
+$('undo').addEventListener('click',()=>restoreEdit('undo'));
+$('redo').addEventListener('click',()=>restoreEdit('redo'));
+window.addEventListener('keydown',event=>{if(!(event.metaKey||event.ctrlKey)||event.altKey)return;const key=event.key.toLowerCase();if(key==='z'||key==='y'){event.preventDefault();restoreEdit(key==='y'||event.shiftKey?'redo':'undo');}else if(key==='s'){event.preventDefault();$('save').click();}});
+function applyZoom(){const board=$('board');board.style.width=`${state.width*5*zoom/100}px`;$('zoom').value=zoom;$('zoom-value').textContent=`${Math.round(zoom)}%`;}
+$('zoom').addEventListener('input',()=>{zoom=Number($('zoom').value);applyZoom();});
+$('fit').addEventListener('click',()=>{if(!state)return;zoom=Math.max(30,Math.min(400,(document.querySelector('.stage').clientWidth-60)/(state.width*5)*100));applyZoom();});
+
+function current() {return state.layout.items.find(i=>i.id===selected)||state.layout.holes?.find(i=>i.id===selected)||state.layout.components?.find(i=>i.id===selected);}
+function itemLabel(item) {return state.editableComponents&&state.layout.components.some(c=>c.id===item.id) ? item.name : holeSizes[item.id]&&state.editableHoles ? `${item.id} · 구멍 Ø${holeSizes[item.id]} mm` : item.kind==='text' ? item.text.trim().replace(/\n/g,' / ')||'(빈 텍스트)' : item.name||'SVG';}
 function svgNode(tag, attrs, text) {
   const element=document.createElementNS(NS,tag);
   for(const [key,value] of Object.entries(attrs)) element.setAttribute(key,value);
@@ -31,7 +51,7 @@ function draw() {
   const board=$('board'), side=$('side').value;
   board.setAttribute('viewBox',`0 0 ${state.width} ${state.height}`);
   board.setAttribute('width',state.width); board.setAttribute('height',state.height);
-  board.replaceChildren(svgNode('rect',{width:state.width,height:state.height,fill:'#195039'}));
+  board.replaceChildren(svgNode('rect',{width:state.width,height:state.height,fill:state.color||'#195039'}));
   const checked=inspection?.side===side[0];
   if(background) {
     const image=svgNode('image',{href:background,width:state.width,height:state.height,opacity:checked ? .45 : 1});
@@ -54,10 +74,24 @@ function draw() {
       board.append(svgNode('text',{x:left,y:y-.3,fill:'#ff6257','font-size':.8},[...numbers].join(',')));
     }
   }
-  for(const item of state.layout.items.filter(i=>!checked&&i.side===side)) {
-    const g=svgNode('g',{'data-id':item.id,class:'art',transform:`translate(${item.x} ${item.y}) rotate(${item.rotation})`});
-    if(item.kind==='text') {
-      const text=svgNode('text',{'text-anchor':'middle','dominant-baseline':'central','font-family':'sans-serif','font-size':item.size,fill:'#fff',stroke:'#fff','stroke-width':Math.max(0,item.thickness-.12)});
+  for(const item of visibleItems().filter(()=>!checked)) {
+    const g=svgNode('g',{'data-id':item.id,class:'art',transform:`translate(${item.x} ${item.y}) rotate(${item.rotation||0})`});
+    if(item.kind==='native') {
+      const [x,y,w,h]=item.bounds, back=side==='B.SilkS';
+      const art=svgNode('g',back?{transform:'scale(-1 1)','pointer-events':'none'}:{'pointer-events':'none'});
+      art.append(svgNode('image',{href:`/assets/${item.id}-${side[0]}.svg`,x,y,width:w,height:h}));
+      for(const t of item.texts.filter(t=>t.side===side[0])){
+        const text=svgNode('text',{'text-anchor':t.align,'dominant-baseline':t.valign,'font-family':'Arial,sans-serif','font-size':t.size,fill:'#fff',transform:`translate(${t.x} ${t.y}) rotate(${t.rotation}) scale(${t.mirror?-1:1} 1)`},t.text);art.append(text);
+      }
+      for(const [dx,dy,diameter] of item.drills||[])art.append(svgNode('circle',{cx:dx,cy:dy,r:diameter/2,fill:'#b6b8b9'}));
+      g.append(art);
+      if(item.side===side)g.append(svgNode('rect',{x:back?-x-w:x,y,width:w,height:h,fill:'transparent'}));
+      else for(const [dx,dy,diameter] of item.drills||[])g.append(svgNode('circle',{cx:back?-dx:dx,cy:dy,r:diameter/2+.2,fill:'transparent'}));
+    } else if(item.kind==='hole') {
+      g.append(svgNode('circle',{r:holeSizes[item.id]/2,fill:'#b6b8b9',stroke:'#e8bb63','stroke-width':.18}));
+      g.append(svgNode('text',{y:-holeSizes[item.id]/2-1.3,'text-anchor':'middle','dominant-baseline':'central','font-size':.85,fill:'#fff'},`${item.id} / ${holeSizes[item.id]}`));
+    } else if(item.kind==='text') {
+      const text=svgNode('text',{'text-anchor':item.align||'middle','dominant-baseline':item.valign||'central','font-family':'Arial,sans-serif','font-size':item.size,fill:'#fff',stroke:'#fff','stroke-width':Math.max(0,item.thickness-.12)});
       const lines=item.text.split('\n');
       lines.forEach((line,i)=>text.append(svgNode('tspan',{x:0,y:(i-(lines.length-1)/2)*item.size*1.5,'xml:space':'preserve'},line)));
       g.append(text);
@@ -77,19 +111,30 @@ function draw() {
 function refresh() {
   if(!state)return;
   const items=$('items'); items.replaceChildren();
-  for(const item of state.layout.items.filter(i=>i.side===$('side').value)) {
+  for(const item of visibleItems()) {
     const option=document.createElement('option'); option.value=item.id;
     option.textContent=itemLabel(item); items.append(option);
   }
   if(![...items.options].some(o=>o.value===selected)) selected=items.options[0]?.value||null;
   items.value=selected||'';
-  const item=current(); $('properties').disabled=!item;
-  $('text-label').hidden=item?.kind!=='text'; $('text-fields').hidden=item?.kind!=='text'; $('svg-fields').hidden=item?.kind!=='svg';
+  const item=current(),native=state.editableComponents&&state.layout.components.some(c=>c.id===item?.id),hole=state.editableHoles&&item&&holeSizes[item.id]; $('properties').disabled=!item;
+  $('rotation').parentElement.hidden=!!hole;$('delete').hidden=!!hole;
+  $('text-label').hidden=item?.kind!=='text'&&!(native&&item.texts.length);
+  if(native&&item.texts.length){$('text').value=item.texts.map(t=>t.text).join('\n');$('text').maxLength=10000;}else $('text').maxLength=120; $('text-fields').hidden=item?.kind!=='text'; $('svg-fields').hidden=item?.kind!=='svg';
   if(item) for(const field of ['text','x','y','rotation','size','thickness','width','height']) {
-    const value=item[field];$(field).value=typeof value==='number'?Number(value.toFixed(4)):value??'';
+    if(native&&field==='text')continue;
+    const value=(hole||native)&&field==='x'&&$('side').value==='B.SilkS'?state.width-item.x:native&&field==='rotation'&&$('side').value==='B.SilkS'?-item.rotation:item[field];$(field).value=typeof value==='number'?Number(value.toFixed(4)):value??'';
   }
   $('ignore-white').checked=item?.ignoreWhite||false;
-  draw();
+  $('selected-name').textContent=item?itemLabel(item):'요소를 선택하세요';
+  const provenance=$('provenance');provenance.replaceChildren();
+  if(item?.source){const link=document.createElement('a');link.href=item.source.url;link.target='_blank';link.rel='noreferrer';link.textContent=item.source.name;provenance.append(link,document.createElement('br'),document.createTextNode(item.source.license||''));}
+  if(item?.note){const note=document.createElement('p');note.textContent=item.note;provenance.append(note);}
+  const list=$('layer-list'),query=$('search').value.toLowerCase();list.replaceChildren();
+  const visible=visibleItems();$('item-count').textContent=visible.length;
+  for(const entry of visible.filter(i=>itemLabel(i).toLowerCase().includes(query))){const row=document.createElement('button');row.className='layer-row';row.setAttribute('aria-pressed',String(entry.id===selected));row.textContent=itemLabel(entry);row.addEventListener('click',()=>{selected=entry.id;refresh();});list.append(row);}
+  updateDirty();draw();
+
 }
 async function loadBackground() {
   const side=$('side').value;
@@ -152,7 +197,7 @@ async function rasterize(item) {
 function error(exc) {status(exc.message||String(exc),true);}
 async function withBusy(action) {
   if(busy||!state)return;busy=true;$('save').disabled=true;$('check').disabled=true;$('side').disabled=true;$('upload').disabled=true;$('properties').disabled=true;
-  try{await action();}catch(exc){error(exc);}finally{busy=false;$('save').disabled=!state;$('check').disabled=false;$('side').disabled=false;$('upload').disabled=false;refresh();}
+  try{updateDirty();await action();}catch(exc){error(exc);}finally{busy=false;$('save').disabled=!state;$('check').disabled=false;$('side').disabled=false;$('upload').disabled=false;refresh();}
 }
 $('side').addEventListener('change',()=>{clearInspection();background=null;refresh();loadBackground().catch(error);});
 $('show-copper').addEventListener('change',()=>{background=null;draw();loadBackground().catch(error);});
@@ -175,12 +220,14 @@ $('add-text').addEventListener('click',()=>{
   const item={id:crypto.randomUUID(),kind:'text',side:$('side').value,text:'새 텍스트',x:state.width/2,y:state.height/2,size:1,thickness:.15,rotation:0};
   state.layout.items.push(item);selected=item.id;markDirty();refresh();
 });
-$('delete').addEventListener('click',()=>{if(!current()||busy)return;state.layout.items=state.layout.items.filter(i=>i.id!==selected);selected=null;markDirty();refresh();});
+$('delete').addEventListener('click',()=>{if(!current()||busy)return;state.layout.items=state.layout.items.filter(i=>i.id!==selected);if(state.editableComponents)state.layout.components=state.layout.components.filter(i=>i.id!==selected);selected=null;markDirty();refresh();});
 for(const field of ['text','x','y','rotation','size','thickness']) $(field).addEventListener('input',()=>{
   const item=current();if(!item||busy)return;
   const value=field==='text'?$(field).value:Number($(field).value);
   if(!$(field).checkValidity()||(field!=='text'&&(!$(field).value||!Number.isFinite(value)))) {status('입력 범위를 확인하세요.',true);return;}
-  item[field]=value;markDirty();draw();
+  const native=state.editableComponents&&state.layout.components.some(c=>c.id===item.id);
+  if(native&&field==='text'){const lines=value.split('\n');if(lines.length!==item.texts.length){status(`구성 텍스트 ${item.texts.length}줄을 유지하세요.`,true);return;}lines.forEach((line,i)=>item.texts[i].text=line);markDirty(field+selected);draw();return;}
+  if(field==='rotation'&&native&&$('side').value==='B.SilkS')item.rotation=-value;else if(field==='x'&&(native||state.editableHoles&&holeSizes[item.id])&&$('side').value==='B.SilkS')item.x=state.width-value;else item[field]=value;markDirty(field+selected);draw();
   if(field==='text')$('items').selectedOptions[0].textContent=itemLabel(item);
 });
 $('width').addEventListener('change',()=>withBusy(async()=>{
@@ -204,25 +251,64 @@ $('upload').addEventListener('change',()=>withBusy(async()=>{
 function point(event) {const pt=new DOMPoint(event.clientX,event.clientY);return pt.matrixTransform($('board').getScreenCTM().inverse());}
 $('board').addEventListener('pointerdown',event=>{
   if(busy||event.button!==0)return;const target=event.target.closest('[data-id]');if(!target)return;
-  selected=target.getAttribute('data-id');const item=current(),pt=point(event);drag={id:selected,x:pt.x,y:pt.y,originalX:item.x,originalY:item.y};
+  selected=target.getAttribute('data-id');const item=current(),pt=point(event);drag={id:selected,x:pt.x,y:pt.y,originalX:(state.editableComponents&&state.layout.components.some(c=>c.id===item.id)||state.editableHoles&&holeSizes[item.id])&&$('side').value==='B.SilkS'?state.width-item.x:item.x,originalY:item.y};
   $('board').setPointerCapture(event.pointerId);refresh();event.preventDefault();
 });
 $('board').addEventListener('pointermove',event=>{
   if(!drag)return;const pt=point(event),item=current();
-  item.x=Math.round(Math.max(0,Math.min(state.width,drag.originalX+pt.x-drag.x))*100)/100;
-  item.y=Math.round(Math.max(0,Math.min(state.height,drag.originalY+pt.y-drag.y))*100)/100;
-  $('x').value=item.x;$('y').value=item.y;markDirty();draw();
+  const x=Math.round(Math.max(0,Math.min(state.width,drag.originalX+pt.x-drag.x))*100)/100;
+  const y=Math.round(Math.max(0,Math.min(state.height,drag.originalY+pt.y-drag.y))*100)/100;
+  holePosition(item,x,y);
+  $('x').value=x;$('y').value=y;clearInspection();dirty=true;$('dirty').textContent='저장하지 않은 변경';draw();
 });
-for(const event of ['pointerup','pointercancel']) $('board').addEventListener(event,()=>{drag=null;});
+for(const event of ['pointerup','pointercancel']) $('board').addEventListener(event,()=>{if(drag)markDirty();drag=null;refresh();});
 $('save').addEventListener('click',()=>withBusy(async()=>{
   status('저장 중…');
   const response=await api('/api/save',{revision:state.revision,layout:state.layout});const saved=await response.json();
-  state.revision=saved.revision;dirty=false;$('dirty').textContent='저장됨';status(saved.message);
+  state.revision=saved.revision;savedLayout=JSON.stringify(state.layout);updateDirty();status(saved.message);
 }));
 window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
+$('search').addEventListener('input',refresh);
+$('module').addEventListener('change',()=>{const c=state.catalog?.find(c=>c.id===$('module').value);$('module-source').textContent=c?`${c.source?.name||'원본'} · ${c.source?.license||''}`:'';});
+$('add-module').addEventListener('click',()=>{
+  if(busy||!state?.editableComponents)return;
+  const c=state.catalog.find(c=>c.id===$('module').value);if(!c)return;
+  if(state.layout.components.some(i=>i.id===c.id)){selected=c.id;$('side').value=c.side;refresh();status('이미 배치된 모듈을 선택했습니다.');return;}
+  const item=structuredClone(c);item.x=state.width/2-(item.bounds[0]+item.bounds[2]/2);item.y=state.height/2-(item.bounds[1]+item.bounds[3]/2);item.rotation=0;
+  state.layout.components.push(item);selected=item.id;$('side').value=item.side;markDirty();refresh();loadBackground().catch(error);
+});
+$('projects').addEventListener('click',()=>{$('overview').hidden=false;document.querySelector('main').hidden=true;});
+function setupProject(){
+  $('overview').hidden=true;document.querySelector('main').hidden=false;
+  $('dimensions').textContent=`${state.width} × ${state.height} mm · ${state.id}`;$('board-id').textContent=`LOVELACE / ${state.id}`;
+  $('x').max=state.width;$('y').max=state.height;$('width').max=state.width;$('save').disabled=false;
+  if(state.editableComponents||state.editableHoles){$('x').step='any';$('y').step='any';document.title='LOVELACE · Ruler Studio';document.querySelector('h1').textContent='Ruler Studio';}
+  $('variant-notes').textContent=state.notes||'';
+  const variants=state.variants||[];$('projects').hidden=!variants.length;$('variant-label').hidden=!variants.length;
+  $('variant').replaceChildren();$('project-cards').replaceChildren();
+  for(const v of variants){const option=document.createElement('option');option.value=v.id;option.textContent=v.name;$('variant').append(option);const card=document.createElement('button');card.className='project-card';const title=document.createElement('strong');title.textContent=v.name;const desc=document.createElement('span');desc.textContent=v.description;card.append(title,desc);card.addEventListener('click',()=>switchVariant(v.id));$('project-cards').append(card);}
+  $('variant').value=activeVariant;
+  $('library').hidden=!state.editableComponents;$('module').replaceChildren();
+  for(const c of state.catalog||[]){const option=document.createElement('option');option.value=c.id;option.textContent=c.name;$('module').append(option);}
+  $('module').dispatchEvent(new Event('change'));
+  refresh();applyZoom();
+}
+async function switchVariant(id){
+  if(busy||!state)return;
+  sessions.set(activeVariant,{state,selected,edits,savedLayout,side:$('side').value});
+  const previous=activeVariant;activeVariant=id;busy=true;
+  try{
+    const cached=sessions.get(id);
+    if(cached){({state,selected,edits,savedLayout}=cached);$('side').value=cached.side;}
+    else{state=await(await api('/api/state')).json();selected=null;savedLayout=JSON.stringify(state.layout);edits=new LayoutHistory(state.layout);$('side').value='F.SilkS';}
+    clearInspection();background=null;setupProject();await loadBackground();
+    window.history.replaceState(null,'',`?variant=${encodeURIComponent(id)}${location.hash}`);
+    status('설계안을 전환했습니다. 각 안의 편집 내용은 이 탭에서 유지됩니다.');
+  }catch(exc){activeVariant=previous;const cached=sessions.get(previous);({state,selected,edits,savedLayout}=cached);$('side').value=cached.side;setupProject();error(exc);}
+  finally{busy=false;refresh();}
+}
+$('variant').addEventListener('change',()=>switchVariant($('variant').value));
 (async()=>{
-  try{state=await (await api('/api/state')).json();$('dimensions').textContent=`${state.width} × ${state.height} mm · ${state.id} rev ${state.rev}`;$('board-id').textContent=`LOVELACE / ${state.id}`;
-    $('x').max=state.width;$('y').max=state.height;$('width').max=state.width;$('save').disabled=false;
-    refresh();await loadBackground();status('배치 준비 완료. 저장 전에는 원본 파일이 바뀌지 않습니다.');
-  }catch(exc){error(exc);}
+  try{state=await(await api('/api/state')).json();activeVariant=state.activeVariant||'';savedLayout=JSON.stringify(state.layout);edits=new LayoutHistory(state.layout);$('side').value='F.SilkS';setupProject();await loadBackground();$('fit').click();status('배치 준비 완료. 실행 취소·다시 실행과 원본 모듈 추가를 사용할 수 있습니다.');}
+  catch(exc){error(exc);}
 })();

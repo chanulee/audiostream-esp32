@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import secrets
 import shutil
@@ -12,6 +13,7 @@ import sys
 import tempfile
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import xml.etree.ElementTree as ET
+from urllib.parse import urlsplit, parse_qs
 
 ROOT = Path(__file__).resolve().parents[1]
 KICAD = Path(os.environ.get('KICAD', '/Volumes/KiCad/KiCad/KiCad.app/Contents'))
@@ -137,6 +139,19 @@ def main():
     token = secrets.token_urlsafe(32)
     web = ROOT / 'tools/silkscreen-editor'
     cache = {}
+    asset_root = board_path.parent
+    manifest_path = asset_root / 'variants.json'
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else None
+    projects = {}
+    if manifest:
+        for entry in manifest['variants']:
+            directory = (asset_root / entry['path']).resolve()
+            directory.relative_to(asset_root)
+            spec = json.loads((directory / 'placement.json').read_text())
+            projects[entry['id']] = (directory / board_path.name, spec)
+    else:
+        projects['original'] = (board_path, plan)
+    default_variant = manifest['default'] if manifest else 'original'
 
     class Handler(BaseHTTPRequestHandler):
         def send(self, data, content_type='application/json', status=200):
@@ -157,11 +172,38 @@ def main():
         def authorized(self):
             return secrets.compare_digest(self.headers.get('X-Silk-Token', ''), token)
 
+        def project(self):
+            parsed = urlsplit(self.path)
+            variant = parse_qs(parsed.query).get('variant', [default_variant])[0]
+            if variant not in projects:
+                raise ValueError('알 수 없는 설계안입니다.')
+            self.path = parsed.path
+            path, project_plan = projects[variant]
+            info = project_plan['board']
+            return path, project_plan, info['w'], info['h'], info.get('id', path.stem), info.get('rev', ''), variant
+
         def do_GET(self):
-            if self.path in ('/', '/editor.js', '/editor.css'):
-                name = {'/': 'index.html', '/editor.js': 'editor.js', '/editor.css': 'editor.css'}[self.path]
-                mime = {'/': 'text/html; charset=utf-8', '/editor.js': 'text/javascript; charset=utf-8', '/editor.css': 'text/css; charset=utf-8'}[self.path]
+            try:
+                board_path, plan, width, height, board_id, board_rev, variant = self.project()
+            except ValueError as exc:
+                self.send({'error': str(exc)}, status=400)
+                return
+            if self.path in ('/', '/editor.js', '/editor.css', '/history.js'):
+                name = {'/': 'index.html', '/editor.js': 'editor.js', '/editor.css': 'editor.css', '/history.js': 'history.js'}[self.path]
+                mime = {'/': 'text/html; charset=utf-8', '/editor.js': 'text/javascript; charset=utf-8', '/editor.css': 'text/css; charset=utf-8', '/history.js': 'text/javascript; charset=utf-8'}[self.path]
                 self.send((web / name).read_bytes(), mime)
+                return
+            if plan['board'].get('editable_components') and re.fullmatch(r'/assets/[0-9a-f-]{36}-[FB]\.svg', self.path):
+                asset = asset_root / self.path.lstrip('/')
+                if not asset.is_file():
+                    from silkscreen import instance_asset
+                    data = instance_asset(board_path.parent, asset.name)
+                    if data is None:
+                        self.send({'error': 'Not found'}, status=404)
+                        return
+                    self.send(data, 'image/svg+xml')
+                    return
+                self.send(asset.read_bytes(), 'image/svg+xml')
                 return
             if not self.authorized():
                 self.send({'error': '시작 시 출력된 전체 URL로 접속하세요.'}, status=403)
@@ -169,17 +211,38 @@ def main():
             try:
                 if self.path == '/api/state':
                     board = p.LoadBoard(str(board_path))
+                    catalog = []
+                    if plan['board'].get('editable_components'):
+                        from silkscreen import registry
+                        catalog = list(registry().values())
                     self.send(dict(width=width, height=height, board=str(board_path),
                                    id=board_id, rev=board_rev,
+                                   variants=manifest['variants'] if manifest else [], activeVariant=variant,
+                                   notes=plan['board'].get('notes', ''), catalog=catalog,
+                                   editableHoles=plan['board'].get('editable_holes', False),
+                                   editableComponents=plan['board'].get('editable_components', False),
+                                   color=plan['board'].get('color', '#195039'),
                                    revision=revision(board_path, board_path.parent / LAYOUT_FILE),
                                    layout=read_layout(board, board_path.parent, width, height)))
                 elif self.path in ('/api/background/F', '/api/background/B', '/api/background/F/copper', '/api/background/B/copper'):
                     side = self.path.split('/')[3]
                     copper = self.path.endswith('/copper')
-                    key = (side, copper, hashlib.sha256(board_path.read_bytes()).hexdigest())
+                    key = (str(board_path), side, copper, hashlib.sha256(board_path.read_bytes()).hexdigest())
                     if key not in cache:
                         with tempfile.TemporaryDirectory() as temp:
                             board = p.LoadBoard(str(board_path))
+                            if plan['board'].get('editable_components'):
+                                for fp in list(board.GetFootprints()):
+                                    board.Delete(fp)
+                                for track in list(board.GetTracks()):
+                                    board.Delete(track)
+                                for drawing in list(board.GetDrawings()):
+                                    if drawing.GetLayer() != p.Edge_Cuts or drawing.GetShape() != p.SHAPE_T_RECT:
+                                        board.Delete(drawing)
+                            if plan['board'].get('editable_holes'):
+                                for fp in list(board.GetFootprints()):
+                                    if fp.GetReference() in ('M2', 'M2.5', 'M3', 'M4', 'M5'):
+                                        board.Delete(fp)
                             for drawing in list(board.GetDrawings()):
                                 if drawing.GetLayer() in (p.F_SilkS, p.B_SilkS):
                                     board.Delete(drawing)
@@ -195,6 +258,15 @@ def main():
                                             '--mode-single', '--page-size-mode', '1', '--exclude-drawing-sheet',
                                             '-o', str(out), str(source)], check=True, capture_output=True, timeout=30)
                             svg = ET.fromstring(out.read_text())
+                            if plan['board'].get('editable_holes'):
+                                for element in svg.iter():
+                                    for attribute in ('style', 'stroke', 'fill'):
+                                        value = element.get(attribute)
+                                        if value:
+                                            value = re.sub(r'(stroke|fill):\s*(?:#[0-9a-fA-F]{3,8}|rgb\([^)]*\))', r'\1:#d9b968', value)
+                                            if re.fullmatch(r'#[0-9a-fA-F]{3,8}|rgb\([^)]*\)', value):
+                                                value = '#d9b968'
+                                            element.set(attribute, value)
                             svg.set('viewBox', f'0 0 {width} {height}')
                             svg.set('width', f'{width}mm')
                             svg.set('height', f'{height}mm')
@@ -207,6 +279,11 @@ def main():
                 self.send({'error': str(exc)}, status=400)
 
         def do_POST(self):
+            try:
+                board_path, plan, width, height, board_id, board_rev, variant = self.project()
+            except ValueError as exc:
+                self.send({'error': str(exc)}, status=400)
+                return
             if self.path not in ('/api/save', '/api/check') or not self.authorized():
                 self.send({'error': '저장 권한이 없습니다.'}, status=403)
                 return

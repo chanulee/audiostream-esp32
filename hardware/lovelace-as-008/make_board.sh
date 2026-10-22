@@ -5,6 +5,9 @@
 #   ROUTER=freerouting REROUTE=1 ./make_board.sh
 #                              FreeRouting instead of KiCadRoutingTools
 #   RENDER=0 ./make_board.sh   skip the renders (renders/latest, ~10 s)
+#   ./make_board.sh release    silkscreen-only change (web editor, Figma):
+#                              keep placement and copper, re-run DRC/ERC,
+#                              the audit and the release files
 # Needs: KiCad 10 (mounted at /Volumes/KiCad) and, under ../../work/tools, the
 # pcb-layout-skill checkout, KiCadRoutingTools (krt/ + krt-venv/) and, for
 # ROUTER=freerouting only, FreeRouting + a Java 25 runtime.
@@ -18,6 +21,11 @@ SKILL=${SKILL:-$TOOLS/pcb-layout-skill/skills/pcb-layout-design}
 ROUTER=${ROUTER:-krt}
 quiet() { grep -v -e Overflow -e kimath -e wxApp -e 'memory leak' -e '^$' || true; }
 
+if [ "${1:-}" = release ]; then
+    # Board name and revision, set once in plan_pcb.py.
+    NAME=$(python3 -c "import json; print(json.load(open('placement.json'))['board']['name'])")
+    REV=$(python3 -c "import json; print(json.load(open('placement.json'))['board']['rev'])")
+else
 if [ "${1:-}" = anneal ]; then
     rm -f positions.json
     "$PY" plan_pcb.py 2>&1 | quiet
@@ -84,6 +92,7 @@ else
             -de "$NAME".dsn -do "$NAME".ses -mp 100 > reports/freerouting.log 2>&1
     fi
     "$PY" finish_pcb.py --ses 2>&1 | quiet
+fi
 fi
 # --exit-code-violations makes any DRC/ERC finding stop the script (pipefail)
 # before a release ZIP is written; grep only prints the summary.
